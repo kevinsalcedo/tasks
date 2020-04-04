@@ -3,7 +3,7 @@ const config = require("config");
 
 // FUuction that has access to request and response objects
 // Next - callback to run after
-module.exports = function(req, res, next) {
+module.exports = function (req, res, next) {
   // Get token from header
   const token = req.header("x-auth-token");
 
