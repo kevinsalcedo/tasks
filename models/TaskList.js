@@ -20,10 +20,6 @@ const TaskListSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  // TODO: add tasks object array?
-  tasks: {
-    type: [String],
-  },
   // TODO: color scheme?
 });
 
