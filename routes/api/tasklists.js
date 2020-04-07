@@ -97,7 +97,7 @@ router.put(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, description, tags, tasks } = req.body;
+    const { name, description, tags } = req.body;
     const taskListFields = {};
 
     if (name) {
@@ -136,6 +136,23 @@ router.put(
 );
 
 //TODO: delete all tasklists, tasks, and user - look at 4.5
-//TODO: delete one tasklist
+//@route  DELETE api/tasklist
+//@desc   Delete a list
+//@access Private
+router.delete("/:list_id", auth, async (req, res) => {
+  try {
+    let result = await TaskList.findOneAndDelete({ _id: req.params.list_id });
+    // todo - remove all tasks associated with task list
+    // await Task.deleteMany({ taskList: req.params.list_id });
+
+    res.json({ msg: ` ${result.name} was deleted. Bye-bye list!` });
+  } catch (err) {
+    console.log(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(400).json({ msg: "oops! That list doesn't exist" });
+    }
+    return res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;
