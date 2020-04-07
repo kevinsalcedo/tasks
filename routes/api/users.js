@@ -3,10 +3,13 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator/check");
 
 // Import User Model
 const User = require("../../models/User");
+const Task = require("../../models/Task");
+const TaskList = require("../../models/TaskList");
 
 // @route     POST api/users
 // @desc      Register user
@@ -14,15 +17,13 @@ const User = require("../../models/User");
 router.post(
   "/",
   [
-    check("name", "Name is required")
-      .not()
-      .isEmpty(),
+    check("name", "Name is required").not().isEmpty(),
     check("email", "Please include a valid email").isEmail(),
 
     check(
       "password",
       "please enter a password with 6 or more characters"
-    ).isLength({ min: 6 })
+    ).isLength({ min: 6 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -45,7 +46,7 @@ router.post(
       user = new User({
         name,
         email,
-        password
+        password,
       });
       // Encrypt password
       const salt = await bcrypt.genSalt(10);
@@ -57,8 +58,8 @@ router.post(
       // Saving a user returns the id within the database (user.id)
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
       // Sign the token, pass in the payload, secret
@@ -74,9 +75,24 @@ router.post(
       );
     } catch (err) {
       console.log(err);
-      res.status(500).send("Server error");
+      res.status(500).send("Server Error");
     }
   }
 );
+
+//@route  DELETE api/user
+//@desc   Delete a user and all associated tasks/lists from the db
+//@desc   Private
+router.delete("/", auth, async (req, res) => {
+  try {
+    await Task.deleteMany({ user: req.user.id });
+    await TaskList.deleteMany({ user: req.user.id });
+    await User.findOneAndDelete({ _id: req.user.id });
+    res.json({ msg: "All data deleted." });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;
