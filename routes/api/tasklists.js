@@ -143,7 +143,7 @@ router.delete("/:list_id", auth, async (req, res) => {
   try {
     let result = await TaskList.findOneAndDelete({ _id: req.params.list_id });
     // todo - remove all tasks associated with task list
-    // await Task.deleteMany({ taskList: req.params.list_id });
+    await Task.deleteMany({ taskList: req.params.list_id });
 
     res.json({ msg: ` ${result.name} was deleted. Bye-bye list!` });
   } catch (err) {
