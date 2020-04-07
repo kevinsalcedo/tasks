@@ -119,7 +119,7 @@ router.post(
       await task.save();
       res.json(task);
     } catch (err) {
-      console.log(err.message);
+      // Handle if the tasklist is invalid
       return res.status(500).send("Server Error");
     }
   }
@@ -166,14 +166,13 @@ router.put(
     }
 
     try {
-      let task = Task.findOne({ user: req.user.id, task: req.params.task_id });
-
+      let task = await Task.findOne({ _id: req.params.task_id });
       if (!task) {
         return res.status(400).json({ msg: "This task does not exist." });
       }
 
       task = await Task.findOneAndUpdate(
-        { user: req.user.id },
+        { user: req.user.id, _id: req.params.task_id },
         { $set: taskFields },
         { new: true }
       );
@@ -188,4 +187,20 @@ router.put(
   }
 );
 
+//@route  DELETE api/tasks
+//@desc   Delete a task
+//@access Private
+router.delete("/:task_id", auth, async (req, res) => {
+  try {
+    let result = await Task.findOneAndDelete({ _id: req.params.task_id });
+
+    res.json({ msg: ` ${result.name} was deleted. Bye-bye task!` });
+  } catch (err) {
+    console.log(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(400).json({ msg: "oops! That task doesn't exist" });
+    }
+    return res.status(500).send("Server Error");
+  }
+});
 module.exports = router;
