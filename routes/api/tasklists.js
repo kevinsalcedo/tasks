@@ -73,6 +73,9 @@ router.post(
     if (tags) {
       taskListFields.tags = tags.split(",").map((tag) => tag.trim());
     }
+    if (color) {
+      taskListFields.color = color;
+    }
     try {
       // Create
       tasklist = new TaskList(taskListFields);
@@ -109,6 +112,9 @@ router.put(
     if (tags) {
       taskListFields.tags = tags.split(",").map((tag) => tag.trim());
     }
+    if (color) {
+      taskListFields.color = color;
+    }
     try {
       let list = await TaskList.findOne({
         _id: req.params.list_id,
@@ -135,7 +141,6 @@ router.put(
   }
 );
 
-//TODO: delete all tasklists, tasks, and user - look at 4.5
 //@route  DELETE api/tasklist
 //@desc   Delete a list
 //@access Private

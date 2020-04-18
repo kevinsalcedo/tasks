@@ -12,7 +12,7 @@ router.get("/", auth, async (req, res) => {
   try {
     let allTasks = await Task.find({
       user: req.user.id,
-    }).populate("taskList", ["name"]);
+    }).populate("taskList", ["name", "color"]);
 
     if (!allTasks) {
       return res.status(400).json({ msg: "No tasks found." });
@@ -31,7 +31,7 @@ router.get("/lists/:list_id", auth, async (req, res) => {
   try {
     let allTasks = await Task.find({
       taskList: req.params.list_id,
-    }).populate("taskList", ["name"]);
+    }).populate("taskList", ["name", "color"]);
 
     if (!allTasks) {
       return res.status(400).json({ msg: "No tasks found." });
