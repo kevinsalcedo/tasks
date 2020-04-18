@@ -15,7 +15,7 @@ export const Login = () => {
     console.log("SUCCESS");
   };
 
-  const { name, email, password, password2 } = formData;
+  const { email, password } = formData;
   return (
     <Fragment>
       <h1 className='large text-primary'>Sign In</h1>
