@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PAGES from "../../strings/pages";
-import AUTH_CONSTANTS from "../../strings/auth";
 
 export const Landing = () => {
   return (
