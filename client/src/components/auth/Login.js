@@ -3,7 +3,8 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/auth";
-import CONSTANTS from "../../strings";
+import AUTH_CONSTANTS from "../../strings/auth";
+import PAGES from "../../strings/pages";
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -28,16 +29,15 @@ const Login = ({ login, isAuthenticated }) => {
 
   return (
     <Fragment>
-      <h1 className='large text-primary'>{CONSTANTS.LOGIN_PAGE.SIGN_IN}</h1>
+      <h1 className='large text-primary'>{AUTH_CONSTANTS.SIGN_IN}</h1>
       <p className='lead'>
-        <i className='fas fa-user'></i>
-        {CONSTANTS.LOGIN_PAGE.SIGN_INTO_ACCOUNT}
+        <i className='fas fa-user'></i> {AUTH_CONSTANTS.SIGN_IN_PAGE.HEADER}
       </p>
       <form className='form' onSubmit={(e) => onSubmit(e)}>
         <div className='form-group'>
           <input
             type='email'
-            placeholder={CONSTANTS.LOGIN_PAGE.EMAIL_PLACEHOLDER}
+            placeholder={AUTH_CONSTANTS.FORM_FIELDS.EMAIL_PLACEHOLDER}
             name='email'
             value={email}
             onChange={(e) => onChange(e)}
@@ -46,7 +46,7 @@ const Login = ({ login, isAuthenticated }) => {
         <div className='form-group'>
           <input
             type='password'
-            placeholder={CONSTANTS.LOGIN_PAGE.PASSWORD_PLACEHOLDER}
+            placeholder={AUTH_CONSTANTS.FORM_FIELDS.PASSWORD_PLACEHOLDER}
             name='password'
             minLength='6'
             value={password}
@@ -56,12 +56,14 @@ const Login = ({ login, isAuthenticated }) => {
         <input
           type='submit'
           className='btn btn-primary'
-          value={CONSTANTS.LOGIN_PAGE.SUBMIT_BUTTON}
+          value={AUTH_CONSTANTS.SIGN_IN_PAGE.SUBMIT_BUTTON}
         />
       </form>
       <p className='my-1'>
-        {CONSTANTS.LOGIN_PAGE.SWITCH_TO_REGISTER}
-        <Link to='/register'>{CONSTANTS.LOGIN_PAGE.SIGN_UP_LINK}</Link>
+        {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH}{" "}
+        <Link to={PAGES.REGISTER}>
+          {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH_LINK}
+        </Link>
       </p>
     </Fragment>
   );

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
+import PAGES from "../../strings/pages";
 
 const Navbar = ({ logout, auth: { isAuthenticated, loading } }) => {
   const authLinks = (
@@ -19,17 +20,17 @@ const Navbar = ({ logout, auth: { isAuthenticated, loading } }) => {
   const guestLinks = (
     <ul>
       <li>
-        <Link to='/register'>Register</Link>
+        <Link to={PAGES.REGISTER}>Register</Link>
       </li>
       <li>
-        <Link to='/login'>Login</Link>
+        <Link to={PAGES.LOGIN}>Login</Link>
       </li>
     </ul>
   );
   return (
     <nav className='navbar bg-dark'>
       <h1>
-        <Link to='/'>
+        <Link to={isAuthenticated ? PAGES.DASHBOARD : PAGES.LANDING}>
           <i className='fas fa-code'></i> Tasker
         </Link>
       </h1>

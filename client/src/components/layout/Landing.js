@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import PAGES from "../../strings/pages";
+import AUTH_CONSTANTS from "../../strings/auth";
 
 export const Landing = () => {
   return (
@@ -12,10 +14,10 @@ export const Landing = () => {
             other developers
           </p>
           <div className='buttons'>
-            <Link to='/register' className='btn btn-primary'>
+            <Link to={PAGES.REGISTER} className='btn btn-primary'>
               Sign Up
             </Link>
-            <Link to='/login' className='btn btn-light'>
+            <Link to={PAGES.LOGIN} className='btn btn-light'>
               Login
             </Link>
           </div>
