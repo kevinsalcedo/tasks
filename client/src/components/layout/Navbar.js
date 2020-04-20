@@ -1,43 +1,67 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
 import PAGES from "../../strings/pages";
+import { Box, Header, Heading, Menu, Nav, ResponsiveContext } from "grommet";
+import LinkAnchor from "../routing/LinkAnchor";
+import { useHistory } from "react-router-dom";
 
 const Navbar = ({ logout, auth: { isAuthenticated, loading } }) => {
-  const authLinks = (
-    <ul>
-      <li>
-        <Link onClick={logout} to='/'>
-          <i className='fas fa-sign-out-alt'></i>{" "}
-          <span className='hide-sm'>Logout</span>
-        </Link>
-      </li>
-    </ul>
+  const history = useHistory();
+  const handleClick = (path) => history.push(path);
+  const authNavLinks = (
+    <Nav direction='row'>
+      <LinkAnchor primary onClick={logout} to='/'>
+        <i className='fas fa-sign-out-alt'></i>{" "}
+        <span className='hide-sm'>Logout</span>
+      </LinkAnchor>
+    </Nav>
   );
 
-  const guestLinks = (
-    <ul>
-      <li>
-        <Link to={PAGES.REGISTER}>Register</Link>
-      </li>
-      <li>
-        <Link to={PAGES.LOGIN}>Login</Link>
-      </li>
-    </ul>
+  const guestNavLinks = (
+    <Nav direction='row'>
+      <LinkAnchor primary to={PAGES.REGISTER}>
+        Register
+      </LinkAnchor>
+      <LinkAnchor primary to={PAGES.LOGIN}>
+        Login
+      </LinkAnchor>
+    </Nav>
+  );
+
+  const authMenuItems = [{ label: "Logout", onClick: () => logout() }];
+
+  const guestMenuItems = [
+    { label: "Register", onClick: () => handleClick(PAGES.REGISTER) },
+    { label: "Log In", onClick: () => handleClick(PAGES.LOGIN) },
+  ];
+
+  const renderNavContext = () => (
+    <ResponsiveContext.Consumer>
+      {(responsive) =>
+        responsive === "small" ? (
+          <Menu
+            label='Menu'
+            items={isAuthenticated ? authMenuItems : guestMenuItems}
+          />
+        ) : (
+          <Fragment>{isAuthenticated ? authNavLinks : guestNavLinks}</Fragment>
+        )
+      }
+    </ResponsiveContext.Consumer>
   );
   return (
-    <nav className='navbar bg-dark'>
-      <h1>
-        <Link to={isAuthenticated ? PAGES.DASHBOARD : PAGES.LANDING}>
-          <i className='fas fa-code'></i> Tasker
-        </Link>
-      </h1>
-      {!loading && (
-        <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
-      )}
-    </nav>
+    <Header pad='medium' elevation='small'>
+      <Box direction='row' align='center' gap='small'>
+        <LinkAnchor to={PAGES.DASHBOARD}>
+          <Heading>
+            <i className='fas fa-code'></i> Tasker
+          </Heading>
+        </LinkAnchor>
+      </Box>
+      {!loading && renderNavContext()}
+    </Header>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // Constants
 import PAGES from "./strings/pages";
@@ -18,6 +18,10 @@ import { loadUser } from "./actions/auth";
 
 import "./App.css";
 
+// UI
+import { Grommet, Main } from "grommet";
+import theme from "./components/layout/ui/theme";
+
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -29,10 +33,10 @@ const App = () => {
   return (
     <Provider store={store}>
       <Router>
-        <Fragment>
+        <Grommet theme={theme}>
           <Navbar />
           <Route exact path={PAGES.LANDING} component={Landing} />
-          <section className='container'>
+          <Main responsive pad='xlarge'>
             <Alert />
             <Switch>
               <Route exact path={PAGES.LOGIN} component={Login} />
@@ -43,8 +47,8 @@ const App = () => {
                 component={Dashboard}
               />
             </Switch>
-          </section>
-        </Fragment>
+          </Main>
+        </Grommet>
       </Router>
     </Provider>
   );
