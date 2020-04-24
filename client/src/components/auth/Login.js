@@ -1,10 +1,22 @@
-import React, { Fragment, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/auth";
 import AUTH_CONSTANTS from "../../strings/auth";
 import PAGES from "../../strings/pages";
+import {
+  Box,
+  Button,
+  Heading,
+  Form,
+  FormField,
+  TextInput,
+  MaskedInput,
+  Paragraph,
+} from "grommet";
+import { Hide, View } from "grommet-icons";
+import LinkAnchor from "../routing/LinkAnchor";
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -12,10 +24,9 @@ const Login = ({ login, isAuthenticated }) => {
     password: "",
   });
 
-  const { email, password } = formData;
+  const [reveal, setReveal] = React.useState(false);
 
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const { email, password } = formData;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -28,44 +39,61 @@ const Login = ({ login, isAuthenticated }) => {
   }
 
   return (
-    <Fragment>
-      <h1 className='large text-primary'>{AUTH_CONSTANTS.SIGN_IN}</h1>
-      <p className='lead'>
+    <Box width='large' gap='medium'>
+      <Heading color='brand'>{AUTH_CONSTANTS.SIGN_IN}</Heading>
+      <Heading level='3'>
         <i className='fas fa-user'></i> {AUTH_CONSTANTS.SIGN_IN_PAGE.HEADER}
-      </p>
-      <form className='form' onSubmit={(e) => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            type='email'
-            placeholder={AUTH_CONSTANTS.FORM_FIELDS.EMAIL_PLACEHOLDER}
+      </Heading>
+
+      <Form
+        value={formData}
+        onChange={(nextValue) => setFormData(nextValue)}
+        onReset={() => setFormData({})}
+        onSubmit={(e) => onSubmit(e)}
+      >
+        <FormField
+          name='email'
+          label={AUTH_CONSTANTS.FORM_FIELDS.EMAIL_PLACEHOLDER}
+        >
+          <MaskedInput
             name='email'
-            value={email}
-            onChange={(e) => onChange(e)}
+            mask={[
+              { regexp: /^[\w\-_.]+$/, placeholder: "example" },
+              { fixed: "@" },
+              { regexpt: /^[\w]+$/, placehodler: "my" },
+              { fixed: "." },
+              { regexp: /^[\w]+$/, placeholder: "com" },
+            ]}
           />
-        </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder={AUTH_CONSTANTS.FORM_FIELDS.PASSWORD_PLACEHOLDER}
-            name='password'
-            minLength='6'
-            value={password}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
-        <input
-          type='submit'
-          className='btn btn-primary'
-          value={AUTH_CONSTANTS.SIGN_IN_PAGE.SUBMIT_BUTTON}
-        />
-      </form>
-      <p className='my-1'>
+        </FormField>
+        <FormField
+          name='password'
+          label={AUTH_CONSTANTS.FORM_FIELDS.PASSWORD_PLACEHOLDER}
+        >
+          <Box direction='row' align='center'>
+            <TextInput
+              name='password'
+              plain
+              type={reveal ? "text" : "password"}
+            />
+            <Button
+              icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
+              onClick={() => setReveal(!reveal)}
+            />
+          </Box>
+        </FormField>
+        <Box direction='row' justify='around' margin={{ top: "medium" }}>
+          <Button type='submit' label='Submit' primary />
+        </Box>
+      </Form>
+
+      <Paragraph>
         {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH}{" "}
-        <Link to={PAGES.REGISTER}>
+        <LinkAnchor to={PAGES.REGISTER}>
           {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH_LINK}
-        </Link>
-      </p>
-    </Fragment>
+        </LinkAnchor>
+      </Paragraph>
+    </Box>
   );
 };
 

@@ -19,8 +19,8 @@ import { loadUser } from "./actions/auth";
 import "./App.css";
 
 // UI
-import { Grommet, Main } from "grommet";
-import theme from "./components/layout/ui/theme";
+import { Grid, Grommet, Main } from "grommet";
+import { grommet } from "grommet/themes";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -32,24 +32,34 @@ const App = () => {
   }, []);
   return (
     <Provider store={store}>
-      <Router>
-        <Grommet theme={theme}>
-          <Navbar />
-          <Route exact path={PAGES.LANDING} component={Landing} />
-          <Main responsive pad='xlarge'>
-            <Alert />
-            <Switch>
-              <Route exact path={PAGES.LOGIN} component={Login} />
-              <Route exact path={PAGES.REGISTER} component={Register} />
-              <PrivateRoute
-                exact
-                path={PAGES.DASHBOARD}
-                component={Dashboard}
-              />
-            </Switch>
-          </Main>
-        </Grommet>
-      </Router>
+      <Grommet themeMode='light' theme={grommet} full>
+        <Grid
+          fill
+          rows={["auto", "flex"]}
+          columns={["auto", "flex"]}
+          areas={[
+            { name: "header", start: [0, 0], end: [1, 0] },
+            { name: "main", start: [0, 1], end: [1, 1] },
+          ]}
+        >
+          <Router>
+            <Navbar gridArea='header' />
+            <Main gridArea='main' responsive pad='medium' align='center'>
+              <Alert />
+              <Route exact path={PAGES.LANDING} component={Landing} />
+              <Switch>
+                <Route exact path={PAGES.LOGIN} component={Login} />
+                <Route exact path={PAGES.REGISTER} component={Register} />
+                <PrivateRoute
+                  exact
+                  path={PAGES.DASHBOARD}
+                  component={Dashboard}
+                />
+              </Switch>
+            </Main>
+          </Router>
+        </Grid>
+      </Grommet>
     </Provider>
   );
 };

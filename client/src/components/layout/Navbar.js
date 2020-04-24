@@ -3,19 +3,31 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
 import PAGES from "../../strings/pages";
-import { Box, Header, Heading, Menu, Nav, ResponsiveContext } from "grommet";
+import {
+  Box,
+  Header,
+  Heading,
+  Menu,
+  Nav,
+  ResponsiveContext,
+  Button,
+} from "grommet";
 import LinkAnchor from "../routing/LinkAnchor";
 import { useHistory } from "react-router-dom";
 
-const Navbar = ({ logout, auth: { isAuthenticated, loading } }) => {
+const Navbar = ({ logout, auth: { isAuthenticated, loading }, ...rest }) => {
   const history = useHistory();
-  const handleClick = (path) => history.push(path);
+  const directTo = (path) => history.push(path);
+
   const authNavLinks = (
     <Nav direction='row'>
-      <LinkAnchor primary onClick={logout} to='/'>
+      {/* <LinkAnchor primary onClick={() => logout()} to='/'> */}
+      <Button onClick={() => logout()}>
         <i className='fas fa-sign-out-alt'></i>{" "}
         <span className='hide-sm'>Logout</span>
-      </LinkAnchor>
+      </Button>
+
+      {/* </LinkAnchor> */}
     </Nav>
   );
 
@@ -33,8 +45,8 @@ const Navbar = ({ logout, auth: { isAuthenticated, loading } }) => {
   const authMenuItems = [{ label: "Logout", onClick: () => logout() }];
 
   const guestMenuItems = [
-    { label: "Register", onClick: () => handleClick(PAGES.REGISTER) },
-    { label: "Log In", onClick: () => handleClick(PAGES.LOGIN) },
+    { label: "Register", onClick: () => directTo(PAGES.REGISTER) },
+    { label: "Log In", onClick: () => directTo(PAGES.LOGIN) },
   ];
 
   const renderNavContext = () => (
@@ -52,7 +64,7 @@ const Navbar = ({ logout, auth: { isAuthenticated, loading } }) => {
     </ResponsiveContext.Consumer>
   );
   return (
-    <Header pad='medium' elevation='small'>
+    <Header pad='medium' elevation='small' {...rest}>
       <Box direction='row' align='center' gap='small'>
         <LinkAnchor to={PAGES.DASHBOARD}>
           <Heading>
