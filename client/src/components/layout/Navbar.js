@@ -64,7 +64,7 @@ const Navbar = ({ logout, auth: { isAuthenticated, loading }, ...rest }) => {
     </ResponsiveContext.Consumer>
   );
   return (
-    <Header pad='medium' elevation='small' {...rest}>
+    <Header pad='small' elevation='small' {...rest}>
       <Box direction='row' align='center' gap='small'>
         <LinkAnchor to={PAGES.DASHBOARD}>
           <Heading>

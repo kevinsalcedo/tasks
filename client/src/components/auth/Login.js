@@ -39,60 +39,69 @@ const Login = ({ login, isAuthenticated }) => {
   }
 
   return (
-    <Box width='large' gap='medium'>
-      <Heading color='brand'>{AUTH_CONSTANTS.SIGN_IN}</Heading>
-      <Heading level='3'>
-        <i className='fas fa-user'></i> {AUTH_CONSTANTS.SIGN_IN_PAGE.HEADER}
-      </Heading>
+    <Box
+      background='white'
+      align='center'
+      justify='center'
+      fill
+      round='medium'
+      elevation='small'
+    >
+      <Box width='large' gap='medium'>
+        <Heading color='brand'>{AUTH_CONSTANTS.SIGN_IN}</Heading>
+        <Heading level='3'>
+          <i className='fas fa-user'></i> {AUTH_CONSTANTS.SIGN_IN_PAGE.HEADER}
+        </Heading>
 
-      <Form
-        value={formData}
-        onChange={(nextValue) => setFormData(nextValue)}
-        onReset={() => setFormData({})}
-        onSubmit={(e) => onSubmit(e)}
-      >
-        <FormField
-          name='email'
-          label={AUTH_CONSTANTS.FORM_FIELDS.EMAIL_PLACEHOLDER}
+        <Form
+          value={formData}
+          onChange={(nextValue) => setFormData(nextValue)}
+          onReset={() => setFormData({})}
+          onSubmit={(e) => onSubmit(e)}
         >
-          <MaskedInput
+          <FormField
             name='email'
-            mask={[
-              { regexp: /^[\w\-_.]+$/, placeholder: "example" },
-              { fixed: "@" },
-              { regexpt: /^[\w]+$/, placehodler: "my" },
-              { fixed: "." },
-              { regexp: /^[\w]+$/, placeholder: "com" },
-            ]}
-          />
-        </FormField>
-        <FormField
-          name='password'
-          label={AUTH_CONSTANTS.FORM_FIELDS.PASSWORD_PLACEHOLDER}
-        >
-          <Box direction='row' align='center'>
-            <TextInput
-              name='password'
-              plain
-              type={reveal ? "text" : "password"}
+            label={AUTH_CONSTANTS.FORM_FIELDS.EMAIL_PLACEHOLDER}
+          >
+            <MaskedInput
+              name='email'
+              mask={[
+                { regexp: /^[\w\-_.]+$/, placeholder: "example" },
+                { fixed: "@" },
+                { regexpt: /^[\w]+$/, placehodler: "my" },
+                { fixed: "." },
+                { regexp: /^[\w]+$/, placeholder: "com" },
+              ]}
             />
-            <Button
-              icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
-              onClick={() => setReveal(!reveal)}
-            />
+          </FormField>
+          <FormField
+            name='password'
+            label={AUTH_CONSTANTS.FORM_FIELDS.PASSWORD_PLACEHOLDER}
+          >
+            <Box direction='row' align='center'>
+              <TextInput
+                name='password'
+                plain
+                type={reveal ? "text" : "password"}
+              />
+              <Button
+                icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
+                onClick={() => setReveal(!reveal)}
+              />
+            </Box>
+          </FormField>
+          <Box direction='row' justify='around' margin={{ top: "medium" }}>
+            <Button type='submit' label='Submit' primary />
           </Box>
-        </FormField>
-        <Box direction='row' justify='around' margin={{ top: "medium" }}>
-          <Button type='submit' label='Submit' primary />
-        </Box>
-      </Form>
+        </Form>
 
-      <Paragraph>
-        {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH}{" "}
-        <LinkAnchor to={PAGES.REGISTER}>
-          {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH_LINK}
-        </LinkAnchor>
-      </Paragraph>
+        <Paragraph>
+          {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH}{" "}
+          <LinkAnchor to={PAGES.REGISTER}>
+            {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH_LINK}
+          </LinkAnchor>
+        </Paragraph>
+      </Box>
     </Box>
   );
 };
