@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Calendar as GrommetCalendar } from "grommet";
-import { setDateRange, selectList } from "../../../actions/list";
+import { setDateRange } from "../../../actions/dashboard";
 import moment from "moment";
 
 class Calendar extends React.Component {
@@ -10,10 +10,7 @@ class Calendar extends React.Component {
   onSelect = (nextDate) => {
     // Get the start and end dates in local time zone
     const startDate = moment(nextDate).startOf("day").format();
-    const rangeDate = moment(nextDate).add(2, "days").endOf("day").format();
-    this.props.setDateRange(startDate, rangeDate);
-
-    this.props.selectList(this.props.selectedList, startDate, rangeDate);
+    this.props.setDateRange(startDate);
   };
   render() {
     const { startDate } = this.props;
@@ -30,6 +27,5 @@ class Calendar extends React.Component {
 const mapStateToProps = (state) => ({
   selectedList: state.list.selectedList,
   startDate: state.list.startDate,
-  endDate: state.list.endDate,
 });
-export default connect(mapStateToProps, { setDateRange, selectList })(Calendar);
+export default connect(mapStateToProps, { setDateRange })(Calendar);

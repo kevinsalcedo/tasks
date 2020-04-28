@@ -1,21 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { loadLists, selectList } from "../../../actions/list";
+import { selectList } from "../../../actions/list";
 import { Accordion, AccordionPanel, Box, Button, Text } from "grommet";
 import { Add } from "grommet-icons";
-import moment from "moment";
 
 class TaskLists extends React.Component {
-  // When the sidebar is loaded, then populate the lists
-  // Get all the tasks for the next three (four?) days
-  componentDidMount() {
-    const start = moment().startOf("day").format();
-    const end = moment(start).add(2, "days").format();
-    this.props.loadLists(start, end);
-  }
-
   render() {
-    const { selectedList, lists, loading, startDate, endDate } = this.props;
+    const { selectedList, lists, loading } = this.props;
     if (!loading) {
       return (
         <Accordion>
@@ -25,7 +16,7 @@ class TaskLists extends React.Component {
                 label='All'
                 active={!selectedList}
                 primary
-                onClick={() => this.props.selectList(null, startDate, endDate)}
+                onClick={() => this.props.selectList(null)}
               />
             </Box>
             {lists.map((list) => (
@@ -34,9 +25,7 @@ class TaskLists extends React.Component {
                   color={list.color}
                   label={list.name}
                   active={selectedList === list._id}
-                  onClick={() =>
-                    this.props.selectList(list._id, startDate, endDate)
-                  }
+                  onClick={() => this.props.selectList(list._id)}
                   primary
                 />
               </Box>
@@ -58,7 +47,6 @@ const mapStateToProps = (state) => ({
   tasks: state.list.tasks,
   loading: state.list.loading,
   startDate: state.list.startDate,
-  endDate: state.list.endDate,
 });
 
-export default connect(mapStateToProps, { loadLists, selectList })(TaskLists);
+export default connect(mapStateToProps, { selectList })(TaskLists);

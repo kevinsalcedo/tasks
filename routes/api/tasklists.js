@@ -9,7 +9,7 @@ const Task = require("../../models/Task");
 const User = require("../../models/User");
 
 //@route GET api/taskslists
-//@desc Get current user's tasklists and tasks
+//@desc Get current user's tasklists
 //@access Private
 router.get("/", auth, async (req, res) => {
   try {
@@ -20,14 +20,7 @@ router.get("/", auth, async (req, res) => {
     if (!lists) {
       return res.status(400).json({ msg: "You don't have any task lists!" });
     }
-    let allTasks = await Task.find({ user: req.user.id }).populate("taskList", [
-      "name",
-      "color",
-    ]);
-
-    allTasks = filterTasks(allTasks, req.query.start, req.query.end);
-
-    res.json({ lists, allTasks });
+    res.json(lists);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

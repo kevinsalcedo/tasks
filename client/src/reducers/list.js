@@ -2,9 +2,9 @@ import {
   GET_LISTS,
   LIST_ERROR,
   SELECT_LIST,
-  SELECT_ERROR,
   SET_DATE,
-  DATE_ERROR,
+  GET_TASKS,
+  TASK_ERROR,
 } from "../actions/types";
 import moment from "moment";
 
@@ -14,7 +14,6 @@ const initialState = {
   selectedList: null,
   loading: true,
   startDate: moment().startOf("day").format(),
-  endDate: moment().add(2, "days").endOf("day").format(),
 };
 
 export default function (state = initialState, action) {
@@ -24,20 +23,24 @@ export default function (state = initialState, action) {
       return {
         ...state,
         lists: payload.lists,
-        tasks: payload.tasks,
         loading: false,
       };
     case SELECT_LIST:
       return {
         ...state,
-        selectedList: payload.selectedList,
-        tasks: payload.tasks,
+        selectedList: payload,
+        loading: false,
+      };
+    case GET_TASKS:
+      return {
+        ...state,
+        tasks: payload,
+        loading: false,
       };
     case SET_DATE:
-      return { ...state, startDate: payload.start, endDate: payload.end };
-    case SELECT_ERROR:
+      return { ...state, startDate: payload };
     case LIST_ERROR:
-    case DATE_ERROR:
+    case TASK_ERROR:
       return {
         ...state,
         lists: [],
@@ -45,7 +48,6 @@ export default function (state = initialState, action) {
         selectedList: null,
         loading: false,
         startDate: moment().format(),
-        endDate: moment().add(2, "days").format(),
       };
     default:
       return state;

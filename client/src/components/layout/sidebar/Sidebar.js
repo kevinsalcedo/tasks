@@ -1,24 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
 import { logout } from "../../../actions/auth";
+import { loadLists } from "../../../actions/list";
 import PAGES from "../../../strings/pages";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import {
-  Box,
-  Sidebar as GrommetSidebar,
-  Button,
-  Avatar,
-  Heading,
-  Menu,
-  Text,
-  ResponsiveContext,
-} from "grommet";
+import { Box, Sidebar as GrommetSidebar, Avatar, Menu, Text } from "grommet";
 import Calendar from "./Calendar";
-import { Task, Schedule } from "grommet-icons";
 import TaskLists from "./TaskLists";
-export const Sidebar = ({ logout, isAuthenticated }, ...rest) => {
+import DisplayButtonGroup from "./DisplayButtonGroup";
+
+export const Sidebar = (
+  { loadLists, logout, isAuthenticated, view },
+  ...rest
+) => {
   const history = useHistory();
   const directTo = (path) => history.push(path);
 
@@ -27,6 +23,7 @@ export const Sidebar = ({ logout, isAuthenticated }, ...rest) => {
     { label: "Register", onClick: () => directTo(PAGES.REGISTER) },
     { label: "Log In", onClick: () => directTo(PAGES.LOGIN) },
   ];
+
   return (
     <GrommetSidebar
       header={
@@ -42,11 +39,13 @@ export const Sidebar = ({ logout, isAuthenticated }, ...rest) => {
             )
           }
           items={isAuthenticated ? authMenuItems : guestMenuItems}
+          gap='small'
         />
       }
       {...rest}
     >
-      {isAuthenticated && <Calendar />}
+      {isAuthenticated && <DisplayButtonGroup />}
+      {isAuthenticated && view === "calendar" && <Calendar />}
       {isAuthenticated && <TaskLists />}
     </GrommetSidebar>
   );
@@ -58,6 +57,7 @@ Sidebar.propTypes = {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  view: state.dashboard.view,
 });
 
-export default connect(mapStateToProps, { logout })(Sidebar);
+export default connect(mapStateToProps, { loadLists, logout })(Sidebar);

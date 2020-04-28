@@ -22,3 +22,6 @@ export const DATE_ERROR = "DATE_ERROR";
 // Tasks
 export const GET_TASKS = "GET_TASKS";
 export const TASK_ERROR = "TASK_ERROR";
+
+// Dashboard settings
+export const CHANGE_VIEW = "CHANGE_VIEW";
