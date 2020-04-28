@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { loadLists, selectList } from "../../../actions/list";
 import { Accordion, AccordionPanel, Box, Button, Text } from "grommet";
+import { Add } from "grommet-icons";
 import moment from "moment";
 
 class TaskLists extends React.Component {
@@ -18,7 +19,7 @@ class TaskLists extends React.Component {
     if (!loading) {
       return (
         <Accordion>
-          <AccordionPanel label='My Lists' pad='small'>
+          <AccordionPanel label='My Lists' pad='small' active>
             <Box pad='small'>
               <Button
                 label='All'
@@ -40,6 +41,9 @@ class TaskLists extends React.Component {
                 />
               </Box>
             ))}
+            <Box pad='small'>
+              <Button icon={<Add />} label='New List' onClick={() => {}} />
+            </Box>
           </AccordionPanel>
         </Accordion>
       );

@@ -1,13 +1,13 @@
-import React from 'react';
-import { Box, Button, Heading } from 'grommet';
-import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import React from "react";
+import { Box, Button, Heading } from "grommet";
+import { useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import PAGES from '../../strings/pages';
-import ContainerPane from './ContainerPane';
+import PAGES from "../../strings/pages";
+import ContainerPane from "./ContainerPane";
 
 export const Landing = ({ isAuthenticated }) => {
   const history = useHistory();

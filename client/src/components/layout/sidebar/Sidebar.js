@@ -16,7 +16,7 @@ import {
   ResponsiveContext,
 } from "grommet";
 import Calendar from "./Calendar";
-import { Help } from "grommet-icons";
+import { Task, Schedule } from "grommet-icons";
 import TaskLists from "./TaskLists";
 export const Sidebar = ({ logout, isAuthenticated }, ...rest) => {
   const history = useHistory();
@@ -33,8 +33,8 @@ export const Sidebar = ({ logout, isAuthenticated }, ...rest) => {
         <Menu
           label={
             isAuthenticated ? (
-              <Box direction="row" gap="small" align="center">
-                <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+              <Box direction='row' gap='small' align='center'>
+                <Avatar src='//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80' />
                 <Text>Your Name</Text>
               </Box>
             ) : (

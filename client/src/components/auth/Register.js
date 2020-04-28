@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
-import ALERT_CONSTANTS from '../../strings/alerts';
-import AUTH_CONSTANTS from '../../strings/auth';
-import PAGES from '../../strings/pages';
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { setAlert } from "../../actions/alert";
+import { register } from "../../actions/auth";
+import ALERT_CONSTANTS from "../../strings/alerts";
+import AUTH_CONSTANTS from "../../strings/auth";
+import PAGES from "../../strings/pages";
+import PropTypes from "prop-types";
 import {
   Box,
   Button,
@@ -16,17 +16,17 @@ import {
   TextInput,
   MaskedInput,
   Paragraph,
-} from 'grommet';
-import { Hide, View } from 'grommet-icons';
-import LinkAnchor from '../routing/LinkAnchor';
-import ContainerPane from '../layout/ContainerPane';
+} from "grommet";
+import { Hide, View } from "grommet-icons";
+import LinkAnchor from "../routing/LinkAnchor";
+import ContainerPane from "../layout/ContainerPane";
 
 const Register = ({ setAlert, register, isAuthenticated, loading }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password2: '',
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
   });
   const [reveal, setReveal] = React.useState(false);
 
@@ -35,7 +35,7 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
-      setAlert(ALERT_CONSTANTS.ERRORS.PASSWORD_MATCH, 'danger');
+      setAlert(ALERT_CONSTANTS.ERRORS.PASSWORD_MATCH, "danger");
     } else {
       register({ name, email, password });
     }
@@ -74,11 +74,11 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
             <MaskedInput
               name='email'
               mask={[
-                { regexp: /^[\w\-_.]+$/, placeholder: 'example' },
-                { fixed: '@' },
-                { regexpt: /^[\w]+$/, placehodler: 'my' },
-                { fixed: '.' },
-                { regexp: /^[\w]+$/, placeholder: 'com' },
+                { regexp: /^[\w\-_.]+$/, placeholder: "example" },
+                { fixed: "@" },
+                { regexpt: /^[\w]+$/, placehodler: "my" },
+                { fixed: "." },
+                { regexp: /^[\w]+$/, placeholder: "com" },
               ]}
             />
           </FormField>
@@ -90,7 +90,7 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
               <TextInput
                 name='password'
                 plain
-                type={reveal ? 'text' : 'password'}
+                type={reveal ? "text" : "password"}
               />
               <Button
                 icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
@@ -106,7 +106,7 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
               <TextInput
                 name='password2'
                 plain
-                type={reveal ? 'text' : 'password'}
+                type={reveal ? "text" : "password"}
               />
               <Button
                 icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
@@ -114,14 +114,14 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
               />
             </Box>
           </FormField>
-          <Box direction='row' justify='around' margin={{ top: 'medium' }}>
+          <Box direction='row' justify='around' margin={{ top: "medium" }}>
             <Button type='reset' label='Reset' />
             <Button type='submit' label='Submit' primary />
           </Box>
         </Form>
 
         <Paragraph>
-          {AUTH_CONSTANTS.REGISTER_PAGE.SWITCH}{' '}
+          {AUTH_CONSTANTS.REGISTER_PAGE.SWITCH}{" "}
           <LinkAnchor to={PAGES.LOGIN}>
             {AUTH_CONSTANTS.REGISTER_PAGE.SWITCH_LINK}
           </LinkAnchor>

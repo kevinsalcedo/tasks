@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { login } from '../../actions/auth';
-import AUTH_CONSTANTS from '../../strings/auth';
-import PAGES from '../../strings/pages';
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { login } from "../../actions/auth";
+import AUTH_CONSTANTS from "../../strings/auth";
+import PAGES from "../../strings/pages";
 import {
   Box,
   Button,
@@ -14,15 +14,15 @@ import {
   TextInput,
   MaskedInput,
   Paragraph,
-} from 'grommet';
-import { Hide, View } from 'grommet-icons';
-import LinkAnchor from '../routing/LinkAnchor';
-import ContainerPane from '../layout/ContainerPane';
+} from "grommet";
+import { Hide, View } from "grommet-icons";
+import LinkAnchor from "../routing/LinkAnchor";
+import ContainerPane from "../layout/ContainerPane";
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [reveal, setReveal] = React.useState(false);
@@ -60,11 +60,11 @@ const Login = ({ login, isAuthenticated }) => {
             <MaskedInput
               name='email'
               mask={[
-                { regexp: /^[\w\-_.]+$/, placeholder: 'example' },
-                { fixed: '@' },
-                { regexpt: /^[\w]+$/, placehodler: 'my' },
-                { fixed: '.' },
-                { regexp: /^[\w]+$/, placeholder: 'com' },
+                { regexp: /^[\w\-_.]+$/, placeholder: "example" },
+                { fixed: "@" },
+                { regexpt: /^[\w]+$/, placehodler: "my" },
+                { fixed: "." },
+                { regexp: /^[\w]+$/, placeholder: "com" },
               ]}
             />
           </FormField>
@@ -76,7 +76,7 @@ const Login = ({ login, isAuthenticated }) => {
               <TextInput
                 name='password'
                 plain
-                type={reveal ? 'text' : 'password'}
+                type={reveal ? "text" : "password"}
               />
               <Button
                 icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
@@ -84,13 +84,13 @@ const Login = ({ login, isAuthenticated }) => {
               />
             </Box>
           </FormField>
-          <Box direction='row' justify='around' margin={{ top: 'medium' }}>
+          <Box direction='row' justify='around' margin={{ top: "medium" }}>
             <Button type='submit' label='Submit' primary />
           </Box>
         </Form>
 
         <Paragraph>
-          {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH}{' '}
+          {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH}{" "}
           <LinkAnchor to={PAGES.REGISTER}>
             {AUTH_CONSTANTS.SIGN_IN_PAGE.SWITCH_LINK}
           </LinkAnchor>

@@ -4,12 +4,12 @@ import { Box } from "grommet";
 const ContainerPane = (props) => {
   return (
     <Box
-      background="white"
-      align="center"
-      justify="center"
+      background='white'
+      align='center'
+      justify='center'
       fill
-      round="medium"
-      elevation="small"
+      round='medium'
+      elevation='small'
       {...props}
     >
       {props.children}
