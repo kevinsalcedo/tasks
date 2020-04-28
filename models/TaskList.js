@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const TaskListSchema = new mongoose.Schema({
   user: {
@@ -18,7 +19,7 @@ const TaskListSchema = new mongoose.Schema({
   },
   createDate: {
     type: Date,
-    default: Date.now,
+    default: moment().utc().format(),
   },
   // TODO: color scheme?
   color: {

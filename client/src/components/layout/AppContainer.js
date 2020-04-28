@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import PAGES from "../../strings/pages";
 // Page Components
 import Landing from "./Landing";
-import Sidebar from "../layout/Sidebar";
+import Sidebar from "../layout/sidebar/Sidebar";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
 import Alert from "./Alert";
@@ -21,17 +21,17 @@ import { grommet } from "grommet/themes";
 
 const AppContainer = ({ isAuthenticated }) => {
   return (
-    <Grommet themeMode='light' theme={grommet} full>
-      <Box direction='row' fill>
+    <Grommet themeMode="light" theme={grommet} full>
+      <Box direction="row" fill>
         <Router>
-          <Sidebar gridArea='sidebar' />
+          <Sidebar gridArea="sidebar" />
 
           <Main
-            gridArea='main'
+            gridArea="main"
             responsive
-            pad='medium'
-            align='center'
-            background='linear-gradient(102.77deg, #865ED6 -9.18%, #18BAB9 209.09%)'
+            pad="medium"
+            align="center"
+            background="linear-gradient(102.77deg, #865ED6 -9.18%, #18BAB9 209.09%)"
           >
             <Alert />
             <Route exact path={PAGES.LANDING} component={Landing} />

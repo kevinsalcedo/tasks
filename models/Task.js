@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const TaskSchema = new mongoose.Schema({
   user: {
@@ -25,6 +26,7 @@ const TaskSchema = new mongoose.Schema({
   },
   createDate: {
     type: Date,
+    default: moment().utc().format(),
   },
   // TODO: subtasks?
   // TODO: index in list?

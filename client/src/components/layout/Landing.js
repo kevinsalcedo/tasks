@@ -1,12 +1,13 @@
-import React from "react";
-import { Box, Button, Heading } from "grommet";
-import { useHistory } from "react-router-dom";
-import PropTypes from "prop-types";
-import { Redirect } from "react-router-dom";
+import React from 'react';
+import { Box, Button, Heading } from 'grommet';
+import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import PAGES from "../../strings/pages";
+import PAGES from '../../strings/pages';
+import ContainerPane from './ContainerPane';
 
 export const Landing = ({ isAuthenticated }) => {
   const history = useHistory();
@@ -17,14 +18,7 @@ export const Landing = ({ isAuthenticated }) => {
   }
 
   return (
-    <Box
-      background='white'
-      align='center'
-      justify='center'
-      fill
-      round='medium'
-      elevation='small'
-    >
+    <ContainerPane>
       <Heading>Taskify</Heading>
       <Heading level='3'>Lorem ipsum dolor</Heading>
       <Box align='center' pad='large' gap='small' direction='row'>
@@ -43,7 +37,7 @@ export const Landing = ({ isAuthenticated }) => {
           label='Sign In'
         />
       </Box>
-    </Box>
+    </ContainerPane>
   );
 };
 

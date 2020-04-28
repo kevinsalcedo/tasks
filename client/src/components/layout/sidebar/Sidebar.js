@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { logout } from "../../actions/auth";
-import PAGES from "../../strings/pages";
+import { logout } from "../../../actions/auth";
+import PAGES from "../../../strings/pages";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -15,8 +15,9 @@ import {
   Text,
   ResponsiveContext,
 } from "grommet";
-import Calendar from "../layout/Calendar";
+import Calendar from "./Calendar";
 import { Help } from "grommet-icons";
+import TaskLists from "./TaskLists";
 export const Sidebar = ({ logout, isAuthenticated }, ...rest) => {
   const history = useHistory();
   const directTo = (path) => history.push(path);
@@ -26,19 +27,14 @@ export const Sidebar = ({ logout, isAuthenticated }, ...rest) => {
     { label: "Register", onClick: () => directTo(PAGES.REGISTER) },
     { label: "Log In", onClick: () => directTo(PAGES.LOGIN) },
   ];
-
-  const renderSidebarContext = () => (
-    <ResponsiveContext.Consumer></ResponsiveContext.Consumer>
-  );
-
   return (
     <GrommetSidebar
       header={
         <Menu
           label={
             isAuthenticated ? (
-              <Box direction='row' gap='small' align='center'>
-                <Avatar src='//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80' />
+              <Box direction="row" gap="small" align="center">
+                <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
                 <Text>Your Name</Text>
               </Box>
             ) : (
@@ -46,17 +42,12 @@ export const Sidebar = ({ logout, isAuthenticated }, ...rest) => {
             )
           }
           items={isAuthenticated ? authMenuItems : guestMenuItems}
-          open={!isAuthenticated}
         />
       }
-      footer={<Button icon={<Help />} hoverIndicator />}
       {...rest}
     >
       {isAuthenticated && <Calendar />}
-      {/* <Nav gap='small'>
-        <Button icon={<Projects />} hoverIndicator />
-        <Button icon={<Clock />} hoverIndicator />
-      </Nav> */}
+      {isAuthenticated && <TaskLists />}
     </GrommetSidebar>
   );
 };
