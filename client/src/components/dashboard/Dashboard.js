@@ -13,29 +13,28 @@ class Dashboard extends React.Component {
 
   render() {
     const { tasks } = this.props;
-    console.log(tasks);
     return (
-      <ContainerPane justify="start" pad="medium">
-        {/* <Box direction="row" gap="small" fill>
+      <ContainerPane justify='start' pad='medium'>
+        <Box direction='row' gap='small' fill>
           {Object.keys(tasks).map((dateGroup) => (
             <Box
               key={dateGroup}
-              gap="small"
-              align="center"
+              gap='small'
+              align='center'
               fill
-              background="#aaaaaa"
+              background='#aaaaaa'
               round
-              elevation="small"
+              elevation='small'
             >
-              <Heading level="4">{moment(dateGroup).format("MMMM Do")}</Heading>
-              <Box gap="small">
+              <Heading level='4'>{moment(dateGroup).format("MMMM Do")}</Heading>
+              <Box gap='small'>
                 {tasks[dateGroup].map((item) => (
                   <TaskCard key={item._id}>{item.name}</TaskCard>
                 ))}
               </Box>
             </Box>
           ))}
-        </Box> */}
+        </Box>
       </ContainerPane>
     );
   }
@@ -43,7 +42,7 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
   selectedList: PropTypes.string,
-  tasks: PropTypes.array,
+  tasks: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
@@ -52,7 +51,7 @@ Dashboard.propTypes = {
 const mapStateToProps = (state) => ({
   selectedList: state.list.selectedList,
   tasks: state.list.tasks,
-  loading: state.task.loading,
+  loading: state.list.loading,
   startDate: state.list.startDate,
   endDate: state.list.endDate,
 });

@@ -8,35 +8,34 @@ class TaskLists extends React.Component {
   // When the sidebar is loaded, then populate the lists
   // Get all the tasks for the next three (four?) days
   componentDidMount() {
-    const start = moment().utc().startOf("day").format();
-    const end = moment(start).utc().add(2, "days").format();
+    const start = moment().startOf("day").format();
+    const end = moment(start).add(2, "days").format();
     this.props.loadLists(start, end);
   }
 
   render() {
-    const { selectedList, lists, loading } = this.props;
+    const { selectedList, lists, loading, startDate, endDate } = this.props;
     if (!loading) {
-      if (lists.length === 0) {
-        return <Text>You don't have any lists!</Text>;
-      }
       return (
         <Accordion>
-          <AccordionPanel label="My Lists" pad="small">
-            <Box pad="small">
+          <AccordionPanel label='My Lists' pad='small'>
+            <Box pad='small'>
               <Button
-                label="All"
+                label='All'
                 active={!selectedList}
                 primary
-                onClick={() => this.props.selectList()}
+                onClick={() => this.props.selectList(null, startDate, endDate)}
               />
             </Box>
             {lists.map((list) => (
-              <Box pad="small" key={list._id}>
+              <Box pad='small' key={list._id}>
                 <Button
                   color={list.color}
                   label={list.name}
                   active={selectedList === list._id}
-                  onClick={() => this.props.selectList(list._id)}
+                  onClick={() =>
+                    this.props.selectList(list._id, startDate, endDate)
+                  }
                   primary
                 />
               </Box>
@@ -54,6 +53,8 @@ const mapStateToProps = (state) => ({
   lists: state.list.lists,
   tasks: state.list.tasks,
   loading: state.list.loading,
+  startDate: state.list.startDate,
+  endDate: state.list.endDate,
 });
 
 export default connect(mapStateToProps, { loadLists, selectList })(TaskLists);

@@ -10,11 +10,11 @@ import moment from "moment";
 
 const initialState = {
   lists: [],
-  tasks: [],
+  tasks: {},
   selectedList: null,
   loading: true,
   startDate: moment().startOf("day").format(),
-  endDate: moment().add(3, "days").endOf("day").format(),
+  endDate: moment().add(2, "days").endOf("day").format(),
 };
 
 export default function (state = initialState, action) {
@@ -45,7 +45,7 @@ export default function (state = initialState, action) {
         selectedList: null,
         loading: false,
         startDate: moment().format(),
-        endDate: moment().add(3, "days").format(),
+        endDate: moment().add(2, "days").format(),
       };
     default:
       return state;

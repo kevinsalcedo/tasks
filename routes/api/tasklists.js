@@ -25,16 +25,7 @@ router.get("/", auth, async (req, res) => {
       "color",
     ]);
 
-    const start = moment(req.query.start).utc();
-    const end = moment(req.query.end).utc();
-
-    allTasks = allTasks.filter((task) => {
-      const createDate = moment(task.createDate).utc();
-      return (
-        createDate.isSameOrBefore(end, "days") &&
-        createDate.isSameOrAfter(start, "days")
-      );
-    });
+    allTasks = filterTasks(allTasks, req.query.start, req.query.end);
 
     res.json({ lists, allTasks });
   } catch (err) {
@@ -53,24 +44,7 @@ router.get("/tasks", auth, async (req, res) => {
       "color",
     ]);
 
-    const start = moment(req.query.start).utc();
-    const end = moment(req.query.end).utc();
-
-    allTasks = allTasks.filter((task) => {
-      const createDate = moment(task.createDate).utc();
-      return (
-        createDate.isSameOrBefore(end, "days") &&
-        createDate.isSameOrAfter(start, "days")
-      );
-    });
-
-    // // If there are query parameters then then filter
-    // let start = moment(req.query.start);
-    // let end = moment(req.query.end);
-    // allTasks = allTasks.filter((task) => {
-    //   const taskCreate = moment(task.createDate);
-    //   return taskCreate.isSameOrAfter(start) && taskCreate.isSameOrBefore(end);
-    // });
+    allTasks = filterTasks(allTasks, req.query.start, req.query.end);
 
     res.send(allTasks);
   } catch (err) {
@@ -110,19 +84,7 @@ router.get("/:list_id/tasks", auth, async (req, res) => {
       taskList: req.params.list_id,
     }).populate("taskList", ["name", "color"]);
 
-    if (!allTasks) {
-      return res.status(400).json({ msg: "No tasks found." });
-    }
-    const start = moment(req.query.start).utc();
-    const end = moment(req.query.end).utc();
-
-    allTasks = allTasks.filter((task) => {
-      const createDate = moment(task.createDate).utc();
-      return (
-        createDate.isSameOrBefore(end, "days") &&
-        createDate.isSameOrAfter(start, "days")
-      );
-    });
+    allTasks = filterTasks(allTasks, req.query.start, req.query.end);
 
     res.send(allTasks);
   } catch (err) {
@@ -393,4 +355,18 @@ router.delete("/tasklist/:list_id/tasks/:task_id", auth, async (req, res) => {
     return res.status(500).send("Server Error");
   }
 });
+
+// Helper method to filter tasks based on the dates specified
+const filterTasks = (tasks, start, end) => {
+  const startDate = moment(start);
+  const endDate = moment(end);
+
+  return tasks.filter((task) => {
+    const createDate = moment(task.createDate);
+    return (
+      createDate.isSameOrBefore(endDate, "days") &&
+      createDate.isSameOrAfter(startDate, "days")
+    );
+  });
+};
 module.exports = router;

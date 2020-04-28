@@ -20,10 +20,9 @@ export const loadLists = (start, end) => async (dispatch) => {
 
     // Split up the tasks into consumable format before reaching the user
     let calendar = generateCalendar(start, end, res.data.allTasks);
-    console.log(calendar);
     dispatch({
       type: GET_LISTS,
-      payload: { lists: res.data.lists, tasks: res.data.allTasks },
+      payload: { lists: res.data.lists, tasks: calendar },
     });
   } catch (err) {
     dispatch({
@@ -40,17 +39,12 @@ export const selectList = (id, start, end) => async (dispatch) => {
 
   const extension = !id ? `tasks` : `${id}/tasks`;
 
-  // Take any start and end query parameters
-  const startDate = moment(start).utc().startOf("day").format();
-  const endDate = moment(end).utc().startOf("day").format();
-
   try {
     const res = await axios.get(
-      `/api/tasklists/${extension}?start=${startDate}&end=${endDate}`
+      `/api/tasklists/${extension}?start=${start}&end=${end}`
     );
 
-    let calendar = this.generateCalendar(startDate, endDate, res.data);
-
+    let calendar = generateCalendar(start, end, res.data);
     dispatch({
       type: SELECT_LIST,
       payload: {
@@ -93,7 +87,6 @@ const generateCalendar = (startDate, endDate, tasks) => {
     calendar[curr.startOf("day").format()] = [];
     curr = curr.add(1, "days");
   }
-  console.log(calendar);
   tasks.forEach((task) => {
     const create = moment(task.createDate);
     calendar[create.startOf("day").format()].push(task);
