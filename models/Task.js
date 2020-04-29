@@ -28,8 +28,11 @@ const TaskSchema = new mongoose.Schema({
     type: Date,
     default: moment().utc().format(),
   },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
   // TODO: subtasks?
-  // TODO: index in list?
 });
 
 module.exports = Task = mongoose.model("task", TaskSchema);

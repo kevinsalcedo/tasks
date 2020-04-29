@@ -22,6 +22,12 @@ export const DATE_ERROR = "DATE_ERROR";
 // Tasks
 export const GET_TASKS = "GET_TASKS";
 export const TASK_ERROR = "TASK_ERROR";
+export const GET_CALENDAR = "GET_CALENDAR";
+export const CALENDAR_ERROR = "CALENDAR_ERROR";
 
 // Dashboard settings
 export const CHANGE_VIEW = "CHANGE_VIEW";
+
+// UI Reloads
+export const LOADING_START = "LOADING_START";
+export const LOADING_END = "LOADING_END";

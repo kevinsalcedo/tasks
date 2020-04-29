@@ -31,13 +31,13 @@ router.get("/", auth, async (req, res) => {
 // @desc Get all user's tasks
 // @access Private
 router.get("/tasks", auth, async (req, res) => {
+  const start = moment(req.query.start).utc();
+  const end = moment(req.query.end).utc();
   try {
-    let allTasks = await Task.find({ user: req.user.id }).populate("taskList", [
-      "name",
-      "color",
-    ]);
-
-    allTasks = filterTasks(allTasks, req.query.start, req.query.end);
+    let allTasks = await Task.find({
+      user: req.user.id,
+      createDate: { $gte: start, $lte: end },
+    }).populate("taskList", ["name", "color"]);
 
     res.send(allTasks);
   } catch (err) {
@@ -72,12 +72,13 @@ router.get("/:list_id", auth, async (req, res) => {
 //@desc Get all tasks for selected task list
 //@access Private
 router.get("/:list_id/tasks", auth, async (req, res) => {
+  const start = moment(req.query.start).utc();
+  const end = moment(req.query.end).utc();
   try {
     let allTasks = await Task.find({
       taskList: req.params.list_id,
+      createDate: { $gte: start, $lte: end },
     }).populate("taskList", ["name", "color"]);
-
-    allTasks = filterTasks(allTasks, req.query.start, req.query.end);
 
     res.send(allTasks);
   } catch (err) {
@@ -349,17 +350,4 @@ router.delete("/tasklist/:list_id/tasks/:task_id", auth, async (req, res) => {
   }
 });
 
-// Helper method to filter tasks based on the dates specified
-const filterTasks = (tasks, start, end) => {
-  const startDate = moment(start);
-  const endDate = moment(end);
-
-  return tasks.filter((task) => {
-    const createDate = moment(task.createDate);
-    return (
-      createDate.isSameOrBefore(endDate, "days") &&
-      createDate.isSameOrAfter(startDate, "days")
-    );
-  });
-};
 module.exports = router;

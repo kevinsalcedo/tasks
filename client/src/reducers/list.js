@@ -5,14 +5,15 @@ import {
   SET_DATE,
   GET_TASKS,
   TASK_ERROR,
+  GET_CALENDAR,
 } from "../actions/types";
 import moment from "moment";
 
 const initialState = {
   lists: [],
-  tasks: {},
+  tasks: [],
+  calendar: {},
   selectedList: null,
-  loading: true,
   startDate: moment().startOf("day").format(),
 };
 
@@ -23,19 +24,21 @@ export default function (state = initialState, action) {
       return {
         ...state,
         lists: payload.lists,
-        loading: false,
       };
     case SELECT_LIST:
       return {
         ...state,
         selectedList: payload,
-        loading: false,
       };
     case GET_TASKS:
       return {
         ...state,
         tasks: payload,
-        loading: false,
+      };
+    case GET_CALENDAR:
+      return {
+        ...state,
+        calendar: payload,
       };
     case SET_DATE:
       return { ...state, startDate: payload };
@@ -46,7 +49,6 @@ export default function (state = initialState, action) {
         lists: [],
         tasks: [],
         selectedList: null,
-        loading: false,
         startDate: moment().format(),
       };
     default:

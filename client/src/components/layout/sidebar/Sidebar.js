@@ -11,10 +11,7 @@ import Calendar from "./Calendar";
 import TaskLists from "./TaskLists";
 import DisplayButtonGroup from "./DisplayButtonGroup";
 
-export const Sidebar = (
-  { loadLists, logout, isAuthenticated, view },
-  ...rest
-) => {
+export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
   const history = useHistory();
   const directTo = (path) => history.push(path);
 
@@ -53,6 +50,7 @@ export const Sidebar = (
 
 Sidebar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
+  view: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({

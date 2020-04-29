@@ -5,10 +5,9 @@ import { MoreVertical } from "grommet-icons";
 const TaskCard = (props) => (
   <Box
     direction='row'
-    pad='medium'
+    pad={{ horizontal: "medium", vertical: "xxsmall" }}
     background='light-1'
     elevation='small'
-    width='medium'
     gap='small'
     justify='between'
     align='center'
@@ -20,7 +19,7 @@ const TaskCard = (props) => (
     }}
     {...props}
   >
-    <CheckBox background='yellow' />
+    <CheckBox checked={props.completed} />
     <Box>{props.children}</Box>
     <Button icon={<MoreVertical />} />
   </Box>

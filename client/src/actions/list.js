@@ -5,7 +5,9 @@ import {
   SELECT_LIST,
   GET_TASKS,
   TASK_ERROR,
+  GET_CALENDAR,
 } from "./types";
+import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -25,12 +27,12 @@ export const selectList = (id) => (dispatch) => {
 
 // Get lists for a user
 export const loadLists = () => async (dispatch) => {
+  dispatch(loadRequest());
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
   try {
     const res = await axios.get("/api/tasklists");
-
     dispatch({
       type: GET_LISTS,
       payload: { lists: res.data },
@@ -39,22 +41,27 @@ export const loadLists = () => async (dispatch) => {
     dispatch({
       type: LIST_ERROR,
     });
+  } finally {
+    dispatch(loadResponse());
   }
 };
 
 // Load tasks for selected list, loading all if id is null
 export const loadTasks = (id, start, isCalendar) => async (dispatch) => {
+  dispatch(loadRequest());
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
 
-  // Default get one year ahead (?)
-  let end;
+  let end = moment(start).add(1, "months").format();
+  let actionType = GET_TASKS;
+
+  // Check if calendar view is selected
   if (isCalendar === "calendar") {
+    actionType = GET_CALENDAR;
     end = moment(start).add(2, "days").format();
   } else {
-    start = moment(start).startOf("year").format();
-    end = moment(start).add(1, "years").format();
+    start = moment(start).subtract(1, "week").format();
   }
 
   const extension = !id ? `tasks` : `${id}/tasks`;
@@ -64,15 +71,20 @@ export const loadTasks = (id, start, isCalendar) => async (dispatch) => {
       `/api/tasklists/${extension}?start=${start}&end=${end}`
     );
 
-    let calendar = generateCalendar(start, end, res.data);
+    let tasks =
+      isCalendar === "calendar"
+        ? generateCalendar(start, end, res.data)
+        : res.data;
     dispatch({
-      type: GET_TASKS,
-      payload: calendar,
+      type: actionType,
+      payload: tasks,
     });
   } catch (err) {
     dispatch({
       type: TASK_ERROR,
     });
+  } finally {
+    dispatch(loadResponse());
   }
 };
 

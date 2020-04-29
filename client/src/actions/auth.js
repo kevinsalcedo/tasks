@@ -9,6 +9,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
 } from "./types";
+import { loadRequest, loadResponse } from "./loading";
 import setAuthToken from "../utils/setAuthToken";
 
 // Load User
@@ -28,22 +29,23 @@ export const loadUser = () => async (dispatch) => {
     dispatch({
       type: AUTH_ERROR,
     });
+  } finally {
+    dispatch(loadResponse());
   }
 };
 
 // Register User
 export const register = ({ name, email, password }) => async (dispatch) => {
+  dispatch(loadRequest());
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-
   const body = JSON.stringify({ name, email, password });
 
   try {
     const res = await axios.post("/api/users", body, config);
-
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data,
@@ -64,6 +66,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
 
 // Login  User
 export const login = (email, password) => async (dispatch) => {
+  dispatch(loadRequest());
   const config = {
     headers: {
       "Content-Type": "application/json",
