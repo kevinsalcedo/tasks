@@ -13,10 +13,6 @@ const TaskListSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  // todo: tags object?
-  tags: {
-    type: [String],
-  },
   createDate: {
     type: Date,
     default: moment().utc().format(),
