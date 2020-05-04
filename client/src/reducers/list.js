@@ -6,6 +6,8 @@ import {
   GET_TASKS,
   TASK_ERROR,
   GET_CALENDAR,
+  CREATE_TASK,
+  CREATE_TASK_ERROR,
 } from "../actions/types";
 import moment from "moment";
 
@@ -42,6 +44,8 @@ export default function (state = initialState, action) {
       };
     case SET_DATE:
       return { ...state, startDate: payload };
+    case CREATE_TASK:
+      return { ...state, tasks: [...state.tasks, payload] };
     case LIST_ERROR:
     case TASK_ERROR:
       return {
@@ -51,6 +55,8 @@ export default function (state = initialState, action) {
         selectedList: null,
         startDate: moment().format(),
       };
+
+    case CREATE_TASK_ERROR:
     default:
       return state;
   }

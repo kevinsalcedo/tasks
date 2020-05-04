@@ -6,7 +6,8 @@ import PAGES from "../../strings/pages";
 
 const PrivateRoute = ({
   component: Component,
-  auth: { isAuthenticated, loading },
+  auth: { isAuthenticated },
+  loading: { loading },
   ...rest
 }) => (
   <Route
@@ -27,6 +28,7 @@ PrivateRoute.propTypes = {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  loading: state.loading,
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

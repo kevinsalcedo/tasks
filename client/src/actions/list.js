@@ -6,7 +6,10 @@ import {
   GET_TASKS,
   TASK_ERROR,
   GET_CALENDAR,
+  CREATE_TASK,
+  CREATE_TASK_ERROR,
 } from "./types";
+import { setAlert } from "./alert";
 import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
 import setAuthToken from "../utils/setAuthToken";
@@ -53,13 +56,13 @@ export const loadTasks = (id, start, isCalendar) => async (dispatch) => {
     setAuthToken(localStorage.token);
   }
 
-  let end = moment(start).add(1, "months").format();
+  let end = moment(start).add(1, "months").endOf("day").format();
   let actionType = GET_TASKS;
 
   // Check if calendar view is selected
   if (isCalendar === "calendar") {
     actionType = GET_CALENDAR;
-    end = moment(start).add(2, "days").format();
+    end = moment(start).add(2, "days").endOf("day").format();
   } else {
     start = moment(start).subtract(1, "week").format();
   }
@@ -82,6 +85,46 @@ export const loadTasks = (id, start, isCalendar) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: TASK_ERROR,
+    });
+  } finally {
+    dispatch(loadResponse());
+  }
+};
+
+// Create a task for a selected task list
+export const createTask = (
+  name,
+  description,
+  taskList,
+  startDate,
+  endDate
+) => async (dispatch) => {
+  dispatch(loadRequest());
+  console.log("create task action");
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const listId = taskList.value;
+  const body = JSON.stringify({ name, description, taskList: listId });
+
+  try {
+    const res = await axios.post(`api/tasklists/${listId}/tasks`, body, config);
+    console.log(res);
+    dispatch({ type: CREATE_TASK, payload: res.data });
+  } catch (err) {
+    console.log(err);
+    // const errors = err.response.data.errors;
+
+    // if (errors) {
+    //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    // }
+    dispatch({
+      type: CREATE_TASK_ERROR,
     });
   } finally {
     dispatch(loadResponse());

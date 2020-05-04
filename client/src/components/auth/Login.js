@@ -17,7 +17,7 @@ import {
 } from "grommet";
 import { Hide, View } from "grommet-icons";
 import LinkAnchor from "../routing/LinkAnchor";
-import ContainerPane from "../layout/ContainerPane";
+import ContainerPane from "../layout/containers/ContainerPane";
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({

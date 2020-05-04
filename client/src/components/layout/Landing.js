@@ -7,7 +7,7 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import PAGES from "../../strings/pages";
-import ContainerPane from "./ContainerPane";
+import ContainerPane from "./containers/ContainerPane";
 
 export const Landing = ({ isAuthenticated }) => {
   const history = useHistory();

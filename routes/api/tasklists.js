@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator/check");
 const moment = require("moment");
+const mongoose = require("mongoose");
 
 const TaskList = require("../../models/TaskList");
 const Task = require("../../models/Task");
@@ -193,8 +194,13 @@ router.post(
       // Create
       task = new Task(taskFields);
       await task.save();
-      res.json(task);
+
+      var populatedTask = await task
+        .populate("taskList", ["name", "color"])
+        .execPopulate();
+      res.json(populatedTask);
     } catch (err) {
+      console.log(err);
       // Handle if the tasklist is invalid
       return res.status(500).send("Server Error");
     }

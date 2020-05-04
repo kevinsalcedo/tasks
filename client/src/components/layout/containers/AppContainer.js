@@ -3,17 +3,18 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 
 // Constants
-import PAGES from "../../strings/pages";
+import PAGES from "../../../strings/pages";
 // Page Components
-import Landing from "./Landing";
-import Sidebar from "../layout/sidebar/Sidebar";
-import Login from "../auth/Login";
-import Register from "../auth/Register";
-import Alert from "./Alert";
-import Dashboard from "../dashboard/Dashboard";
-import PrivateRoute from "../routing/PrivateRoute";
+import Landing from "../Landing";
+import Sidebar from "../sidebar/Sidebar";
+import CollapsibleSidebar from "../sidebar/CollapsibleSidebar";
+import Login from "../../auth/Login";
+import Register from "../../auth/Register";
+import Alert from "../alerts/Alert";
+import Dashboard from "../../dashboard/Dashboard";
+import PrivateRoute from "../../routing/PrivateRoute";
 
-import "../../App.css";
+import "../../../App.css";
 
 // UI
 import { Box, Grommet, Main } from "grommet";
@@ -25,6 +26,7 @@ const AppContainer = ({ isAuthenticated }) => {
       <Box direction='row' fill>
         <Router>
           <Sidebar gridArea='sidebar' />
+          {/* <CollapsibleSidebar gridArea='sidebar' /> */}
 
           <Main
             gridArea='main'

@@ -23,5 +23,4 @@ const TaskListSchema = new mongoose.Schema({
     default: "#71EEB8",
   },
 });
-
 module.exports = TaskList = mongoose.model("tasklist", TaskListSchema);

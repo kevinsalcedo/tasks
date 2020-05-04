@@ -8,7 +8,7 @@ import { loadUser } from "./actions/auth";
 import "./App.css";
 
 // UI
-import AppContainer from "./components/layout/AppContainer";
+import AppContainer from "./components/layout/containers/AppContainer";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);

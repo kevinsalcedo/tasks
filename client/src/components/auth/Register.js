@@ -19,15 +19,16 @@ import {
 } from "grommet";
 import { Hide, View } from "grommet-icons";
 import LinkAnchor from "../routing/LinkAnchor";
-import ContainerPane from "../layout/ContainerPane";
+import ContainerPane from "../layout/containers/ContainerPane";
 
 const Register = ({ setAlert, register, isAuthenticated, loading }) => {
-  const [formData, setFormData] = useState({
+  const initialState = {
     name: "",
     email: "",
     password: "",
     password2: "",
-  });
+  };
+  const [formData, setFormData] = useState(initialState);
   const [reveal, setReveal] = React.useState(false);
 
   const { name, email, password, password2 } = formData;
@@ -58,7 +59,7 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
         <Form
           value={formData}
           onChange={(nextValue) => setFormData(nextValue)}
-          onReset={() => setFormData({})}
+          onReset={() => setFormData(initialState)}
           onSubmit={(e) => onSubmit(e)}
         >
           <FormField

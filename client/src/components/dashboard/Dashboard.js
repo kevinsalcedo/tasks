@@ -1,9 +1,9 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { Button, Box, Text, Heading } from "grommet";
+import { Button, Box, Text, Heading, InfiniteScroll } from "grommet";
 import PropTypes from "prop-types";
-import ContainerPane from "../layout/ContainerPane";
-import TaskCard from "../layout/TaskCard";
+import ContainerPane from "../layout/containers/ContainerPane";
+import TaskCard from "../layout/containers/TaskCard";
 import { loadTasks, loadLists } from "../../actions/list";
 import moment from "moment";
 import { Add } from "grommet-icons";
@@ -51,20 +51,14 @@ class Dashboard extends React.Component {
       : "All Lists";
 
     return (
-      <Box>
-        <Box align="center" direction="row">
-          <Heading level="3">{list}</Heading>
+      <Box fill='vertical' width='80%'>
+        <Box align='center' direction='row'>
+          <Heading level='3'>{list}</Heading>
           <Button icon={<Add />} onClick={this.openModal} />
         </Box>
-        <Box gap="small" fill>
+        <Box gap='small' fill overflow='auto'>
           {tasks.map((task) => (
-            <TaskCard
-              key={task._id}
-              color={task.taskList.color}
-              completed={task.completed}
-            >
-              <Box>{task.name}</Box>
-            </TaskCard>
+            <TaskCard key={task._id} task={task} />
           ))}
         </Box>
         {modalOpen && <CreateTaskModal onClose={this.closeModal} />}
@@ -75,30 +69,35 @@ class Dashboard extends React.Component {
   // Render tasks in a day by day calendar view
   renderDayView = () => {
     // debugger;
-    const { calendar } = this.props;
+    const { loading, calendar } = this.props;
     return (
-      <Box direction="row" gap="small" fill>
+      <Box direction='row' gap='medium' fill justify='between'>
         {Object.keys(calendar).map((dateGroup) => (
           <Box
             key={dateGroup}
-            gap="small"
-            align="center"
-            fill
-            background="light-4"
-            elevation="small"
+            gap='small'
+            align='center'
+            fill='vertical'
+            width='medium'
+            overflow='auto'
+            background='light-4'
+            elevation='small'
+            round='xsmall'
           >
-            <Heading level="4">{moment(dateGroup).format("MMMM Do")}</Heading>
-            <Box gap="small">
-              {calendar[dateGroup].map((item) => (
-                <TaskCard
-                  key={item._id}
-                  color={item.taskList.color}
-                  completed={item.completed}
-                >
-                  {item.name}
-                </TaskCard>
-              ))}
-            </Box>
+            {loading ? (
+              <Text>Loading...</Text>
+            ) : (
+              <Fragment>
+                <Heading level='4' pad={"bottom"}>
+                  {moment(dateGroup).format("MMMM Do")}
+                </Heading>
+                <Box gap='small' overflow='auto' width='85%' fill='vertical'>
+                  {calendar[dateGroup].map((item) => (
+                    <TaskCard key={item._id} task={item} />
+                  ))}
+                </Box>
+              </Fragment>
+            )}
           </Box>
         ))}
       </Box>
@@ -107,8 +106,9 @@ class Dashboard extends React.Component {
 
   render() {
     const { loading, view } = this.props;
+
     return (
-      <ContainerPane justify="start" pad="medium">
+      <ContainerPane justify='start' pad='medium'>
         {view === "calendar" ? this.renderDayView() : this.renderListView()}
       </ContainerPane>
     );

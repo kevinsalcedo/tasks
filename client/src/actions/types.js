@@ -24,6 +24,8 @@ export const GET_TASKS = "GET_TASKS";
 export const TASK_ERROR = "TASK_ERROR";
 export const GET_CALENDAR = "GET_CALENDAR";
 export const CALENDAR_ERROR = "CALENDAR_ERROR";
+export const CREATE_TASK = "CREATE_TASK";
+export const CREATE_TASK_ERROR = "CREATE_TASK_ERROR";
 
 // Dashboard settings
 export const CHANGE_VIEW = "CHANGE_VIEW";
