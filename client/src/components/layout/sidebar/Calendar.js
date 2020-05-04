@@ -1,22 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Calendar as GrommetCalendar } from "grommet";
-import { setDateRange } from "../../../actions/dashboard";
+import { setCalendarRange } from "../../../actions/dashboard";
 import moment from "moment";
 
-const Calendar = ({ startDate, setDateRange }) => {
+const Calendar = ({ calendarStart, setCalendarRange }) => {
   return (
     <GrommetCalendar
-      size="small"
-      date={startDate}
+      size='small'
+      date={calendarStart}
       onSelect={(nextDate) =>
-        setDateRange(moment(nextDate).startOf("day").format())
+        setCalendarRange(moment(nextDate).startOf("day").format())
       }
       bounds={["2020-01-01", "2030-12-31"]}
     />
   );
 };
 const mapStateToProps = (state) => ({
-  startDate: state.list.startDate,
+  calendarStart: state.dashboard.calendarStart,
 });
-export default connect(mapStateToProps, { setDateRange })(Calendar);
+export default connect(mapStateToProps, { setCalendarRange })(Calendar);

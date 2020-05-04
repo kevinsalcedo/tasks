@@ -16,7 +16,6 @@ export const GET_LISTS = "GET_LISTS";
 export const LIST_ERROR = "LIST_ERROR";
 export const SELECT_LIST = "SELECT_LIST";
 export const SELECT_ERROR = "SELECT_ERROR";
-export const SET_DATE = "SET_DATE";
 export const DATE_ERROR = "DATE_ERROR";
 
 // Tasks
@@ -29,6 +28,8 @@ export const CREATE_TASK_ERROR = "CREATE_TASK_ERROR";
 
 // Dashboard settings
 export const CHANGE_VIEW = "CHANGE_VIEW";
+export const SET_CALENDAR_RANGE = "SET_CALENDAR_RANGE";
+export const SET_DEFAULT_DUE_DATE = "SET_DEFAULT_DUE_DATE";
 
 // UI Reloads
 export const LOADING_START = "LOADING_START";

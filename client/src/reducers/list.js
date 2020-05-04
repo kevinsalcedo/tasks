@@ -2,7 +2,6 @@ import {
   GET_LISTS,
   LIST_ERROR,
   SELECT_LIST,
-  SET_DATE,
   GET_TASKS,
   TASK_ERROR,
   GET_CALENDAR,
@@ -16,7 +15,6 @@ const initialState = {
   tasks: [],
   calendar: {},
   selectedList: null,
-  startDate: moment().startOf("day").format(),
 };
 
 export default function (state = initialState, action) {
@@ -42,8 +40,6 @@ export default function (state = initialState, action) {
         ...state,
         calendar: payload,
       };
-    case SET_DATE:
-      return { ...state, startDate: payload };
     case CREATE_TASK:
       return { ...state, tasks: [...state.tasks, payload] };
     case LIST_ERROR:
@@ -53,7 +49,6 @@ export default function (state = initialState, action) {
         lists: [],
         tasks: [],
         selectedList: null,
-        startDate: moment().format(),
       };
 
     case CREATE_TASK_ERROR:

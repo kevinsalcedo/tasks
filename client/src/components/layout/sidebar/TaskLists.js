@@ -9,17 +9,17 @@ class TaskLists extends React.Component {
     const { selectedList, lists } = this.props;
     return (
       <Accordion>
-        <AccordionPanel label="My Lists" pad="small" active>
-          <Box pad="small">
+        <AccordionPanel label='My Lists' pad='small' active>
+          <Box pad='small'>
             <Button
-              label="All"
+              label='All'
               active={!selectedList}
               primary
               onClick={() => this.props.selectList(null)}
             />
           </Box>
           {lists.map((list) => (
-            <Box pad="small" key={list._id}>
+            <Box pad='small' key={list._id}>
               <Button
                 color={list.color}
                 label={list.name}
@@ -29,8 +29,8 @@ class TaskLists extends React.Component {
               />
             </Box>
           ))}
-          <Box pad="small">
-            <Button icon={<Add />} label="New List" onClick={this.openModal} />
+          <Box pad='small'>
+            <Button icon={<Add />} label='New List' onClick={this.openModal} />
           </Box>
         </AccordionPanel>
       </Accordion>
@@ -42,7 +42,6 @@ const mapStateToProps = (state) => ({
   selectedList: state.list.selectedList,
   lists: state.list.lists,
   tasks: state.list.tasks,
-  startDate: state.list.startDate,
 });
 
 export default connect(mapStateToProps, { selectList })(TaskLists);

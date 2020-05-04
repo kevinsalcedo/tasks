@@ -37,13 +37,14 @@ export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
 
   const sideBarContent = () => (
     <GrommetSidebar
+      flex={false}
       header={
-        <Box direction="row">
+        <Box direction='row'>
           <Menu
             label={
               isAuthenticated ? (
-                <Box direction="row" gap="small" align="center">
-                  <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+                <Box direction='row' gap='small' align='center'>
+                  <Avatar src='//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80' />
                   <Text>Your Name</Text>
                 </Box>
               ) : (
@@ -51,14 +52,14 @@ export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
               )
             }
             items={isAuthenticated ? authMenuItems : guestMenuItems}
-            gap="small"
+            gap='small'
           />
           {toggleButton()}
         </Box>
       }
       {...rest}
     >
-      <Box fill="horizontal" align="center">
+      <Box fill='horizontal' align='center'>
         {isAuthenticated && <DisplayButtonGroup />}
         {isAuthenticated && view === "calendar" && <Calendar />}
         {isAuthenticated && <TaskLists />}
@@ -69,7 +70,7 @@ export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
   return (
     <Box>
       {!open && toggleButton()}
-      <Collapsible direction="horizontal" open={open}>
+      <Collapsible direction='horizontal' open={open}>
         {sideBarContent()}
       </Collapsible>
     </Box>
