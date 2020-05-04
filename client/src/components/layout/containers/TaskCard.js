@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, CheckBox, Text, Menu } from "grommet";
+import { Box, CheckBox, Text, Menu } from "grommet";
 import { MoreVertical } from "grommet-icons";
 import moment from "moment";
 
@@ -9,7 +9,7 @@ const TaskCard = ({ task, ...rest }) => {
     if (task.endDate) {
       innerText = moment(task.endDate).format();
     }
-    return <Text size='xsmall'>{innerText}</Text>;
+    return <Text size="xsmall">{innerText}</Text>;
   };
   const menuItems = [
     { label: "Edit", onClick: () => {} },
@@ -17,13 +17,13 @@ const TaskCard = ({ task, ...rest }) => {
   ];
   return (
     <Box
-      direction='row'
+      direction="row"
       pad={{ horizontal: "medium", vertical: "xxsmall" }}
-      background='light-1'
-      elevation='small'
-      gap='small'
-      justify='between'
-      align='center'
+      background="light-1"
+      elevation="small"
+      gap="small"
+      justify="between"
+      align="center"
       flex={false}
       border={{
         color: task.taskList.color,
@@ -33,7 +33,7 @@ const TaskCard = ({ task, ...rest }) => {
       }}
       {...rest}
     >
-      <Box direction='row' gap='small' align='center'>
+      <Box direction="row" gap="small" align="center">
         <CheckBox checked={task.completed} />
         <Box>
           <Box>
@@ -42,7 +42,7 @@ const TaskCard = ({ task, ...rest }) => {
           {renderDueDate()}
         </Box>
       </Box>
-      <Box direction='row' gap='small' align='center'>
+      <Box direction="row" gap="small" align="center">
         <Menu icon={<MoreVertical />} items={menuItems} hoverIndicator />
       </Box>
     </Box>

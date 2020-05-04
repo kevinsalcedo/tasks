@@ -1,12 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { selectList } from "../../../actions/list";
-import { Accordion, AccordionPanel, Box, Button, Text } from "grommet";
+import { Accordion, AccordionPanel, Box, Button } from "grommet";
 import { Add } from "grommet-icons";
 
 class TaskLists extends React.Component {
   render() {
-    const { selectedList, lists, loading } = this.props;
+    const { selectedList, lists } = this.props;
     return (
       <Accordion>
         <AccordionPanel label="My Lists" pad="small" active>

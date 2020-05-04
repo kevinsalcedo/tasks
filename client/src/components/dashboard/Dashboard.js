@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { Button, Box, Text, Heading, InfiniteScroll } from "grommet";
+import { Button, Box, Text, Heading } from "grommet";
 import PropTypes from "prop-types";
 import ContainerPane from "../layout/containers/ContainerPane";
 import TaskCard from "../layout/containers/TaskCard";
@@ -44,24 +44,22 @@ class Dashboard extends React.Component {
 
   // Render all tasks in a list view
   renderListView = () => {
-    const { modalOpen } = this.state;
     const { lists, selectedList, tasks } = this.props;
     const list = selectedList
       ? lists.find((list) => list._id === selectedList).name
       : "All Lists";
 
     return (
-      <Box fill='vertical' width='80%'>
-        <Box align='center' direction='row'>
-          <Heading level='3'>{list}</Heading>
-          <Button icon={<Add />} onClick={this.openModal} />
+      <Box fill="vertical" width="80%">
+        <Box align="center" direction="row">
+          <Heading level="3">{list}</Heading>
+          <Button icon={<Add />} hoverIndicator onClick={this.openModal} />
         </Box>
-        <Box gap='small' fill overflow='auto'>
+        <Box gap="small" fill overflow="auto">
           {tasks.map((task) => (
             <TaskCard key={task._id} task={task} />
           ))}
         </Box>
-        {modalOpen && <CreateTaskModal onClose={this.closeModal} />}
       </Box>
     );
   };
@@ -71,33 +69,39 @@ class Dashboard extends React.Component {
     // debugger;
     const { loading, calendar } = this.props;
     return (
-      <Box direction='row' gap='medium' fill justify='between'>
+      <Box direction="row" fill="vertical" gap="small" width="80%">
         {Object.keys(calendar).map((dateGroup) => (
           <Box
             key={dateGroup}
-            gap='small'
-            align='center'
-            fill='vertical'
-            width='medium'
-            overflow='auto'
-            background='light-4'
-            elevation='small'
-            round='xsmall'
+            gap="small"
+            align="center"
+            fill="vertical"
+            width="medium"
+            overflow="auto"
+            background="light-4"
+            elevation="small"
+            round="xsmall"
           >
-            {loading ? (
-              <Text>Loading...</Text>
-            ) : (
-              <Fragment>
-                <Heading level='4' pad={"bottom"}>
-                  {moment(dateGroup).format("MMMM Do")}
-                </Heading>
-                <Box gap='small' overflow='auto' width='85%' fill='vertical'>
-                  {calendar[dateGroup].map((item) => (
-                    <TaskCard key={item._id} task={item} />
-                  ))}
-                </Box>
-              </Fragment>
-            )}
+            <Heading level="4" pad={"bottom"}>
+              {moment(dateGroup).format("MMMM Do")}
+            </Heading>
+            <Box gap="small" overflow="auto" width="85%" fill="vertical">
+              <Box
+                onClick={this.openModal}
+                pad={{ horizontal: "medium", vertical: "xxsmall" }}
+                background="light-1"
+                elevation="small"
+                gap="small"
+                justify="between"
+                align="center"
+                hoverIndicator
+              >
+                <Button icon={<Add />} />
+              </Box>
+              {calendar[dateGroup].map((item) => (
+                <TaskCard key={item._id} task={item} />
+              ))}
+            </Box>
           </Box>
         ))}
       </Box>
@@ -105,11 +109,13 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { loading, view } = this.props;
+    const { view } = this.props;
+    const { modalOpen } = this.state;
 
     return (
-      <ContainerPane justify='start' pad='medium'>
+      <ContainerPane justify="start" pad="medium">
         {view === "calendar" ? this.renderDayView() : this.renderListView()}
+        {modalOpen && <CreateTaskModal onClose={this.closeModal} />}
       </ContainerPane>
     );
   }

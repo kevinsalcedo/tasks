@@ -9,7 +9,6 @@ import {
   Select,
   TextInput,
   TextArea,
-  MaskedInput,
 } from "grommet";
 import DatePicker from "./DatePicker";
 import { createTask } from "../../actions/list";
@@ -47,9 +46,9 @@ const CreateTaskForm = ({ lists, closeForm, createTask }) => {
   };
 
   return (
-    <Box pad='medium' gap='small' width='medium'>
-      <Box direction='row' justify='between' align='center'>
-        <Heading level={3} margin='none'>
+    <Box pad="medium" gap="small" width="medium">
+      <Box direction="row" justify="between" align="center">
+        <Heading level={3} margin="none">
           New Task
         </Heading>
 
@@ -61,26 +60,26 @@ const CreateTaskForm = ({ lists, closeForm, createTask }) => {
         onReset={() => setFormData(initialState)}
         onSubmit={(e) => onSubmit(e)}
       >
-        <FormField label='Name' name='name'>
-          <TextInput placeholder='Name' name='name' />
+        <FormField label="Name" name="name">
+          <TextInput placeholder="Name" name="name" />
         </FormField>
-        <FormField label='Description' name='description'>
-          <TextArea placeholder="What's this task about?" name='description' />
+        <FormField label="Description" name="description">
+          <TextArea placeholder="What's this task about?" name="description" />
         </FormField>
-        <FormField label='List' name='list'>
+        <FormField label="List" name="list">
           <Select
-            name='list'
+            name="list"
             options={selectOptions}
-            labelKey='label'
-            valueKey='value'
+            labelKey="label"
+            valueKey="value"
           />
         </FormField>
         {/* <FormField label='Start Date' name='startDate'>
           <DatePicker name='startDate' currDate={formData.startDate} />
         </FormField> */}
-        <Box direction='row' justify='around' margin={{ top: "medium" }}>
-          <Button type='reset' label='Reset' />
-          <Button type='submit' label='Create' primary />
+        <Box direction="row" justify="around" margin={{ top: "medium" }}>
+          <Button type="reset" label="Reset" />
+          <Button type="submit" label="Create" primary />
         </Box>
       </Form>
     </Box>

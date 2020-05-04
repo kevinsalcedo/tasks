@@ -9,7 +9,6 @@ import {
   CREATE_TASK,
   CREATE_TASK_ERROR,
 } from "./types";
-import { setAlert } from "./alert";
 import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
 import setAuthToken from "../utils/setAuthToken";

@@ -21,11 +21,11 @@ import DisplayButtonGroup from "./DisplayButtonGroup";
 import { Menu as MenuIcon } from "grommet-icons";
 
 export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
-  const [open, toggleOpen] = useState(true);
+  const [open, toggleOpen] = useState(isAuthenticated);
   const history = useHistory();
   const directTo = (path) => history.push(path);
 
-  const menuBotton = () => (
+  const toggleButton = () => (
     <Button icon={<MenuIcon />} onClick={() => toggleOpen(!open)} />
   );
 
@@ -35,36 +35,42 @@ export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
     { label: "Log In", onClick: () => directTo(PAGES.LOGIN) },
   ];
 
+  const sideBarContent = () => (
+    <GrommetSidebar
+      header={
+        <Box direction="row">
+          <Menu
+            label={
+              isAuthenticated ? (
+                <Box direction="row" gap="small" align="center">
+                  <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+                  <Text>Your Name</Text>
+                </Box>
+              ) : (
+                <Text>Get Started</Text>
+              )
+            }
+            items={isAuthenticated ? authMenuItems : guestMenuItems}
+            gap="small"
+          />
+          {toggleButton()}
+        </Box>
+      }
+      {...rest}
+    >
+      <Box fill="horizontal" align="center">
+        {isAuthenticated && <DisplayButtonGroup />}
+        {isAuthenticated && view === "calendar" && <Calendar />}
+        {isAuthenticated && <TaskLists />}
+      </Box>
+    </GrommetSidebar>
+  );
+
   return (
     <Box>
-      {!open && menuBotton()}
-      <Collapsible direction='horizontal' open={open}>
-        <GrommetSidebar
-          header={
-            <Box direction='row'>
-              {menuBotton()}
-              <Menu
-                label={
-                  isAuthenticated ? (
-                    <Box direction='row' gap='small' align='center'>
-                      <Avatar src='//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80' />
-                      <Text>Your Name</Text>
-                    </Box>
-                  ) : (
-                    <Text>Get Started</Text>
-                  )
-                }
-                items={isAuthenticated ? authMenuItems : guestMenuItems}
-                gap='small'
-              />
-            </Box>
-          }
-          {...rest}
-        >
-          {isAuthenticated && <DisplayButtonGroup />}
-          {isAuthenticated && view === "calendar" && <Calendar />}
-          {isAuthenticated && <TaskLists />}
-        </GrommetSidebar>
+      {!open && toggleButton()}
+      <Collapsible direction="horizontal" open={open}>
+        {sideBarContent()}
       </Collapsible>
     </Box>
   );

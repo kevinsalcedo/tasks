@@ -7,7 +7,7 @@ import moment from "moment";
 const Calendar = ({ startDate, setDateRange }) => {
   return (
     <GrommetCalendar
-      size='small'
+      size="small"
       date={startDate}
       onSelect={(nextDate) =>
         setDateRange(moment(nextDate).startOf("day").format())
