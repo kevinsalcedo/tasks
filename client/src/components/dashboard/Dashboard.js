@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Button, Box, Text, Heading } from "grommet";
 import PropTypes from "prop-types";
@@ -7,18 +7,26 @@ import TaskCard from "../layout/containers/TaskCard";
 import { loadTasks, loadLists } from "../../actions/list";
 import moment from "moment";
 import { Add } from "grommet-icons";
-import CreateTaskModal from "../forms/CreateTaskModal";
+import CreateTaskForm from "../forms/CreateTaskForm";
+import DeleteTaskForm from "../forms/DeleteTaskForm";
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalOpen: false,
+      createModalOpen: false,
+      deleteModalOpen: false,
+      taskToDelete: null,
     };
   }
 
-  openModal = () => this.setState({ modalOpen: true });
-  closeModal = () => this.setState({ modalOpen: false });
+  openCreateModal = () => this.setState({ createModalOpen: true });
+  closeCreateModal = () => this.setState({ createModalOpen: false });
+  openDeleteModal = (task) =>
+    this.setState({ deleteModalOpen: true, taskToDelete: task });
+  closeDeleteModal = () =>
+    this.setState({ deleteModalOpen: false, taskToDelete: null });
+
   // // On loading the dashboard, default load tasks for the year
   componentDidMount() {
     const { loadLists, loadTasks, view } = this.props;
@@ -53,11 +61,20 @@ class Dashboard extends React.Component {
       <Box fill='vertical' width='80%'>
         <Box align='center' direction='row'>
           <Heading level='3'>{list}</Heading>
-          <Button icon={<Add />} hoverIndicator onClick={this.openModal} />
+          <Button
+            icon={<Add />}
+            hoverIndicator
+            onClick={this.openCreateModal}
+          />
         </Box>
         <Box gap='small' fill overflow='auto'>
           {tasks.map((task) => (
-            <TaskCard key={task._id} task={task} />
+            <TaskCard
+              key={task._id}
+              task={task}
+              onDeleteOpen={() => this.openDeleteModal(task)}
+              onDeleteClose={this.closeDeleteModal}
+            />
           ))}
         </Box>
       </Box>
@@ -87,7 +104,7 @@ class Dashboard extends React.Component {
             </Heading>
             <Box gap='small' overflow='auto' width='85%' fill='vertical'>
               <Box
-                onClick={this.openModal}
+                onClick={this.openCreateModal}
                 pad={{ horizontal: "medium", vertical: "xxsmall" }}
                 background='light-1'
                 elevation='small'
@@ -100,8 +117,13 @@ class Dashboard extends React.Component {
               >
                 <Button icon={<Add />} />
               </Box>
-              {calendar[dateGroup].map((item) => (
-                <TaskCard key={item._id} task={item} />
+              {calendar[dateGroup].map((task) => (
+                <TaskCard
+                  key={task._id}
+                  task={task}
+                  onDeleteOpen={() => this.openDeleteModal(task)}
+                  onDeleteClose={this.closeDeleteModal}
+                />
               ))}
             </Box>
           </Box>
@@ -112,12 +134,20 @@ class Dashboard extends React.Component {
 
   render() {
     const { view } = this.props;
-    const { modalOpen } = this.state;
+    const { createModalOpen, deleteModalOpen, taskToDelete } = this.state;
 
     return (
       <ContainerPane justify='start' pad='medium'>
         {view === "calendar" ? this.renderDayView() : this.renderListView()}
-        {modalOpen && <CreateTaskModal onClose={this.closeModal} />}
+        {createModalOpen && (
+          <CreateTaskForm closeForm={this.closeCreateModal} task />
+        )}
+        {deleteModalOpen && (
+          <DeleteTaskForm
+            closeForm={this.closeDeleteModal}
+            taskToDelete={taskToDelete}
+          />
+        )}
       </ContainerPane>
     );
   }

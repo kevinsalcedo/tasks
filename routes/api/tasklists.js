@@ -342,7 +342,7 @@ router.delete("/:list_id", auth, async (req, res) => {
 //@route  DELETE api/tasks/:list_id/tasks/:task_id
 //@desc   Delete a task
 //@access Private
-router.delete("/tasklist/:list_id/tasks/:task_id", auth, async (req, res) => {
+router.delete("/:list_id/tasks/:task_id", auth, async (req, res) => {
   try {
     let result = await Task.findOneAndDelete({ _id: req.params.task_id });
 

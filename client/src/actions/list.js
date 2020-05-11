@@ -8,10 +8,13 @@ import {
   GET_CALENDAR,
   CREATE_TASK,
   CREATE_TASK_ERROR,
+  DELETE_TASK,
+  DELETE_TASK_ERROR,
 } from "./types";
 import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
 import setAuthToken from "../utils/setAuthToken";
+import { setAlert } from "./alert";
 
 // SELECTORS - these only change the application wide state
 // Selectors do not make API calls
@@ -108,12 +111,19 @@ export const createTask = (
       "Content-Type": "application/json",
     },
   };
+
+  const utcDueDate = moment(endDate).utc().format();
+  console.log(utcDueDate);
   const listId = taskList.value;
-  const body = JSON.stringify({ name, description, taskList: listId });
+  const body = JSON.stringify({
+    name,
+    description,
+    taskList: listId,
+    endDate: utcDueDate,
+  });
 
   try {
     const res = await axios.post(`api/tasklists/${listId}/tasks`, body, config);
-    console.log(res);
     dispatch({ type: CREATE_TASK, payload: res.data });
   } catch (err) {
     console.log(err);
@@ -124,6 +134,31 @@ export const createTask = (
     // }
     dispatch({
       type: CREATE_TASK_ERROR,
+    });
+  } finally {
+    dispatch(loadResponse());
+  }
+};
+
+// Delete a task
+export const deleteTask = (taskID, listID) => async (dispatch) => {
+  dispatch(loadRequest());
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
+  try {
+    const res = await axios.delete(`api/tasklists/${listID}/tasks/${taskID}`);
+    dispatch({
+      type: DELETE_TASK,
+      payload: taskID,
+    });
+    dispatch(setAlert(res.data.msg, "good"));
+  } catch (err) {
+    // TODO: send error alerts
+    console.log(err);
+    dispatch({
+      type: DELETE_TASK_ERROR,
     });
   } finally {
     dispatch(loadResponse());

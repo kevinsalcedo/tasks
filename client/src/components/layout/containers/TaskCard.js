@@ -3,27 +3,27 @@ import { Box, CheckBox, Text, Menu } from "grommet";
 import { MoreVertical } from "grommet-icons";
 import moment from "moment";
 
-const TaskCard = ({ task, ...rest }) => {
+const TaskCard = ({ task, onDeleteOpen, onDeleteClose }) => {
   const renderDueDate = () => {
     let innerText = "No due date";
     if (task.endDate) {
-      innerText = moment(task.endDate).format();
+      innerText = moment(task.endDate).format("MM/DD/YYYY hh:mm a");
     }
-    return <Text size="xsmall">{innerText}</Text>;
+    return <Text size='xsmall'>{innerText}</Text>;
   };
   const menuItems = [
     { label: "Edit", onClick: () => {} },
-    { label: "Delete Task", onClick: () => {} },
+    { label: "Delete Task", onClick: onDeleteOpen },
   ];
   return (
     <Box
-      direction="row"
+      direction='row'
       pad={{ horizontal: "medium", vertical: "xxsmall" }}
-      background="light-1"
-      elevation="small"
-      gap="small"
-      justify="between"
-      align="center"
+      background='light-1'
+      elevation='small'
+      gap='small'
+      justify='between'
+      align='center'
       flex={false}
       border={{
         color: task.taskList.color,
@@ -31,9 +31,8 @@ const TaskCard = ({ task, ...rest }) => {
         size: "large",
         style: "solid",
       }}
-      {...rest}
     >
-      <Box direction="row" gap="small" align="center">
+      <Box direction='row' gap='small' align='center'>
         <CheckBox checked={task.completed} />
         <Box>
           <Box>
@@ -42,7 +41,7 @@ const TaskCard = ({ task, ...rest }) => {
           {renderDueDate()}
         </Box>
       </Box>
-      <Box direction="row" gap="small" align="center">
+      <Box direction='row' gap='small' align='center'>
         <Menu icon={<MoreVertical />} items={menuItems} hoverIndicator />
       </Box>
     </Box>

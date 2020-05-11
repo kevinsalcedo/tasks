@@ -7,8 +7,9 @@ import {
   GET_CALENDAR,
   CREATE_TASK,
   CREATE_TASK_ERROR,
+  DELETE_TASK,
+  DELETE_TASK_ERROR,
 } from "../actions/types";
-import moment from "moment";
 
 const initialState = {
   lists: [],
@@ -42,6 +43,11 @@ export default function (state = initialState, action) {
       };
     case CREATE_TASK:
       return { ...state, tasks: [...state.tasks, payload] };
+    case DELETE_TASK:
+      return {
+        ...state,
+        tasks: [...state.tasks.filter((task) => task._id !== payload)],
+      };
     case LIST_ERROR:
     case TASK_ERROR:
       return {
@@ -50,8 +56,8 @@ export default function (state = initialState, action) {
         tasks: [],
         selectedList: null,
       };
-
     case CREATE_TASK_ERROR:
+    case DELETE_TASK_ERROR:
     default:
       return state;
   }
