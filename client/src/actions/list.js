@@ -51,23 +51,41 @@ export const loadLists = () => async (dispatch) => {
   }
 };
 
-// Load tasks for selected list, loading all if id is null
-export const loadTasks = (id, start, isCalendar) => async (dispatch) => {
+// Load all tasks for selected list, loading all if id is null
+export const loadTasksView = (id) => async (dispatch) => {
   dispatch(loadRequest());
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
 
-  let end = moment(start).add(1, "months").endOf("day").format();
-  let actionType = GET_TASKS;
-
-  // Check if calendar view is selected
-  if (isCalendar === "calendar") {
-    actionType = GET_CALENDAR;
-    end = moment(start).add(2, "days").endOf("day").format();
-  } else {
-    start = moment(start).subtract(1, "week").format();
+  console.log("Load Tasks All");
+  const listFilter = !id ? `/tasks` : `/${id}/tasks`;
+  console.log(listFilter);
+  try {
+    const res = await axios.get(`/api/tasklists${listFilter}`);
+    console.log(res);
+    dispatch({
+      type: GET_TASKS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: TASK_ERROR,
+    });
+  } finally {
+    dispatch(loadResponse());
   }
+};
+
+// Load tasks in a calendar view for a selected list, loading all lists if id is null
+export const loadCalendarView = (id, start) => async (dispatch) => {
+  dispatch(loadRequest());
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+  console.log("Load Tasks Calendar");
+
+  let end = moment(start).add(2, "days").endOf("day").format();
 
   const extension = !id ? `tasks` : `${id}/tasks`;
 
@@ -76,13 +94,9 @@ export const loadTasks = (id, start, isCalendar) => async (dispatch) => {
       `/api/tasklists/${extension}?start=${start}&end=${end}`
     );
 
-    let tasks =
-      isCalendar === "calendar"
-        ? generateCalendar(start, end, res.data)
-        : res.data;
     dispatch({
-      type: actionType,
-      payload: tasks,
+      type: GET_CALENDAR,
+      payload: generateCalendar(start, end, res.data),
     });
   } catch (err) {
     dispatch({

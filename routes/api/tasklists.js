@@ -13,6 +13,7 @@ const User = require("../../models/User");
 //@desc Get current user's tasklists
 //@access Private
 router.get("/", auth, async (req, res) => {
+  console.log("GET taskslist");
   try {
     const lists = await TaskList.find({
       user: req.user.id,
@@ -32,13 +33,29 @@ router.get("/", auth, async (req, res) => {
 // @desc Get all user's tasks
 // @access Private
 router.get("/tasks", auth, async (req, res) => {
-  const start = moment(req.query.start).utc();
-  const end = moment(req.query.end).utc();
+  console.log("GET all tasks");
+  let start = null;
+  let end = null;
+  if (req.query.start) {
+    start = moment(req.query.start).utc();
+  }
+  if (req.query.end) {
+    end = moment(req.query.end).utc();
+  }
+
+  let filter = {
+    user: req.user.id,
+  };
+
+  if (start && end) {
+    filter = { ...filter, createDate: { $gte: start, $lte: end } };
+  }
+
   try {
-    let allTasks = await Task.find({
-      user: req.user.id,
-      createDate: { $gte: start, $lte: end },
-    }).populate("taskList", ["name", "color"]);
+    let allTasks = await Task.find(filter).populate("taskList", [
+      "name",
+      "color",
+    ]);
 
     res.send(allTasks);
   } catch (err) {
@@ -51,6 +68,7 @@ router.get("/tasks", auth, async (req, res) => {
 //@desc Get current user's tasklist by list id
 //@access Private
 router.get("/:list_id", auth, async (req, res) => {
+  console.log("GET tasklist");
   try {
     let list = await TaskList.findOne({
       _id: req.params.list_id,
@@ -73,13 +91,29 @@ router.get("/:list_id", auth, async (req, res) => {
 //@desc Get all tasks for selected task list
 //@access Private
 router.get("/:list_id/tasks", auth, async (req, res) => {
-  const start = moment(req.query.start).utc();
-  const end = moment(req.query.end).utc();
+  console.log("GET tasks for list");
+  let start = null;
+  let end = null;
+  if (req.query.start) {
+    start = moment(req.query.start).utc();
+  }
+  if (req.query.end) {
+    end = moment(req.query.end).utc();
+  }
+
+  let filter = {
+    taskList: req.params.list_id,
+  };
+
+  if (start && end) {
+    filter = { ...filter, createDate: { $gte: start, $lte: end } };
+  }
+
   try {
-    let allTasks = await Task.find({
-      taskList: req.params.list_id,
-      createDate: { $gte: start, $lte: end },
-    }).populate("taskList", ["name", "color"]);
+    let allTasks = await Task.find(filter).populate("taskList", [
+      "name",
+      "color",
+    ]);
 
     res.send(allTasks);
   } catch (err) {
@@ -96,6 +130,7 @@ router.get("/:list_id/tasks", auth, async (req, res) => {
 //desc Get a specific task for a tasklist
 //@access Private
 router.get("/:list_id/tasks/:task_id", auth, async (req, res) => {
+  console.log("GET task");
   try {
     let task = await Task.findOne({
       _id: req.params.task_id,
@@ -125,6 +160,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+    console.log("POST tasklist");
 
     const { name, description, tags, color } = req.body;
     const taskListFields = {};
@@ -165,6 +201,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+    console.log("POST task");
 
     const { name, description, startDate, endDate } = req.body;
     const taskFields = {};
