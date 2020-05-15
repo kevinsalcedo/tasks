@@ -30,7 +30,7 @@ const DatePicker = (props) => {
         {
           length: [1, 2],
 
-          regexp: /^1[1-2]$|^[0-9]$/,
+          regexp: /^1[0-2]$|^[0-9]$/,
           placeholder: "hh",
         },
         { fixed: ":" },
