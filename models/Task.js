@@ -21,8 +21,14 @@ const TaskSchema = new mongoose.Schema({
   startDate: {
     type: Date,
   },
+  startTimeEnabled: {
+    type: Boolean,
+  },
   endDate: {
     type: Date,
+  },
+  endTimeEnabled: {
+    type: Boolean,
   },
   createDate: {
     type: Date,
