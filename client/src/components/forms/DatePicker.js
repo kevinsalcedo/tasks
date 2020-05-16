@@ -3,14 +3,13 @@ import { Box, Button, Text, DropButton, Calendar } from "grommet";
 import { FormClose } from "grommet-icons";
 import moment from "moment";
 
-const DatePicker = ({ name, onChange, value, required }) => {
-  // const date = formData ? formData[`${name}`] : null;
+const DatePicker = ({ name, onChange, value }) => {
   const [open, setOpen] = useState(false);
 
   const onSelect = (selectedDate) => {
     const newDate = moment(selectedDate).startOf("day");
     setOpen(false);
-    if (!required && newDate.isSame(value)) {
+    if (newDate.isSame(value)) {
       onChange(null);
     } else {
       onChange(moment(selectedDate));
@@ -37,9 +36,7 @@ const DatePicker = ({ name, onChange, value, required }) => {
         </Box>
       </DropButton>
 
-      {!required && value && (
-        <Button icon={<FormClose />} onClick={() => onChange(null)} />
-      )}
+      {value && <Button icon={<FormClose />} onClick={() => onChange(null)} />}
     </Box>
   );
 };

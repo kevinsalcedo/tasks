@@ -114,7 +114,7 @@ export const createTask = (
   endDate
 ) => async (dispatch) => {
   dispatch(loadRequest());
-  console.log("create task action");
+  console.log("Create task action");
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
@@ -128,8 +128,9 @@ export const createTask = (
   const body = JSON.stringify({
     name,
     description,
-    taskList: taskList,
-    endDate: utcDueDate,
+    taskList,
+    startDate: startDate ? startDate.utc.format() : null,
+    endDate: endDate ? endDate.utc.format() : null,
   });
 
   try {

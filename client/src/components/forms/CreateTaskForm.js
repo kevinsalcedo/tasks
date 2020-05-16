@@ -31,7 +31,7 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     // Client side validation here
-    createTask(name, description, list, startDate, endDate.format());
+    createTask(name, description, list, startDate, endDate);
     closeForm();
   };
 
@@ -94,7 +94,6 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
                 name='endDate'
                 value={endDate}
                 onChange={(event) => setEndDate(event)}
-                required
               />
             </FormField>
           </Box>
