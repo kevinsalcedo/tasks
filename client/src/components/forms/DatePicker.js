@@ -1,53 +1,46 @@
 import React, { useState } from "react";
-import { MaskedInput } from "grommet";
-import { FormSchedule } from "grommet-icons";
+import { Box, Button, Text, DropButton, Calendar } from "grommet";
+import { FormClose } from "grommet-icons";
+import moment from "moment";
 
-const DatePicker = (props) => {
+const DatePicker = ({ name, onChange, value, required }) => {
+  // const date = formData ? formData[`${name}`] : null;
+  const [open, setOpen] = useState(false);
+
+  const onSelect = (selectedDate) => {
+    const newDate = moment(selectedDate).startOf("day");
+    setOpen(false);
+    if (!required && newDate.isSame(value)) {
+      onChange(null);
+    } else {
+      onChange(moment(selectedDate));
+    }
+  };
+
   return (
-    <MaskedInput
-      icon={<FormSchedule />}
-      reverse
-      mask={[
-        {
-          length: [1, 2],
-          options: Array.from({ length: 12 }, (v, k) => k + 1),
-          regexp: /^1[0,1-2]$|^0?[1-9]$|^0$/,
-          placeholder: "mm",
-        },
-        { fixed: "/" },
-        {
-          length: [1, 2],
-          regexp: /^[1-2][0-9]$|^3[0-1]$|^0?[1-9]$|^0$/,
-          placeholder: "dd",
-        },
-        { fixed: "/" },
-        {
-          length: 4,
-          regexp: /^[1-2]$|^19$|^20$|^19[0-9]$|^20[0-9]$|^19[0-9][0-9]$|^20[0-9][0-9]$/,
-          placeholder: "yyyy",
-        },
-        { fixed: " " },
-        {
-          length: [1, 2],
+    <Box align='center' direction='row'>
+      <DropButton
+        name={name}
+        open={open}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        dropContent={
+          <Calendar
+            size='small'
+            onSelect={onSelect}
+            date={value ? value.format() : null}
+          />
+        }
+      >
+        <Box direction='row' gap='medium' align='center' pad='small'>
+          <Text>{value ? value.format("MM/DD/YYYY") : "Select date"}</Text>
+        </Box>
+      </DropButton>
 
-          regexp: /^1[0-2]$|^[0-9]$/,
-          placeholder: "hh",
-        },
-        { fixed: ":" },
-        {
-          length: 2,
-          regexp: /^[0-5][0-9]$|^[0-9]$/,
-          placeholder: "mm",
-        },
-        { fixed: " " },
-        {
-          length: 2,
-          regexp: /^[ap]m$|^[AP]M$|^[aApP]$/,
-          placeholder: "ap",
-        },
-      ]}
-      name={props.name}
-    />
+      {!required && value && (
+        <Button icon={<FormClose />} onClick={() => onChange(null)} />
+      )}
+    </Box>
   );
 };
 

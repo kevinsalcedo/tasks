@@ -76,16 +76,16 @@ class Dashboard extends React.Component {
       : "All Lists";
 
     return (
-      <Box fill="vertical" width="80%">
-        <Box align="center" direction="row">
-          <Heading level="3">{list}</Heading>
+      <Box fill='vertical' width='80%'>
+        <Box align='center' direction='row'>
+          <Heading level='3'>{list}</Heading>
           <Button
             icon={<Add />}
             hoverIndicator
             onClick={this.openCreateModal}
           />
         </Box>
-        <Box gap="small" fill overflow="auto">
+        <Box gap='small' fill overflow='auto'>
           {tasks.map((task) => (
             <TaskCard
               key={task._id}
@@ -104,33 +104,33 @@ class Dashboard extends React.Component {
     // debugger;
     const { loading, calendar } = this.props;
     return (
-      <Box direction="row" fill="vertical" gap="small" width="80%">
+      <Box direction='row' fill='vertical' gap='small' width='80%'>
         {Object.keys(calendar).map((dateGroup) => (
           <Box
             key={dateGroup}
-            gap="small"
-            align="center"
-            fill="vertical"
-            width="medium"
-            overflow="auto"
-            background="light-5"
-            elevation="small"
-            round="xsmall"
+            gap='small'
+            align='center'
+            fill='vertical'
+            width='medium'
+            overflow='auto'
+            background='light-5'
+            elevation='small'
+            round='xsmall'
           >
-            <Heading level="4" pad={"bottom"}>
+            <Heading level='4' pad={"bottom"}>
               {moment(dateGroup).format("MMMM Do")}
             </Heading>
-            <Box gap="small" overflow="auto" width="85%" fill="vertical">
+            <Box gap='small' overflow='auto' width='85%' fill='vertical'>
               <Box
                 onClick={this.openCreateModal}
                 pad={{ horizontal: "medium", vertical: "xxsmall" }}
-                background="light-1"
-                elevation="small"
-                gap="small"
-                justify="between"
-                align="center"
+                background='light-1'
+                elevation='small'
+                gap='small'
+                justify='between'
+                align='center'
                 flex={false}
-                height="xxsmall"
+                height='xxsmall'
                 hoverIndicator
               >
                 <Button icon={<Add />} />
@@ -155,10 +155,10 @@ class Dashboard extends React.Component {
     const { createModalOpen, deleteModalOpen, taskToDelete } = this.state;
 
     return (
-      <ContainerPane justify="start" pad="medium">
+      <ContainerPane justify='start' pad='medium'>
         {view === "calendar" ? this.renderDayView() : this.renderListView()}
         {createModalOpen && (
-          <CreateTaskForm closeForm={this.closeCreateModal} task />
+          <CreateTaskForm closeForm={this.closeCreateModal} />
         )}
         {deleteModalOpen && (
           <DeleteTaskForm

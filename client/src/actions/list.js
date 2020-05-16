@@ -60,10 +60,8 @@ export const loadTasksView = (id) => async (dispatch) => {
 
   console.log("Load Tasks All");
   const listFilter = !id ? `/tasks` : `/${id}/tasks`;
-  console.log(listFilter);
   try {
     const res = await axios.get(`/api/tasklists${listFilter}`);
-    console.log(res);
     dispatch({
       type: GET_TASKS,
       payload: res.data,
@@ -127,17 +125,19 @@ export const createTask = (
   };
 
   const utcDueDate = moment(endDate).utc().format();
-  console.log(utcDueDate);
-  const listId = taskList.value;
   const body = JSON.stringify({
     name,
     description,
-    taskList: listId,
+    taskList: taskList,
     endDate: utcDueDate,
   });
 
   try {
-    const res = await axios.post(`api/tasklists/${listId}/tasks`, body, config);
+    const res = await axios.post(
+      `api/tasklists/${taskList}/tasks`,
+      body,
+      config
+    );
     dispatch({ type: CREATE_TASK, payload: res.data });
   } catch (err) {
     console.log(err);

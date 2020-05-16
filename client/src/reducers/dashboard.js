@@ -8,7 +8,7 @@ import moment from "moment";
 const initialState = {
   view: "task",
   calendarStart: moment().startOf("day").format(),
-  defaultDueDate: moment().format("MM/DD/YYYY hh:mm a"),
+  defaultDueDate: moment().startOf("day"),
 };
 
 export default function (state = initialState, action) {

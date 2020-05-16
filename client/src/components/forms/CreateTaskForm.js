@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import {
   Box,
   Button,
+  Calendar,
   Heading,
   Form,
   FormField,
@@ -16,16 +17,11 @@ import { createTask } from "../../actions/list";
 import { Close, FormSchedule } from "grommet-icons";
 
 const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
-  const initialState = {
-    name: "",
-    description: "",
-    list: "",
-    startDate: "",
-    endDate: defaultDueDate,
-  };
-  const [formData, setFormData] = useState(initialState);
-
-  const { name, description, list, startDate, endDate } = formData;
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [list, setList] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(defaultDueDate);
 
   const selectOptions = [];
   lists.map((item) =>
@@ -35,18 +31,8 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     // Client side validation here
-    // Do the submit action here
-    createTask(name, description, list, startDate, endDate);
-    console.log(endDate);
+    createTask(name, description, list, startDate, endDate.format());
     closeForm();
-  };
-
-  const onChange = (nextValue) => {
-    setFormData(nextValue);
-  };
-
-  const onDateChange = (date, time) => {
-    const combinedDate = `${date} ${time}`;
   };
 
   return (
@@ -60,18 +46,29 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
           <Button icon={<Close />} onClick={closeForm} />
         </Box>
         <Form
-          value={formData}
-          onChange={onChange}
-          onReset={() => setFormData(initialState)}
+          onReset={() => {
+            setName("");
+            setDescription("");
+            setList("");
+            setStartDate(null);
+            setEndDate(defaultDueDate);
+          }}
           onSubmit={(e) => onSubmit(e)}
         >
           <FormField label='Name' name='name'>
-            <TextInput placeholder='Name' name='name' />
+            <TextInput
+              placeholder='Name'
+              name='name'
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
           </FormField>
           <FormField label='Description' name='description'>
             <TextArea
               placeholder="What's this task about?"
               name='description'
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
             />
           </FormField>
           <FormField label='List' name='list'>
@@ -79,19 +76,28 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
               name='list'
               options={selectOptions}
               labelKey='label'
-              valueKey='value'
+              valueKey={{ key: "value", reduce: true }}
+              value={list}
+              onChange={({ value: nextValue }) => setList(nextValue)}
             />
           </FormField>
-          {/* <FormField label='Start Date' name='startDate'>
-          <DatePicker name='startDate' currDate={formData.startDate} />
-        </FormField> */}
-          <FormField label='End Date' name='endDate'>
-            <DatePicker
-              name='endDate'
-              currDate={formData.endDate}
-              onDateChange={onDateChange}
-            />
-          </FormField>
+          <Box direction='row' align='center' justify='around'>
+            <FormField label='Start Date' name='startDate'>
+              <DatePicker
+                name='startDate'
+                value={startDate}
+                onChange={(event) => setStartDate(event)}
+              />
+            </FormField>
+            <FormField label='End Date' name='endDate'>
+              <DatePicker
+                name='endDate'
+                value={endDate}
+                onChange={(event) => setEndDate(event)}
+                required
+              />
+            </FormField>
+          </Box>
           <Box direction='row' justify='around' margin={{ top: "medium" }}>
             <Button type='reset' label='Reset' />
             <Button type='submit' label='Create' primary />
