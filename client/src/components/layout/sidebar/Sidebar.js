@@ -64,7 +64,6 @@ export const Sidebar = (
     </GrommetSidebar>
   );
 
-  console.log("here");
   return (
     <Box>
       <Collapsible direction='horizontal' open={sidebarOpen}>

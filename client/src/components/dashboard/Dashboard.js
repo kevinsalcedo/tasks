@@ -64,10 +64,8 @@ class Dashboard extends React.Component {
   updateTasksView = () => {
     const { calendarStart, selectedList, view, loadTasksView } = this.props;
     if (view === "task") {
-      console.log("Update list view");
       loadTasksView(selectedList);
     } else {
-      console.log("Update calendar");
       loadTasksView(selectedList, calendarStart);
     }
     this.setState({ dueDate: moment() });

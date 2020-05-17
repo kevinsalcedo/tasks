@@ -106,6 +106,7 @@ router.get("/:list_id/tasks", auth, async (req, res) => {
 
   let filter = {
     taskList: req.params.list_id,
+    backlog: false,
   };
 
   if (start && end) {

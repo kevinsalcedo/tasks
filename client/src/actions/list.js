@@ -60,8 +60,6 @@ export const loadTasksView = (id, start) => async (dispatch) => {
     setAuthToken(localStorage.token);
   }
 
-  console.log(`Load tasks for ${id || "all"}`);
-
   const dateFilter = start
     ? `?start=${start}&end=${moment(start)
         .add(2, "days")
@@ -79,6 +77,7 @@ export const loadTasksView = (id, start) => async (dispatch) => {
       },
     });
   } catch (err) {
+    console.log(err);
     dispatch({
       type: TASK_ERROR,
     });
@@ -96,7 +95,6 @@ export const createTask = (
   endDate
 ) => async (dispatch) => {
   dispatch(loadRequest());
-  console.log("Create task action");
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
