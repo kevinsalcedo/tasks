@@ -34,6 +34,7 @@ export const UPDATE_TASK_ERROR = "UPDATE_TASK_ERROR";
 export const CHANGE_VIEW = "CHANGE_VIEW";
 export const SET_CALENDAR_RANGE = "SET_CALENDAR_RANGE";
 export const SET_DEFAULT_DUE_DATE = "SET_DEFAULT_DUE_DATE";
+export const SIDEBAR_OPEN = "SIDEBAR_OPEN";
 
 // UI Reloads
 export const LOADING_START = "LOADING_START";

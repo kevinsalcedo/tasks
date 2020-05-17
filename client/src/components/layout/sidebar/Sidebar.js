@@ -20,14 +20,12 @@ import TaskLists from "./TaskLists";
 import DisplayButtonGroup from "./DisplayButtonGroup";
 import { Menu as MenuIcon } from "grommet-icons";
 
-export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
-  const [open, toggleOpen] = useState(isAuthenticated);
+export const Sidebar = (
+  { logout, isAuthenticated, view, sidebarOpen },
+  ...rest
+) => {
   const history = useHistory();
   const directTo = (path) => history.push(path);
-
-  const toggleButton = () => (
-    <Button icon={<MenuIcon />} onClick={() => toggleOpen(!open)} />
-  );
 
   const authMenuItems = [{ label: "Logout", onClick: () => logout() }];
   const guestMenuItems = [
@@ -54,7 +52,6 @@ export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
             items={isAuthenticated ? authMenuItems : guestMenuItems}
             gap='small'
           />
-          {toggleButton()}
         </Box>
       }
       {...rest}
@@ -67,10 +64,10 @@ export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
     </GrommetSidebar>
   );
 
+  console.log("here");
   return (
     <Box>
-      {!open && toggleButton()}
-      <Collapsible direction='horizontal' open={open}>
+      <Collapsible direction='horizontal' open={sidebarOpen}>
         {sideBarContent()}
       </Collapsible>
     </Box>
@@ -80,11 +77,13 @@ export const Sidebar = ({ logout, isAuthenticated, view }, ...rest) => {
 Sidebar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   view: PropTypes.string.isRequired,
+  sidebarOpen: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   view: state.dashboard.view,
+  sidebarOpen: state.dashboard.sidebarOpen,
 });
 
 export default connect(mapStateToProps, { loadLists, logout })(Sidebar);
