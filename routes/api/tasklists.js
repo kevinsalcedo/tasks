@@ -57,7 +57,7 @@ router.get("/tasks", auth, async (req, res) => {
 
   try {
     let allTasks = await Task.find(filter)
-      .sort({ backlog: 1, endDate: "asc" })
+      .sort({ endDate: "asc" })
       .populate("taskList", ["name", "color"]);
 
     res.send(allTasks);
@@ -110,7 +110,7 @@ router.get("/:list_id/tasks", auth, async (req, res) => {
   };
 
   if (start && end) {
-    filter = { ...filter, createDate: { $gte: start, $lte: end } };
+    filter = { ...filter, endDate: { $gte: start, $lte: end } };
   }
 
   try {
