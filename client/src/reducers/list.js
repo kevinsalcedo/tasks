@@ -12,6 +12,7 @@ import {
   UPDATE_TASK,
   UPDATE_TASK_ERROR,
 } from "../actions/types";
+import { addToCalendar, removeFromCalendar } from "../utils/CalendarUtils";
 import moment from "moment";
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
+  let calendar;
   switch (type) {
     case GET_LISTS:
       return {
@@ -46,25 +48,41 @@ export default function (state = initialState, action) {
         calendar: payload,
       };
     case CREATE_TASK:
+      calendar = state.calendar;
+      if (Object.keys(calendar).length > 0) {
+        addToCalendar(calendar, payload);
+      }
       return {
         ...state,
         tasks: [...state.tasks, payload].sort((a, b) =>
           moment(a.endDate).diff(b.endDate)
         ),
+        calendar,
       };
     case UPDATE_TASK:
       let tasks = state.tasks.filter((task) => task._id !== payload._id);
+
       if (!payload.backlog) {
         tasks = [...tasks, payload];
+      }
+      calendar = state.calendar;
+      if (Object.keys(calendar).length > 0) {
+        removeFromCalendar(calendar, payload, true);
       }
       return {
         ...state,
         tasks: tasks.sort((a, b) => moment(a.endDate).diff(b.endDate)),
+        calendar,
       };
     case DELETE_TASK:
+      calendar = state.calendar;
+      if (Object.keys(calendar).length > 0) {
+        removeFromCalendar(calendar, payload, false);
+      }
       return {
         ...state,
         tasks: [...state.tasks.filter((task) => task._id !== payload)],
+        calendar,
       };
     case LIST_ERROR:
     case TASK_ERROR:

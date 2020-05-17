@@ -15,6 +15,7 @@ import {
 import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
 import setAuthToken from "../utils/setAuthToken";
+import { generateCalendar } from "../utils/CalendarUtils";
 import { setAlert } from "./alert";
 
 // SELECTORS - these only change the application wide state
@@ -150,7 +151,7 @@ export const deleteTask = (taskID, listID) => async (dispatch) => {
     const res = await axios.delete(`api/tasklists/${listID}/tasks/${taskID}`);
     dispatch({
       type: DELETE_TASK,
-      payload: taskID,
+      payload: res.data.task,
     });
     dispatch(setAlert(res.data.msg, "good"));
   } catch (err) {
@@ -183,10 +184,8 @@ export const updateTask = (
       "Content-Type": "application/json",
     },
   };
-  debugger;
 
   var backlog = endDate === null;
-  console.log(backlog);
   const body = JSON.stringify({
     name,
     description,
@@ -202,7 +201,6 @@ export const updateTask = (
       body,
       config
     );
-    console.log(res);
     dispatch({ type: UPDATE_TASK, payload: res.data });
   } catch (err) {
     console.log(err);
@@ -210,24 +208,4 @@ export const updateTask = (
   } finally {
     dispatch(loadResponse());
   }
-};
-
-const generateCalendar = (tasks, calendarStart) => {
-  const calendar = {};
-  const start = moment(calendarStart);
-  const end = moment(calendarStart).add(2, "days").endOf("day");
-  let curr = start;
-  while (!curr.isAfter(end, "day")) {
-    calendar[curr.startOf("day").format()] = [];
-    curr = curr.add(1, "days");
-  }
-  debugger;
-  tasks.forEach((task) => {
-    const create = task.endDate
-      ? moment(task.endDate)
-      : moment(task.createDate);
-    calendar[create.startOf("day").format()].push(task);
-  });
-  console.log(calendar);
-  return calendar;
 };

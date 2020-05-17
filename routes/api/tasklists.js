@@ -402,7 +402,10 @@ router.delete("/:list_id/tasks/:task_id", auth, async (req, res) => {
   try {
     let result = await Task.findOneAndDelete({ _id: req.params.task_id });
 
-    res.json({ msg: ` ${result.name} was deleted. Bye-bye task!` });
+    res.json({
+      msg: ` ${result.name} was deleted. Bye-bye task!`,
+      task: result,
+    });
   } catch (err) {
     console.log(err.message);
     if (err.kind === "ObjectId") {
