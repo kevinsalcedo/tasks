@@ -72,7 +72,10 @@ export const loadTasksView = (id, start) => async (dispatch) => {
     const res = await axios.get(`/api/tasklists${listFilter}`);
     dispatch({
       type: GET_TASKS,
-      payload: res.data,
+      payload: {
+        tasks: res.data,
+        calendar: start ? generateCalendar(res.data, start) : {},
+      },
     });
   } catch (err) {
     dispatch({
@@ -207,4 +210,24 @@ export const updateTask = (
   } finally {
     dispatch(loadResponse());
   }
+};
+
+const generateCalendar = (tasks, calendarStart) => {
+  const calendar = {};
+  const start = moment(calendarStart);
+  const end = moment(calendarStart).add(2, "days").endOf("day");
+  let curr = start;
+  while (!curr.isAfter(end, "day")) {
+    calendar[curr.startOf("day").format()] = [];
+    curr = curr.add(1, "days");
+  }
+  debugger;
+  tasks.forEach((task) => {
+    const create = task.endDate
+      ? moment(task.endDate)
+      : moment(task.createDate);
+    calendar[create.startOf("day").format()].push(task);
+  });
+  console.log(calendar);
+  return calendar;
 };

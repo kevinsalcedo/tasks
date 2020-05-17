@@ -37,7 +37,8 @@ export default function (state = initialState, action) {
     case GET_TASKS:
       return {
         ...state,
-        tasks: payload,
+        tasks: payload.tasks,
+        calendar: payload.calendar,
       };
     case GET_CALENDAR:
       return {

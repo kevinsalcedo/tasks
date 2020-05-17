@@ -4,12 +4,7 @@ import { Button, Box, Text, Heading } from "grommet";
 import PropTypes from "prop-types";
 import ContainerPane from "../layout/containers/ContainerPane";
 import TaskCard from "../layout/containers/TaskCard";
-import {
-  loadTasksView,
-  loadLists,
-  createTask,
-  updateTask,
-} from "../../actions/list";
+import { loadTasksView, loadLists } from "../../actions/list";
 import moment from "moment";
 import { Add } from "grommet-icons";
 import CreateTaskForm from "../forms/CreateTaskForm";
@@ -74,32 +69,8 @@ class Dashboard extends React.Component {
     } else {
       console.log("Update calendar");
       loadTasksView(selectedList, calendarStart);
-      // this.generateCalendar();
     }
     this.setState({ dueDate: moment() });
-  };
-
-  generateCalendar = () => {
-    const { calendarStart, tasks, loading } = this.props;
-
-    if (!loading) {
-      const calendar = {};
-      const start = moment(calendarStart);
-      const end = moment(calendarStart).add(2, "days").endOf("day");
-      let curr = start;
-      while (!curr.isAfter(end, "day")) {
-        calendar[curr.startOf("day").format()] = [];
-        curr = curr.add(1, "days");
-      }
-      debugger;
-      tasks.forEach((task) => {
-        const create = task.endDate
-          ? moment(task.endDate)
-          : moment(task.createDate);
-        calendar[create.startOf("day").format()].push(task);
-      });
-      this.setState({ calendar });
-    }
   };
 
   // Render all tasks in a list view
@@ -137,9 +108,7 @@ class Dashboard extends React.Component {
 
   // Render tasks in a day by day calendar view
   renderDayView = () => {
-    // debugger;
-    const { loading } = this.props;
-    const { calendar } = this.state;
+    const { calendar } = this.props;
     return (
       <Box direction='row' fill='vertical' gap='small' width='80%'>
         {Object.keys(calendar).map((dateGroup) => (
@@ -243,5 +212,4 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   loadTasksView,
   loadLists,
-  createTask,
 })(Dashboard);
