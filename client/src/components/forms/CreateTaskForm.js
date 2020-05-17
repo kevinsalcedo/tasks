@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   Box,
   Button,
-  Calendar,
   Heading,
   Form,
   FormField,
@@ -12,16 +11,28 @@ import {
   TextInput,
   TextArea,
 } from "grommet";
+import moment from "moment";
 import DatePicker from "./DatePicker";
-import { createTask } from "../../actions/list";
-import { Close, FormSchedule } from "grommet-icons";
+import { createTask, updateTask } from "../../actions/list";
+import { Close } from "grommet-icons";
 
-const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [list, setList] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(defaultDueDate);
+const CreateTaskForm = ({
+  dueDate,
+  lists,
+  closeForm,
+  task,
+  createTask,
+  updateTask,
+}) => {
+  const [name, setName] = useState(task ? task.name : "");
+  const [description, setDescription] = useState(task ? task.description : "");
+  const [list, setList] = useState(task ? task.taskList._id : "");
+  const [startDate, setStartDate] = useState(
+    task && task.startDate ? moment(task.startDate) : null
+  );
+  const [endDate, setEndDate] = useState(
+    task && task.endDate && !task.backlog ? moment(task.endDate) : dueDate
+  );
 
   const selectOptions = [];
   lists.map((item) =>
@@ -31,7 +42,19 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     // Client side validation here
-    createTask(name, description, list, startDate, endDate);
+    const body = {};
+    if (name) body.name = name;
+    if (description) body.description = description;
+    if (list) body.list = list;
+    if (startDate) body.startDate = startDate;
+    if (endDate) body.endDate = endDate;
+
+    if (task) {
+      // console.log(list);
+      updateTask(task._id, name, description, list, startDate, endDate);
+    } else {
+      createTask(name, description, list, startDate, endDate);
+    }
     closeForm();
   };
 
@@ -40,7 +63,7 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
       <Box pad='medium' gap='small' width='medium'>
         <Box direction='row' justify='between' align='center'>
           <Heading level={3} margin='none'>
-            New Task
+            {task ? "Update Task" : "New Task"}
           </Heading>
 
           <Button icon={<Close />} onClick={closeForm} />
@@ -51,7 +74,7 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
             setDescription("");
             setList("");
             setStartDate(null);
-            setEndDate(defaultDueDate);
+            setEndDate(dueDate);
           }}
           onSubmit={(e) => onSubmit(e)}
         >
@@ -99,7 +122,7 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
           </Box>
           <Box direction='row' justify='around' margin={{ top: "medium" }}>
             <Button type='reset' label='Reset' />
-            <Button type='submit' label='Create' primary />
+            <Button type='submit' label={task ? "Update" : "Create"} primary />
           </Box>
         </Form>
       </Box>
@@ -109,7 +132,8 @@ const CreateTaskForm = ({ defaultDueDate, lists, closeForm, createTask }) => {
 
 const mapStateToProps = (state) => ({
   lists: state.list.lists,
-  defaultDueDate: state.dashboard.defaultDueDate,
 });
 
-export default connect(mapStateToProps, { createTask })(CreateTaskForm);
+export default connect(mapStateToProps, { createTask, updateTask })(
+  CreateTaskForm
+);

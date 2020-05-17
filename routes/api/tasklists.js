@@ -30,7 +30,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 // @route GET api/tasklists/tasks
-// @desc Get all user's tasks
+// @desc Get all user's non-backlog tasks
 // @access Private
 router.get("/tasks", auth, async (req, res) => {
   console.log("GET all tasks");
@@ -45,17 +45,20 @@ router.get("/tasks", auth, async (req, res) => {
 
   let filter = {
     user: req.user.id,
+    backlog: false,
   };
 
   if (start && end) {
-    filter = { ...filter, createDate: { $gte: start, $lte: end } };
+    filter = {
+      ...filter,
+      endDate: { $gte: start, $lte: end },
+    };
   }
 
   try {
-    let allTasks = await Task.find(filter).populate("taskList", [
-      "name",
-      "color",
-    ]);
+    let allTasks = await Task.find(filter)
+      .sort({ backlog: 1, endDate: "asc" })
+      .populate("taskList", ["name", "color"]);
 
     res.send(allTasks);
   } catch (err) {
@@ -203,7 +206,7 @@ router.post(
     }
     console.log("POST task");
 
-    const { name, description, startDate, endDate } = req.body;
+    const { name, description, startDate, endDate, backlog } = req.body;
     const taskFields = {};
     taskFields.user = req.user.id;
 
@@ -227,6 +230,9 @@ router.post(
     if (endDate) {
       taskFields.endDate = endDate;
     }
+    if (backlog) {
+      taskFields.backlog = backlog;
+    }
     try {
       // Create
       task = new Task(taskFields);
@@ -244,7 +250,7 @@ router.post(
   }
 );
 
-//@route POST api/tasklist
+//@route PUT api/tasklist
 //@desc Update a user tasklist
 //@access Private
 router.put(
@@ -255,10 +261,10 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+    console.log("PUT tasklist");
 
     const { name, description, tags } = req.body;
     const taskListFields = {};
-
     if (name) {
       taskListFields.name = name;
     }
@@ -308,7 +314,14 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { taskList, name, description, startDate, endDate } = req.body;
+    const {
+      taskList,
+      name,
+      description,
+      startDate,
+      endDate,
+      backlog,
+    } = req.body;
     const taskFields = {};
     taskFields.user = req.user.id;
 
@@ -320,7 +333,7 @@ router.put(
       // then hit the create list endpoint first. Then pass in that id here
       // let list = TaskList.findOne({user: req.user.id, taskList: taskList});
       // taskFields.taskList = taskList;
-      taskFields.taskList = req.params._id;
+      taskFields.taskList = req.params.list_id;
     }
     if (name) {
       taskFields.name = name;
@@ -334,6 +347,9 @@ router.put(
     if (endDate) {
       taskFields.endDate = endDate;
     }
+    if (backlog !== null) {
+      taskFields.backlog = backlog;
+    }
 
     try {
       let task = await Task.findOne({ _id: req.params.task_id });
@@ -346,7 +362,10 @@ router.put(
         { $set: taskFields },
         { new: true }
       );
-      return res.json(task);
+      var populatedTask = await task
+        .populate("taskList", ["name", "color"])
+        .execPopulate();
+      return res.json(populatedTask);
     } catch (err) {
       console.log(err.message);
       if (err.kind == "ObjectId") {

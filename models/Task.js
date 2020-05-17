@@ -26,6 +26,7 @@ const TaskSchema = new mongoose.Schema({
   },
   endDate: {
     type: Date,
+    default: moment().utc().format(),
   },
   endTimeEnabled: {
     type: Boolean,
@@ -35,6 +36,10 @@ const TaskSchema = new mongoose.Schema({
     default: moment().utc().format(),
   },
   completed: {
+    type: Boolean,
+    default: false,
+  },
+  backlog: {
     type: Boolean,
     default: false,
   },

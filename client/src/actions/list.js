@@ -5,11 +5,12 @@ import {
   SELECT_LIST,
   GET_TASKS,
   TASK_ERROR,
-  GET_CALENDAR,
   CREATE_TASK,
   CREATE_TASK_ERROR,
   DELETE_TASK,
   DELETE_TASK_ERROR,
+  UPDATE_TASK,
+  UPDATE_TASK_ERROR,
 } from "./types";
 import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
@@ -51,50 +52,27 @@ export const loadLists = () => async (dispatch) => {
   }
 };
 
-// Load all tasks for selected list, loading all if id is null
-export const loadTasksView = (id) => async (dispatch) => {
+// Load tasks for selected list, loading all if id is null and filtering by dates, if provided
+export const loadTasksView = (id, start) => async (dispatch) => {
   dispatch(loadRequest());
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
 
-  console.log("Load Tasks All");
-  const listFilter = !id ? `/tasks` : `/${id}/tasks`;
+  console.log(`Load tasks for ${id || "all"}`);
+
+  const dateFilter = start
+    ? `?start=${start}&end=${moment(start)
+        .add(2, "days")
+        .endOf("day")
+        .format()}`
+    : "";
+  const listFilter = !id ? `/tasks${dateFilter}` : `/${id}/tasks${dateFilter}`;
   try {
     const res = await axios.get(`/api/tasklists${listFilter}`);
     dispatch({
       type: GET_TASKS,
       payload: res.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: TASK_ERROR,
-    });
-  } finally {
-    dispatch(loadResponse());
-  }
-};
-
-// Load tasks in a calendar view for a selected list, loading all lists if id is null
-export const loadCalendarView = (id, start) => async (dispatch) => {
-  dispatch(loadRequest());
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
-  }
-  console.log("Load Tasks Calendar");
-
-  let end = moment(start).add(2, "days").endOf("day").format();
-
-  const extension = !id ? `tasks` : `${id}/tasks`;
-
-  try {
-    const res = await axios.get(
-      `/api/tasklists/${extension}?start=${start}&end=${end}`
-    );
-
-    dispatch({
-      type: GET_CALENDAR,
-      payload: generateCalendar(start, end, res.data),
     });
   } catch (err) {
     dispatch({
@@ -123,14 +101,17 @@ export const createTask = (
       "Content-Type": "application/json",
     },
   };
-
-  const utcDueDate = moment(endDate).utc().format();
+  var backlog = endDate === null;
+  console.log(backlog);
   const body = JSON.stringify({
     name,
     description,
     taskList,
-    startDate: startDate ? startDate.utc.format() : null,
-    endDate: endDate ? endDate.utc.format() : null,
+    startDate: startDate ? startDate.utc().format() : null,
+    endDate: endDate
+      ? endDate.utc().format()
+      : moment().endOf("day").utc().format(),
+    backlog,
   });
 
   try {
@@ -180,20 +161,50 @@ export const deleteTask = (taskID, listID) => async (dispatch) => {
   }
 };
 
-// Helper method to parse a list of tasks into calendar format
-const generateCalendar = (startDate, endDate, tasks) => {
-  const calendar = {};
-  const start = moment(startDate);
-  const end = moment(endDate);
-  let curr = start;
-
-  while (!curr.isAfter(end, "day")) {
-    calendar[curr.startOf("day").format()] = [];
-    curr = curr.add(1, "days");
+// Mark a task as completed
+export const updateTask = (
+  taskID,
+  name,
+  description,
+  taskList,
+  startDate,
+  endDate
+) => async (dispatch) => {
+  dispatch(loadRequest());
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
   }
-  tasks.forEach((task) => {
-    const create = moment(task.createDate);
-    calendar[create.startOf("day").format()].push(task);
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  debugger;
+
+  var backlog = endDate === null;
+  console.log(backlog);
+  const body = JSON.stringify({
+    name,
+    description,
+    taskList,
+    startDate: startDate ? startDate.utc().format() : null,
+    endDate: endDate ? endDate.utc().format() : null,
+    backlog,
   });
-  return calendar;
+
+  try {
+    const res = await axios.put(
+      `api/tasklists/${taskList}/tasks/${taskID}`,
+      body,
+      config
+    );
+    console.log(res);
+    dispatch({ type: UPDATE_TASK, payload: res.data });
+  } catch (err) {
+    console.log(err);
+    dispatch({ type: UPDATE_TASK_ERROR });
+  } finally {
+    dispatch(loadResponse());
+  }
 };

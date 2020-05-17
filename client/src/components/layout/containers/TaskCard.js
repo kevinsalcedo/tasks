@@ -3,9 +3,13 @@ import { Box, CheckBox, Collapsible, Text, Menu } from "grommet";
 import { MoreVertical } from "grommet-icons";
 import moment from "moment";
 
-const TaskCard = ({ task, onDeleteOpen, onDeleteClose }) => {
-  const [open, toggleOpen] = useState(false);
-
+const TaskCard = ({
+  task,
+  onDeleteOpen,
+  onDeleteClose,
+  onUpdateOpen,
+  onUpdateClose,
+}) => {
   const renderDueDate = () => {
     let innerText = "No due date";
     if (task.endDate) {
@@ -14,25 +18,30 @@ const TaskCard = ({ task, onDeleteOpen, onDeleteClose }) => {
       const timeEnabled = task.endTimeEnabled;
 
       //Day comparisons for display
-      const diff = dueDate.diff(now, "days");
-      if (diff < 0) {
-        innerText = "Past due";
-      } else if (diff === 0) {
-        innerText =
-          "Today" + (timeEnabled ? ` ${dueDate.format("hh:mm a")}` : "");
-      } else if (diff === 1) {
-        innerText =
-          "Tomorrow" + (timeEnabled ? ` ${dueDate.format("hh:mm a")}` : "");
-      } else if (diff < 7) {
-        innerText = dueDate.format("ddd" + (timeEnabled ? " hh:mm a" : ""));
-      } else {
-        innerText = dueDate.format("MMM Do");
+      if (!task.backlog) {
+        const diff = dueDate.diff(now, "days");
+        if (diff < 0) {
+          innerText = "Past due";
+        } else if (diff === 0) {
+          innerText =
+            "Today" + (timeEnabled ? ` ${dueDate.format("hh:mm a")}` : "");
+        } else if (diff === 1) {
+          innerText =
+            "Tomorrow" + (timeEnabled ? ` ${dueDate.format("hh:mm a")}` : "");
+        } else if (diff < 7) {
+          innerText = dueDate.format("ddd" + (timeEnabled ? " hh:mm a" : ""));
+        } else {
+          innerText = dueDate.format("MMM Do");
+        }
       }
     }
     return <Text size='xsmall'>{innerText}</Text>;
   };
   const menuItems = [
-    { label: "Edit", onClick: () => {} },
+    {
+      label: "Edit",
+      onClick: () => onUpdateOpen(null, task),
+    },
     { label: "Delete Task", onClick: onDeleteOpen },
   ];
   return (

@@ -9,7 +9,10 @@ import {
   CREATE_TASK_ERROR,
   DELETE_TASK,
   DELETE_TASK_ERROR,
+  UPDATE_TASK,
+  UPDATE_TASK_ERROR,
 } from "../actions/types";
+import moment from "moment";
 
 const initialState = {
   lists: [],
@@ -42,7 +45,21 @@ export default function (state = initialState, action) {
         calendar: payload,
       };
     case CREATE_TASK:
-      return { ...state, tasks: [...state.tasks, payload] };
+      return {
+        ...state,
+        tasks: [...state.tasks, payload].sort((a, b) =>
+          moment(a.endDate).diff(b.endDate)
+        ),
+      };
+    case UPDATE_TASK:
+      let tasks = state.tasks.filter((task) => task._id !== payload._id);
+      if (!payload.backlog) {
+        tasks = [...tasks, payload];
+      }
+      return {
+        ...state,
+        tasks: tasks.sort((a, b) => moment(a.endDate).diff(b.endDate)),
+      };
     case DELETE_TASK:
       return {
         ...state,
@@ -57,6 +74,7 @@ export default function (state = initialState, action) {
         selectedList: null,
       };
     case CREATE_TASK_ERROR:
+    case UPDATE_TASK_ERROR:
     case DELETE_TASK_ERROR:
     default:
       return state;

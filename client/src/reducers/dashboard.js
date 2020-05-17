@@ -1,14 +1,9 @@
-import {
-  CHANGE_VIEW,
-  SET_CALENDAR_RANGE,
-  SET_DEFAULT_DUE_DATE,
-} from "../actions/types";
+import { CHANGE_VIEW, SET_CALENDAR_RANGE } from "../actions/types";
 import moment from "moment";
 
 const initialState = {
   view: "task",
   calendarStart: moment().startOf("day").format(),
-  defaultDueDate: moment().startOf("day"),
 };
 
 export default function (state = initialState, action) {
@@ -21,8 +16,6 @@ export default function (state = initialState, action) {
       };
     case SET_CALENDAR_RANGE:
       return { ...state, calendarStart: payload };
-    case SET_DEFAULT_DUE_DATE:
-      return { ...state, defaultTaskDate: payload };
     default:
       return state;
   }

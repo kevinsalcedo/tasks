@@ -4,7 +4,12 @@ import { Button, Box, Text, Heading } from "grommet";
 import PropTypes from "prop-types";
 import ContainerPane from "../layout/containers/ContainerPane";
 import TaskCard from "../layout/containers/TaskCard";
-import { loadTasksView, loadCalendarView, loadLists } from "../../actions/list";
+import {
+  loadTasksView,
+  loadLists,
+  createTask,
+  updateTask,
+} from "../../actions/list";
 import moment from "moment";
 import { Add } from "grommet-icons";
 import CreateTaskForm from "../forms/CreateTaskForm";
@@ -17,11 +22,20 @@ class Dashboard extends React.Component {
       createModalOpen: false,
       deleteModalOpen: false,
       taskToDelete: null,
+      calendar: {},
+      dueDate: moment(),
+      taskToUpdate: null,
     };
   }
 
-  openCreateModal = () => this.setState({ createModalOpen: true });
-  closeCreateModal = () => this.setState({ createModalOpen: false });
+  openCreateModal = (dueDate, task) =>
+    this.setState({
+      createModalOpen: true,
+      dueDate: moment(dueDate),
+      taskToUpdate: task,
+    });
+  closeCreateModal = () =>
+    this.setState({ createModalOpen: false, taskToUpdate: null });
   openDeleteModal = (task) =>
     this.setState({ deleteModalOpen: true, taskToDelete: task });
   closeDeleteModal = () =>
@@ -53,18 +67,38 @@ class Dashboard extends React.Component {
   // When in list view, load all tasks
   // When in calendar, filter on the selected start date
   updateTasksView = () => {
-    console.log("Updating tasks");
-    const {
-      calendarStart,
-      selectedList,
-      view,
-      loadTasksView,
-      loadCalendarView,
-    } = this.props;
+    const { calendarStart, selectedList, view, loadTasksView } = this.props;
     if (view === "task") {
+      console.log("Update list view");
       loadTasksView(selectedList);
     } else {
-      loadCalendarView(selectedList, calendarStart);
+      console.log("Update calendar");
+      loadTasksView(selectedList, calendarStart);
+      // this.generateCalendar();
+    }
+    this.setState({ dueDate: moment() });
+  };
+
+  generateCalendar = () => {
+    const { calendarStart, tasks, loading } = this.props;
+
+    if (!loading) {
+      const calendar = {};
+      const start = moment(calendarStart);
+      const end = moment(calendarStart).add(2, "days").endOf("day");
+      let curr = start;
+      while (!curr.isAfter(end, "day")) {
+        calendar[curr.startOf("day").format()] = [];
+        curr = curr.add(1, "days");
+      }
+      debugger;
+      tasks.forEach((task) => {
+        const create = task.endDate
+          ? moment(task.endDate)
+          : moment(task.createDate);
+        calendar[create.startOf("day").format()].push(task);
+      });
+      this.setState({ calendar });
     }
   };
 
@@ -82,7 +116,7 @@ class Dashboard extends React.Component {
           <Button
             icon={<Add />}
             hoverIndicator
-            onClick={this.openCreateModal}
+            onClick={() => this.openCreateModal(moment().format())}
           />
         </Box>
         <Box gap='small' fill overflow='auto'>
@@ -92,6 +126,8 @@ class Dashboard extends React.Component {
               task={task}
               onDeleteOpen={() => this.openDeleteModal(task)}
               onDeleteClose={this.closeDeleteModal}
+              onUpdateOpen={() => this.openCreateModal(moment().format(), task)}
+              onUpdateClose={this.closeCreateModal}
             />
           ))}
         </Box>
@@ -102,7 +138,8 @@ class Dashboard extends React.Component {
   // Render tasks in a day by day calendar view
   renderDayView = () => {
     // debugger;
-    const { loading, calendar } = this.props;
+    const { loading } = this.props;
+    const { calendar } = this.state;
     return (
       <Box direction='row' fill='vertical' gap='small' width='80%'>
         {Object.keys(calendar).map((dateGroup) => (
@@ -122,7 +159,7 @@ class Dashboard extends React.Component {
             </Heading>
             <Box gap='small' overflow='auto' width='85%' fill='vertical'>
               <Box
-                onClick={this.openCreateModal}
+                onClick={() => this.openCreateModal(dateGroup)}
                 pad={{ horizontal: "medium", vertical: "xxsmall" }}
                 background='light-1'
                 elevation='small'
@@ -141,6 +178,8 @@ class Dashboard extends React.Component {
                   task={task}
                   onDeleteOpen={() => this.openDeleteModal(task)}
                   onDeleteClose={this.closeDeleteModal}
+                  onUpdateOpen={() => this.openCreateModal(dateGroup, task)}
+                  onUpdateClose={this.closeCreateModal}
                 />
               ))}
             </Box>
@@ -152,13 +191,23 @@ class Dashboard extends React.Component {
 
   render() {
     const { view } = this.props;
-    const { createModalOpen, deleteModalOpen, taskToDelete } = this.state;
+    const {
+      createModalOpen,
+      deleteModalOpen,
+      taskToDelete,
+      dueDate,
+      taskToUpdate,
+    } = this.state;
 
     return (
       <ContainerPane justify='start' pad='medium'>
         {view === "calendar" ? this.renderDayView() : this.renderListView()}
         {createModalOpen && (
-          <CreateTaskForm closeForm={this.closeCreateModal} />
+          <CreateTaskForm
+            dueDate={dueDate}
+            task={taskToUpdate}
+            closeForm={this.closeCreateModal}
+          />
         )}
         {deleteModalOpen && (
           <DeleteTaskForm
@@ -193,6 +242,6 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   loadTasksView,
-  loadCalendarView,
   loadLists,
+  createTask,
 })(Dashboard);

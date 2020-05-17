@@ -24,11 +24,13 @@ const DatePicker = ({ name, onChange, value }) => {
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         dropContent={
-          <Calendar
-            size='small'
-            onSelect={onSelect}
-            date={value ? value.format() : null}
-          />
+          <Box align='center' pad='small' round>
+            <Calendar
+              size='small'
+              onSelect={onSelect}
+              date={value ? value.format() : null}
+            />
+          </Box>
         }
       >
         <Box direction='row' gap='medium' align='center' pad='small'>
