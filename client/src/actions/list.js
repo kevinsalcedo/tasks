@@ -12,6 +12,7 @@ import {
   DELETE_TASK_ERROR,
   UPDATE_TASK,
   UPDATE_TASK_ERROR,
+  CREATE_LIST,
 } from "./types";
 import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
@@ -213,6 +214,26 @@ export const updateTask = (
   } catch (err) {
     console.log(err);
     dispatch({ type: UPDATE_TASK_ERROR });
+  } finally {
+    dispatch(loadResponse());
+  }
+};
+
+// Create a new task list
+export const createList = (formValues) => async (dispatch) => {
+  dispatch(loadRequest());
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
+  const config = { headers: { "Content-Type": "application/json" } };
+  const body = JSON.stringify(formValues);
+
+  try {
+    const res = await axios.post("api/tasklists", body, config);
+    dispatch({ type: CREATE_LIST, payload: res.data });
+  } catch (err) {
+    console.log(err);
   } finally {
     dispatch(loadResponse());
   }

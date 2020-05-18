@@ -17,6 +17,8 @@ export const LIST_ERROR = "LIST_ERROR";
 export const SELECT_LIST = "SELECT_LIST";
 export const SELECT_ERROR = "SELECT_ERROR";
 export const DATE_ERROR = "DATE_ERROR";
+export const CREATE_LIST = "CREATE_LIST";
+export const CREATE_LIST_ERROR = "CREATE_LIST_ERROR";
 
 // Tasks
 export const SELECT_TASK = "SELECT_TASK";

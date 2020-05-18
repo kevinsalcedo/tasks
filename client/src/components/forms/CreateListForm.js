@@ -13,8 +13,9 @@ import {
 } from "grommet";
 import { CirclePicker } from "react-color";
 import { Close } from "grommet-icons";
+import { createList } from "../../actions/list";
 
-const CreateListForm = ({ taskList, toggleCreateListForm }) => {
+const CreateListForm = ({ taskList, toggleCreateListForm, createList }) => {
   const [name, setName] = useState(taskList ? taskList.name : "");
   const [description, setDescription] = useState(
     taskList ? taskList.description : ""
@@ -24,6 +25,10 @@ const CreateListForm = ({ taskList, toggleCreateListForm }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     // Client side validation here
+    const formValues = { name, description, color };
+
+    createList(formValues);
+    closeForm();
   };
 
   const closeForm = () => {
@@ -41,6 +46,7 @@ const CreateListForm = ({ taskList, toggleCreateListForm }) => {
           <Button icon={<Close />} onClick={closeForm} />
         </Box>
         <Form
+          onSubmit={onSubmit}
           onReset={() => {
             setName("");
             setDescription("");
@@ -90,4 +96,6 @@ const CreateListForm = ({ taskList, toggleCreateListForm }) => {
   );
 };
 
-export default connect(null, { toggleCreateListForm })(CreateListForm);
+export default connect(null, { toggleCreateListForm, createList })(
+  CreateListForm
+);

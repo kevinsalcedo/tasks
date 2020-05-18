@@ -25,10 +25,13 @@ const CreateTaskForm = ({
   updateTask,
   toggleCreateTaskForm,
   selectTask,
+  selectedList,
 }) => {
   const [name, setName] = useState(task ? task.name : "");
   const [description, setDescription] = useState(task ? task.description : "");
-  const [list, setList] = useState(task ? task.taskList._id : "");
+  const [list, setList] = useState(
+    task ? task.taskList._id : selectedList ? selectedList : ""
+  );
   const [startDate, setStartDate] = useState(
     task && task.startDate ? moment(task.startDate) : null
   );
@@ -144,6 +147,7 @@ const CreateTaskForm = ({
 const mapStateToProps = (state) => ({
   lists: state.list.lists,
   task: state.list.selectedTask,
+  selectedList: state.list.selectedList,
 });
 
 export default connect(mapStateToProps, {

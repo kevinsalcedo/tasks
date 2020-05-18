@@ -12,6 +12,8 @@ import {
   DELETE_TASK_ERROR,
   UPDATE_TASK,
   UPDATE_TASK_ERROR,
+  CREATE_LIST,
+  CREATE_LIST_ERROR,
 } from "../actions/types";
 import { addToCalendar, removeFromCalendar } from "../utils/CalendarUtils";
 import moment from "moment";
@@ -93,6 +95,11 @@ export default function (state = initialState, action) {
         calendar,
         selectedTask: null,
       };
+    case CREATE_LIST:
+      return {
+        ...state,
+        lists: [...state.lists, payload],
+      };
     case LIST_ERROR:
     case TASK_ERROR:
       return {
@@ -105,6 +112,7 @@ export default function (state = initialState, action) {
     case CREATE_TASK_ERROR:
     case UPDATE_TASK_ERROR:
     case DELETE_TASK_ERROR:
+    case CREATE_LIST_ERROR:
     default:
       return state;
   }
