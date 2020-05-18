@@ -7,6 +7,7 @@ import TaskCard from "../layout/containers/TaskCard";
 import { loadTasksView, loadLists } from "../../actions/list";
 import moment from "moment";
 import { Add } from "grommet-icons";
+import Spinner from "../layout/Spinner";
 import CreateTaskForm from "../forms/CreateTaskForm";
 import DeleteTaskForm from "../forms/DeleteTaskForm";
 
@@ -73,10 +74,14 @@ class Dashboard extends React.Component {
 
   // Render all tasks in a list view
   renderListView = () => {
-    const { lists, selectedList, tasks } = this.props;
+    const { lists, selectedList, tasks, loading } = this.props;
     const list = selectedList
       ? lists.find((list) => list._id === selectedList).name
       : "All Lists";
+
+    if (loading) {
+      return <Spinner />;
+    }
 
     return (
       <Box fill='vertical' width='80%'>
@@ -106,7 +111,11 @@ class Dashboard extends React.Component {
 
   // Render tasks in a day by day calendar view
   renderDayView = () => {
-    const { calendar } = this.props;
+    const { calendar, loading } = this.props;
+    if (loading) {
+      return <Spinner />;
+    }
+
     return (
       <Box direction='row' fill='vertical' gap='small' width='80%'>
         {Object.keys(calendar).map((dateGroup) => (
