@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { selectList } from "../../../actions/list";
 import { Accordion, AccordionPanel, Box, Button, List, Text } from "grommet";
-import { Add } from "grommet-icons";
+import { Add, List as ListIcon } from "grommet-icons";
 
 const TaskLists = ({ selectedList, lists, selectList, loading }) => {
   const [selectedItem, setSelectedItem] = useState(0);
@@ -10,7 +10,7 @@ const TaskLists = ({ selectedList, lists, selectList, loading }) => {
   let data = [];
   data.push({ name: "All", id: null });
   lists.map((list) => {
-    data.push({ name: list.name, id: list._id });
+    data.push({ name: list.name, id: list._id, color: list.color });
   });
 
   const onClickItem = (event) => {
@@ -26,6 +26,11 @@ const TaskLists = ({ selectedList, lists, selectList, loading }) => {
         <List
           data={data}
           pad='small'
+          itemProps={
+            selectedItem >= 0
+              ? { [selectedItem]: { background: "brand" } }
+              : undefined
+          }
           onClickItem={(event) => onClickItem(event)}
         >
           {(datum, index) => (
@@ -35,8 +40,18 @@ const TaskLists = ({ selectedList, lists, selectList, loading }) => {
               gap='medium'
               size='xsmall'
               align='center'
+              fill
               hoverIndicator
             >
+              <Box
+                round='full'
+                pad='small'
+                align='center'
+                justify='center'
+                background={datum.color}
+              >
+                <ListIcon color={datum.color ? "white" : null} />
+              </Box>
               <Text weight='bold'>{datum.name}</Text>
             </Box>
           )}

@@ -35,8 +35,6 @@ export const Sidebar = (
 
   const sideBarContent = () => (
     <GrommetSidebar
-      flex={false}
-      pad='small'
       header={
         <Box direction='row'>
           <Menu

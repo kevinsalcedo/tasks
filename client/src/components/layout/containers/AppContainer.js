@@ -17,7 +17,7 @@ import PrivateRoute from "../../routing/PrivateRoute";
 import "../../../App.css";
 
 // UI
-import { Box, Grommet, Main } from "grommet";
+import { Box, Grommet, Main, Grid } from "grommet";
 import { grommet } from "grommet/themes";
 
 const AppContainer = ({ isAuthenticated }) => {
@@ -26,9 +26,19 @@ const AppContainer = ({ isAuthenticated }) => {
       <Router>
         <Box direction='row' fill>
           {isAuthenticated && <Sidebar />}
-          <Box fill>
-            {isAuthenticated && <Navbar />}
+
+          <Grid
+            fill
+            rows={["xxsmall", "flex"]}
+            columns={["flex"]}
+            areas={[
+              { name: "header", start: [0, 0], end: [0, 0] },
+              { name: "body", start: [0, 1], end: [0, 1] },
+            ]}
+          >
+            <Navbar gridArea='header' />
             <Main
+              gridArea='body'
               pad='medium'
               align='center'
               background='linear-gradient(102.77deg, #865ED6 -9.18%, #18BAB9 209.09%)'
@@ -45,7 +55,7 @@ const AppContainer = ({ isAuthenticated }) => {
                 />
               </Switch>
             </Main>
-          </Box>
+          </Grid>
         </Box>
       </Router>
     </Grommet>
