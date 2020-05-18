@@ -60,7 +60,13 @@ const CreateTaskForm = ({
 
   return (
     <Layer position='center' modal onClickOutside={closeForm} onEsc={closeForm}>
-      <Box pad='medium' gap='small' width='medium'>
+      <Box
+        pad='medium'
+        gap='small'
+        width='medium'
+        fill='horizontal'
+        pad='medium'
+      >
         <Box direction='row' justify='between' align='center'>
           <Heading level={3} margin='none'>
             {task ? "Update Task" : "New Task"}
@@ -121,7 +127,11 @@ const CreateTaskForm = ({
             </FormField>
           </Box>
           <Box direction='row' justify='around' margin={{ top: "medium" }}>
-            <Button type='reset' label='Reset' />
+            {task ? (
+              <Button label='Cancel' onClick={closeForm} />
+            ) : (
+              <Button type='reset' label='Reset' />
+            )}
             <Button type='submit' label={task ? "Update" : "Create"} primary />
           </Box>
         </Form>
