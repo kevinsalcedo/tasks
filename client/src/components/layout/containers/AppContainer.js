@@ -26,11 +26,10 @@ const AppContainer = ({ isAuthenticated }) => {
       <Router>
         <Box direction='row' fill>
           {isAuthenticated && <Sidebar />}
-
           <Grid
             fill
             rows={["auto", "flex"]}
-            columns={["flex"]}
+            columns={["auto"]}
             areas={[
               { name: "header", start: [0, 0], end: [0, 0] },
               { name: "body", start: [0, 1], end: [0, 1] },

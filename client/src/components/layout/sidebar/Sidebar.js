@@ -12,12 +12,13 @@ import {
   Sidebar as GrommetSidebar,
   Menu,
   Text,
+  ResponsiveContext,
 } from "grommet";
 import Calendar from "./Calendar";
 import TaskLists from "./TaskLists";
 
 export const Sidebar = (
-  { logout, isAuthenticated, userName, sidebarOpen },
+  { logout, isAuthenticated, user, sidebarOpen },
   ...rest
 ) => {
   const history = useHistory();
@@ -30,32 +31,37 @@ export const Sidebar = (
   ];
 
   const sideBarContent = () => (
-    <GrommetSidebar
-      header={
-        <Box direction='row'>
-          <Menu
-            label={
-              isAuthenticated ? (
-                <Box direction='row' gap='small' align='center'>
-                  <Text>{userName}</Text>
-                </Box>
-              ) : (
-                <Text>Get Started</Text>
-              )
-            }
-            items={isAuthenticated ? authMenuItems : guestMenuItems}
-            gap='small'
-          />
-        </Box>
-      }
-      {...rest}
-      pad='medium'
-    >
-      <Box fill='horizontal' align='center'>
-        {isAuthenticated && <Calendar />}
-        {isAuthenticated && <TaskLists />}
-      </Box>
-    </GrommetSidebar>
+    <ResponsiveContext.Consumer>
+      {(responsive) => (
+        <GrommetSidebar
+          header={
+            <Box direction='row'>
+              <Menu
+                label={
+                  isAuthenticated ? (
+                    <Box direction='row' gap='small' align='center'>
+                      <Text>{isAuthenticated && user ? user.name : ""}</Text>
+                    </Box>
+                  ) : (
+                    <Text>Get Started</Text>
+                  )
+                }
+                items={isAuthenticated ? authMenuItems : guestMenuItems}
+                gap='small'
+              />
+            </Box>
+          }
+          {...rest}
+          width={responsive === "small" ? "large" : null}
+          pad='small'
+        >
+          <Box fill='horizontal' align='center'>
+            {isAuthenticated && <Calendar />}
+            {isAuthenticated && <TaskLists />}
+          </Box>
+        </GrommetSidebar>
+      )}
+    </ResponsiveContext.Consumer>
   );
 
   return (
@@ -70,13 +76,12 @@ export const Sidebar = (
 Sidebar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   sidebarOpen: PropTypes.bool.isRequired,
-  userName: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   sidebarOpen: state.dashboard.sidebarOpen,
-  userName: state.auth.user.name,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { loadLists, logout })(Sidebar);

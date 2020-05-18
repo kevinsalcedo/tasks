@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { selectList } from "../../../actions/list";
-import { Accordion, AccordionPanel, Box, List, Text } from "grommet";
+import {
+  Accordion,
+  AccordionPanel,
+  Box,
+  List,
+  Text,
+  ResponsiveContext,
+} from "grommet";
 import { List as ListIcon } from "grommet-icons";
 
 const TaskLists = ({ lists, selectList }) => {
@@ -21,45 +28,54 @@ const TaskLists = ({ lists, selectList }) => {
     }
   };
   return (
-    <Accordion>
-      <AccordionPanel label='My Lists' pad='small' active>
-        <List
-          data={data}
-          pad='small'
-          itemProps={
-            selectedItem >= 0
-              ? { [selectedItem]: { background: "brand" } }
-              : undefined
-          }
-          onClickItem={(event) => onClickItem(event)}
-        >
-          {(datum, index) => (
-            <Box
-              key={index}
-              direction='row-responsive'
-              gap='small'
-              size='xsmall'
-              align='center'
-              fill
-              hoverIndicator
+    <ResponsiveContext.Consumer>
+      {(responsive) => (
+        <Accordion fill='horizontal'>
+          <AccordionPanel label='My Lists' pad='small' active>
+            <List
+              data={data}
+              pad='small'
+              itemProps={
+                selectedItem >= 0
+                  ? { [selectedItem]: { background: "brand" } }
+                  : undefined
+              }
+              onClickItem={(event) => onClickItem(event)}
             >
-              <Box
-                round='full'
-                pad='xsmall'
-                align='center'
-                justify='center'
-                background={datum.color}
-              >
-                <ListIcon size='small' color={datum.color ? "white" : null} />
-              </Box>
-              <Text size='small' weight='bold'>
-                {datum.name}
-              </Text>
-            </Box>
-          )}
-        </List>
-      </AccordionPanel>
-    </Accordion>
+              {(datum, index) => (
+                <Box
+                  key={index}
+                  direction='row'
+                  gap='small'
+                  align='center'
+                  fill='horizontal'
+                  hoverIndicator
+                >
+                  <Box
+                    round='full'
+                    pad='xsmall'
+                    align='center'
+                    justify='center'
+                    background={datum.color}
+                  >
+                    <ListIcon
+                      size='small'
+                      color={datum.color ? "white" : null}
+                    />
+                  </Box>
+                  <Text
+                    size={responsive === "small" ? "medium" : "small"}
+                    weight='bold'
+                  >
+                    {datum.name}
+                  </Text>
+                </Box>
+              )}
+            </List>
+          </AccordionPanel>
+        </Accordion>
+      )}
+    </ResponsiveContext.Consumer>
   );
 };
 const mapStateToProps = (state) => ({
