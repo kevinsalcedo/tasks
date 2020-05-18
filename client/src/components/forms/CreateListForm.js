@@ -11,6 +11,7 @@ import {
   TextInput,
   TextArea,
 } from "grommet";
+import { CirclePicker } from "react-color";
 import { Close } from "grommet-icons";
 
 const CreateListForm = ({ taskList, toggleCreateListForm }) => {
@@ -61,6 +62,15 @@ const CreateListForm = ({ taskList, toggleCreateListForm }) => {
               value={description}
               onChange={(event) => setDescription(event.target.value)}
             />
+          </FormField>
+          <FormField label='Color' name='color'>
+            <Box align='center' justify='center' pad='small'>
+              <CirclePicker
+                name='color'
+                color={color}
+                onChangeComplete={(color) => setColor(color.hex)}
+              />
+            </Box>
           </FormField>
           <Box direction='row' justify='around' margin={{ top: "medium" }}>
             {taskList ? (
