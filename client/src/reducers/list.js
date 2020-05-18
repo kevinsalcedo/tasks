@@ -81,7 +81,7 @@ export default function (state = initialState, action) {
       }
       return {
         ...state,
-        tasks: [...state.tasks.filter((task) => task._id !== payload)],
+        tasks: [...state.tasks.filter((task) => task._id !== payload._id)],
         calendar,
       };
     case LIST_ERROR:
