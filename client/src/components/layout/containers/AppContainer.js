@@ -29,14 +29,14 @@ const AppContainer = ({ isAuthenticated }) => {
 
           <Grid
             fill
-            rows={["xxsmall", "flex"]}
+            rows={["auto", "flex"]}
             columns={["flex"]}
             areas={[
               { name: "header", start: [0, 0], end: [0, 0] },
               { name: "body", start: [0, 1], end: [0, 1] },
             ]}
           >
-            <Navbar gridArea='header' />
+            {isAuthenticated && <Navbar gridArea='header' />}
             <Main
               gridArea='body'
               pad='medium'

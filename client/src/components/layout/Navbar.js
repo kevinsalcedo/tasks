@@ -8,7 +8,10 @@ const Navbar = ({ sidebarOpen, openSidebar }) => {
   return (
     <Header pad='small' elevation='small'>
       <Box direction='row' align='center' gap='small'>
-        <Button icon={<Menu />} onClick={() => openSidebar(!sidebarOpen)} />
+        <Button
+          icon={<Menu size='medium' />}
+          onClick={() => openSidebar(!sidebarOpen)}
+        />
       </Box>
     </Header>
   );

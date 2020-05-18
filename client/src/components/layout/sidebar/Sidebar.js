@@ -21,7 +21,7 @@ import DisplayButtonGroup from "./DisplayButtonGroup";
 import { Menu as MenuIcon } from "grommet-icons";
 
 export const Sidebar = (
-  { logout, isAuthenticated, view, sidebarOpen },
+  { logout, isAuthenticated, view, userName, sidebarOpen },
   ...rest
 ) => {
   const history = useHistory();
@@ -42,7 +42,7 @@ export const Sidebar = (
               isAuthenticated ? (
                 <Box direction='row' gap='small' align='center'>
                   <Avatar src='//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80' />
-                  <Text>Your Name</Text>
+                  <Text>{userName}</Text>
                 </Box>
               ) : (
                 <Text>Get Started</Text>
@@ -76,12 +76,14 @@ Sidebar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   view: PropTypes.string.isRequired,
   sidebarOpen: PropTypes.bool.isRequired,
+  userName: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   view: state.dashboard.view,
   sidebarOpen: state.dashboard.sidebarOpen,
+  userName: state.auth.user.name,
 });
 
 export default connect(mapStateToProps, { loadLists, logout })(Sidebar);
