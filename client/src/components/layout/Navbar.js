@@ -3,12 +3,17 @@ import { connect } from "react-redux";
 import { Menu as MenuIcon } from "grommet-icons";
 import { Box, Header, Button, Menu } from "grommet";
 import DisplayButtonGroup from "../layout/sidebar/DisplayButtonGroup";
-import { openSidebar, toggleCreateTaskForm } from "../../actions/dashboard";
+import {
+  openSidebar,
+  toggleCreateTaskForm,
+  toggleCreateListForm,
+} from "../../actions/dashboard";
 
 const Navbar = ({
   isAuthenticated,
   sidebarOpen,
   toggleCreateTaskForm,
+  toggleCreateListForm,
   openSidebar,
 }) => {
   return (
@@ -26,7 +31,7 @@ const Navbar = ({
           label='Add New'
           items={[
             { label: "Task", onClick: () => toggleCreateTaskForm(true) },
-            { label: "List" },
+            { label: "List", onClick: () => toggleCreateListForm(true) },
           ]}
         />
       </Box>
@@ -39,6 +44,8 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { openSidebar, toggleCreateTaskForm })(
-  Navbar
-);
+export default connect(mapStateToProps, {
+  openSidebar,
+  toggleCreateTaskForm,
+  toggleCreateListForm,
+})(Navbar);

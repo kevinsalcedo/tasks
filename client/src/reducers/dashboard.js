@@ -4,6 +4,7 @@ import {
   SIDEBAR_OPEN,
   TOGGLE_CREATE_TASK_FORM,
   TOGGLE_DELETE_TASK_FORM,
+  TOGGLE_CREATE_LIST_FORM,
 } from "../actions/types";
 import moment from "moment";
 
@@ -13,6 +14,7 @@ const initialState = {
   sidebarOpen: true,
   createTaskOpen: false,
   deleteTaskOpen: false,
+  createListOpen: false,
 };
 
 export default function (state = initialState, action) {
@@ -31,6 +33,8 @@ export default function (state = initialState, action) {
       return { ...state, createTaskOpen: payload };
     case TOGGLE_DELETE_TASK_FORM:
       return { ...state, deleteTaskOpen: payload };
+    case TOGGLE_CREATE_LIST_FORM:
+      return { ...state, createListOpen: payload };
     default:
       return state;
   }

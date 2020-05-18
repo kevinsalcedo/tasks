@@ -11,12 +11,12 @@ import Spinner from "../layout/Spinner";
 import CreateTaskForm from "../forms/CreateTaskForm";
 import DeleteTaskForm from "../forms/DeleteTaskForm";
 import { toggleCreateTaskForm } from "../../actions/dashboard";
+import CreateListForm from "../forms/CreateListForm";
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      calendar: {},
       dueDate: moment(),
     };
   }
@@ -143,14 +143,15 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { view, createTaskOpen, deleteTaskOpen } = this.props;
+    const { view, createTaskOpen, deleteTaskOpen, createListOpen } = this.props;
     const { dueDate } = this.state;
 
     return (
       <ContainerPane justify='start' pad='medium'>
         {view === "calendar" ? this.renderDayView() : this.renderListView()}
         {createTaskOpen && <CreateTaskForm dueDate={dueDate} />}
-        {deleteTaskOpen && <DeleteTaskForm />}
+        {deleteTaskOpen && <DeleteTaskForm />}'
+        {createListOpen && <CreateListForm />}
       </ContainerPane>
     );
   }
@@ -176,6 +177,7 @@ const mapStateToProps = (state) => ({
   loading: state.loading.loading,
   createTaskOpen: state.dashboard.createTaskOpen,
   deleteTaskOpen: state.dashboard.deleteTaskOpen,
+  createListOpen: state.dashboard.createListOpen,
 });
 
 export default connect(mapStateToProps, {

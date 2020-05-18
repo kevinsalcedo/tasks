@@ -5,6 +5,7 @@ import {
   SIDEBAR_OPEN,
   TOGGLE_CREATE_TASK_FORM,
   TOGGLE_DELETE_TASK_FORM,
+  TOGGLE_CREATE_LIST_FORM,
 } from "./types";
 
 // Set whether tasks should display in list view or calendar view
@@ -51,6 +52,14 @@ export const toggleCreateTaskForm = (isTrue) => async (dispatch) => {
 export const toggleDeleteTaskForm = (isTrue) => async (dispatch) => {
   dispatch({
     type: TOGGLE_DELETE_TASK_FORM,
+    payload: isTrue,
+  });
+};
+
+// Toggle the create list form to be open or not
+export const toggleCreateListForm = (isTrue) => async (dispatch) => {
+  dispatch({
+    type: TOGGLE_CREATE_LIST_FORM,
     payload: isTrue,
   });
 };
