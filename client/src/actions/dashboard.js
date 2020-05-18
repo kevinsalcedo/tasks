@@ -3,6 +3,8 @@ import {
   SET_CALENDAR_RANGE,
   SET_DEFAULT_DUE_DATE,
   SIDEBAR_OPEN,
+  TOGGLE_CREATE_TASK_FORM,
+  TOGGLE_DELETE_TASK_FORM,
 } from "./types";
 
 // Set whether tasks should display in list view or calendar view
@@ -33,6 +35,22 @@ export const setDefaultDueDate = (day) => async (dispatch) => {
 export const openSidebar = (isTrue) => async (dispatch) => {
   dispatch({
     type: SIDEBAR_OPEN,
+    payload: isTrue,
+  });
+};
+
+// Toggle the create task form to be open or not
+export const toggleCreateTaskForm = (isTrue) => async (dispatch) => {
+  dispatch({
+    type: TOGGLE_CREATE_TASK_FORM,
+    payload: isTrue,
+  });
+};
+
+// Toggle the delete task form to be open or not
+export const toggleDeleteTaskForm = (isTrue) => async (dispatch) => {
+  dispatch({
+    type: TOGGLE_DELETE_TASK_FORM,
     payload: isTrue,
   });
 };

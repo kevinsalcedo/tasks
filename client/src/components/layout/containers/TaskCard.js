@@ -1,9 +1,20 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Box, CheckBox, Text, Menu } from "grommet";
 import { MoreVertical } from "grommet-icons";
 import moment from "moment";
+import { selectTask } from "../../../actions/list";
+import {
+  toggleCreateTaskForm,
+  toggleDeleteTaskForm,
+} from "../../../actions/dashboard";
 
-const TaskCard = ({ task, onDeleteOpen, onUpdateOpen }) => {
+const TaskCard = ({
+  task,
+  selectTask,
+  toggleCreateTaskForm,
+  toggleDeleteTaskForm,
+}) => {
   const renderDueDate = () => {
     let innerText = "No due date";
     if (task.endDate) {
@@ -34,9 +45,18 @@ const TaskCard = ({ task, onDeleteOpen, onUpdateOpen }) => {
   const menuItems = [
     {
       label: "Edit",
-      onClick: () => onUpdateOpen(null, task),
+      onClick: () => {
+        selectTask(task);
+        toggleCreateTaskForm(true);
+      },
     },
-    { label: "Delete Task", onClick: onDeleteOpen },
+    {
+      label: "Delete Task",
+      onClick: () => {
+        selectTask(task);
+        toggleDeleteTaskForm(true);
+      },
+    },
   ];
   return (
     <Box>
@@ -71,4 +91,8 @@ const TaskCard = ({ task, onDeleteOpen, onUpdateOpen }) => {
   );
 };
 
-export default TaskCard;
+export default connect(null, {
+  selectTask,
+  toggleCreateTaskForm,
+  toggleDeleteTaskForm,
+})(TaskCard);

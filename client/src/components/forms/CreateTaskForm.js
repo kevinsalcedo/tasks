@@ -13,16 +13,18 @@ import {
 } from "grommet";
 import moment from "moment";
 import DatePicker from "./DatePicker";
-import { createTask, updateTask } from "../../actions/list";
+import { createTask, updateTask, selectTask } from "../../actions/list";
+import { toggleCreateTaskForm } from "../../actions/dashboard";
 import { Close } from "grommet-icons";
 
 const CreateTaskForm = ({
   dueDate,
   lists,
-  closeForm,
   task,
   createTask,
   updateTask,
+  toggleCreateTaskForm,
+  selectTask,
 }) => {
   const [name, setName] = useState(task ? task.name : "");
   const [description, setDescription] = useState(task ? task.description : "");
@@ -58,15 +60,14 @@ const CreateTaskForm = ({
     closeForm();
   };
 
+  const closeForm = () => {
+    selectTask(null);
+    toggleCreateTaskForm(false);
+  };
+
   return (
     <Layer position='center' modal onClickOutside={closeForm} onEsc={closeForm}>
-      <Box
-        pad='medium'
-        gap='small'
-        width='medium'
-        fill='horizontal'
-        pad='medium'
-      >
+      <Box pad='medium' gap='small' width='medium' fill='horizontal'>
         <Box direction='row' justify='between' align='center'>
           <Heading level={3} margin='none'>
             {task ? "Update Task" : "New Task"}
@@ -142,8 +143,12 @@ const CreateTaskForm = ({
 
 const mapStateToProps = (state) => ({
   lists: state.list.lists,
+  task: state.list.selectedTask,
 });
 
-export default connect(mapStateToProps, { createTask, updateTask })(
-  CreateTaskForm
-);
+export default connect(mapStateToProps, {
+  createTask,
+  updateTask,
+  toggleCreateTaskForm,
+  selectTask,
+})(CreateTaskForm);

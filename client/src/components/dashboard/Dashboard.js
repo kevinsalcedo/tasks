@@ -10,32 +10,16 @@ import { Add } from "grommet-icons";
 import Spinner from "../layout/Spinner";
 import CreateTaskForm from "../forms/CreateTaskForm";
 import DeleteTaskForm from "../forms/DeleteTaskForm";
+import { toggleCreateTaskForm } from "../../actions/dashboard";
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      createModalOpen: false,
-      deleteModalOpen: false,
-      taskToDelete: null,
       calendar: {},
       dueDate: moment(),
-      taskToUpdate: null,
     };
   }
-
-  openCreateModal = (dueDate, task) =>
-    this.setState({
-      createModalOpen: true,
-      dueDate: moment(dueDate),
-      taskToUpdate: task,
-    });
-  closeCreateModal = () =>
-    this.setState({ createModalOpen: false, taskToUpdate: null });
-  openDeleteModal = (task) =>
-    this.setState({ deleteModalOpen: true, taskToDelete: task });
-  closeDeleteModal = () =>
-    this.setState({ deleteModalOpen: false, taskToDelete: null });
 
   // // On loading the dashboard, default load tasks for the year
   componentDidMount() {
@@ -90,19 +74,12 @@ class Dashboard extends React.Component {
           <Button
             icon={<Add />}
             hoverIndicator
-            onClick={() => this.openCreateModal(moment().format())}
+            onClick={() => this.openTaskForm(moment())}
           />
         </Box>
         <Box gap='small' fill overflow='auto'>
           {tasks.map((task) => (
-            <TaskCard
-              key={task._id}
-              task={task}
-              onDeleteOpen={() => this.openDeleteModal(task)}
-              onDeleteClose={this.closeDeleteModal}
-              onUpdateOpen={() => this.openCreateModal(moment().format(), task)}
-              onUpdateClose={this.closeCreateModal}
-            />
+            <TaskCard key={task._id} task={task} />
           ))}
         </Box>
       </Box>
@@ -135,7 +112,7 @@ class Dashboard extends React.Component {
             </Heading>
             <Box gap='small' overflow='auto' width='85%' fill='vertical'>
               <Box
-                onClick={() => this.openCreateModal(dateGroup)}
+                onClick={() => this.openTaskForm(moment(dateGroup))}
                 pad={{ horizontal: "medium", vertical: "xxsmall" }}
                 background='light-1'
                 elevation='small'
@@ -149,14 +126,7 @@ class Dashboard extends React.Component {
                 <Button icon={<Add />} />
               </Box>
               {calendar[dateGroup].map((task) => (
-                <TaskCard
-                  key={task._id}
-                  task={task}
-                  onDeleteOpen={() => this.openDeleteModal(task)}
-                  onDeleteClose={this.closeDeleteModal}
-                  onUpdateOpen={() => this.openCreateModal(dateGroup, task)}
-                  onUpdateClose={this.closeCreateModal}
-                />
+                <TaskCard key={task._id} task={task} />
               ))}
             </Box>
           </Box>
@@ -165,32 +135,22 @@ class Dashboard extends React.Component {
     );
   };
 
+  openTaskForm = (date) => {
+    const { toggleCreateTaskForm } = this.props;
+    if (date) {
+      this.setState({ dueDate: date }, () => toggleCreateTaskForm(true));
+    }
+  };
+
   render() {
-    const { view } = this.props;
-    const {
-      createModalOpen,
-      deleteModalOpen,
-      taskToDelete,
-      dueDate,
-      taskToUpdate,
-    } = this.state;
+    const { view, createTaskOpen, deleteTaskOpen } = this.props;
+    const { dueDate } = this.state;
 
     return (
       <ContainerPane justify='start' pad='medium'>
         {view === "calendar" ? this.renderDayView() : this.renderListView()}
-        {createModalOpen && (
-          <CreateTaskForm
-            dueDate={dueDate}
-            task={taskToUpdate}
-            closeForm={this.closeCreateModal}
-          />
-        )}
-        {deleteModalOpen && (
-          <DeleteTaskForm
-            closeForm={this.closeDeleteModal}
-            taskToDelete={taskToDelete}
-          />
-        )}
+        {createTaskOpen && <CreateTaskForm dueDate={dueDate} />}
+        {deleteTaskOpen && <DeleteTaskForm />}
       </ContainerPane>
     );
   }
@@ -214,9 +174,12 @@ const mapStateToProps = (state) => ({
   calendarStart: state.dashboard.calendarStart,
   view: state.dashboard.view,
   loading: state.loading.loading,
+  createTaskOpen: state.dashboard.createTaskOpen,
+  deleteTaskOpen: state.dashboard.deleteTaskOpen,
 });
 
 export default connect(mapStateToProps, {
   loadTasksView,
   loadLists,
+  toggleCreateTaskForm,
 })(Dashboard);

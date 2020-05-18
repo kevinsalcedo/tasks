@@ -3,6 +3,7 @@ import {
   GET_LISTS,
   LIST_ERROR,
   SELECT_LIST,
+  SELECT_TASK,
   GET_TASKS,
   TASK_ERROR,
   CREATE_TASK,
@@ -26,6 +27,15 @@ export const selectList = (id) => (dispatch) => {
   dispatch({
     type: SELECT_LIST,
     payload: id,
+  });
+};
+
+// Set the current selected task
+// Used to propogate task information into the update/delete forms
+export const selectTask = (task) => (dispatch) => {
+  dispatch({
+    type: SELECT_TASK,
+    payload: task,
   });
 };
 

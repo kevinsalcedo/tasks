@@ -2,13 +2,25 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { Box, Button, Layer, Text, Heading } from "grommet";
-import { deleteTask } from "../../actions/list";
+import { deleteTask, selectTask } from "../../actions/list";
+import { toggleDeleteTaskForm } from "../../actions/dashboard";
 
-const DeleteTaskForm = ({ deleteTask, taskToDelete, closeForm }) => {
+const DeleteTaskForm = ({
+  task,
+  deleteTask,
+  toggleDeleteTaskForm,
+  selectTask,
+}) => {
+  const closeForm = () => {
+    selectTask(null);
+    toggleDeleteTaskForm(false);
+  };
+
   const onClick = () => {
-    deleteTask(taskToDelete._id, taskToDelete.taskList._id);
+    deleteTask(task._id, task.taskList._id);
     closeForm();
   };
+
   return (
     <Layer position='center' modal onClickOutside={closeForm} onEsc={closeForm}>
       <Box pad='medium' round='small' gap='small' align='center'>
@@ -23,4 +35,12 @@ const DeleteTaskForm = ({ deleteTask, taskToDelete, closeForm }) => {
   );
 };
 
-export default connect(null, { deleteTask })(DeleteTaskForm);
+const mapStateToProps = (state) => ({
+  task: state.list.selectedTask,
+});
+
+export default connect(mapStateToProps, {
+  deleteTask,
+  selectTask,
+  toggleDeleteTaskForm,
+})(DeleteTaskForm);

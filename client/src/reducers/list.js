@@ -2,6 +2,7 @@ import {
   GET_LISTS,
   LIST_ERROR,
   SELECT_LIST,
+  SELECT_TASK,
   GET_TASKS,
   TASK_ERROR,
   GET_CALENDAR,
@@ -20,6 +21,7 @@ const initialState = {
   tasks: [],
   calendar: {},
   selectedList: null,
+  selectedTask: null,
 };
 
 export default function (state = initialState, action) {
@@ -35,6 +37,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         selectedList: payload,
+      };
+    case SELECT_TASK:
+      return {
+        ...state,
+        selectedTask: payload,
       };
     case GET_TASKS:
       return {
@@ -73,6 +80,7 @@ export default function (state = initialState, action) {
         ...state,
         tasks: tasks.sort((a, b) => moment(a.endDate).diff(b.endDate)),
         calendar,
+        selectedTask: null,
       };
     case DELETE_TASK:
       calendar = state.calendar;
@@ -83,6 +91,7 @@ export default function (state = initialState, action) {
         ...state,
         tasks: [...state.tasks.filter((task) => task._id !== payload._id)],
         calendar,
+        selectedTask: null,
       };
     case LIST_ERROR:
     case TASK_ERROR:
@@ -91,6 +100,7 @@ export default function (state = initialState, action) {
         lists: [],
         tasks: [],
         selectedList: null,
+        selectedTask: null,
       };
     case CREATE_TASK_ERROR:
     case UPDATE_TASK_ERROR:

@@ -19,6 +19,7 @@ export const SELECT_ERROR = "SELECT_ERROR";
 export const DATE_ERROR = "DATE_ERROR";
 
 // Tasks
+export const SELECT_TASK = "SELECT_TASK";
 export const GET_TASKS = "GET_TASKS";
 export const TASK_ERROR = "TASK_ERROR";
 export const GET_CALENDAR = "GET_CALENDAR";
@@ -35,6 +36,8 @@ export const CHANGE_VIEW = "CHANGE_VIEW";
 export const SET_CALENDAR_RANGE = "SET_CALENDAR_RANGE";
 export const SET_DEFAULT_DUE_DATE = "SET_DEFAULT_DUE_DATE";
 export const SIDEBAR_OPEN = "SIDEBAR_OPEN";
+export const TOGGLE_CREATE_TASK_FORM = "TOGGLE_CREATE_TASK_FORM";
+export const TOGGLE_DELETE_TASK_FORM = "TOGGLE_DELETE_TASK_FORM";
 
 // UI Reloads
 export const LOADING_START = "LOADING_START";
