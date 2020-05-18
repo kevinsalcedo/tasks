@@ -37,7 +37,7 @@ const TaskLists = ({ selectedList, lists, selectList, loading }) => {
             <Box
               key={index}
               direction='row-responsive'
-              gap='medium'
+              gap='small'
               size='xsmall'
               align='center'
               fill
@@ -45,14 +45,16 @@ const TaskLists = ({ selectedList, lists, selectList, loading }) => {
             >
               <Box
                 round='full'
-                pad='small'
+                pad='xsmall'
                 align='center'
                 justify='center'
                 background={datum.color}
               >
-                <ListIcon color={datum.color ? "white" : null} />
+                <ListIcon size='small' color={datum.color ? "white" : null} />
               </Box>
-              <Text weight='bold'>{datum.name}</Text>
+              <Text size='small' weight='bold'>
+                {datum.name}
+              </Text>
             </Box>
           )}
         </List>
