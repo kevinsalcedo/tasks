@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Box, Text, Heading } from "grommet";
+import { Button, Box, Heading } from "grommet";
 import PropTypes from "prop-types";
 import ContainerPane from "../layout/containers/ContainerPane";
 import TaskCard from "../layout/containers/TaskCard";

@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { selectList } from "../../../actions/list";
-import { Accordion, AccordionPanel, Box, Button, List, Text } from "grommet";
-import { Add, List as ListIcon } from "grommet-icons";
+import { Accordion, AccordionPanel, Box, List, Text } from "grommet";
+import { List as ListIcon } from "grommet-icons";
 
-const TaskLists = ({ selectedList, lists, selectList, loading }) => {
+const TaskLists = ({ lists, selectList }) => {
   const [selectedItem, setSelectedItem] = useState(0);
 
   let data = [];
   data.push({ name: "All", id: null });
-  lists.map((list) => {
+  lists.forEach((list) => {
     data.push({ name: list.name, id: list._id, color: list.color });
   });
 

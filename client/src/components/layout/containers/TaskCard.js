@@ -1,15 +1,9 @@
-import React, { useState } from "react";
-import { Box, CheckBox, Collapsible, Text, Menu } from "grommet";
+import React from "react";
+import { Box, CheckBox, Text, Menu } from "grommet";
 import { MoreVertical } from "grommet-icons";
 import moment from "moment";
 
-const TaskCard = ({
-  task,
-  onDeleteOpen,
-  onDeleteClose,
-  onUpdateOpen,
-  onUpdateClose,
-}) => {
+const TaskCard = ({ task, onDeleteOpen, onUpdateOpen }) => {
   const renderDueDate = () => {
     let innerText = "No due date";
     if (task.endDate) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { logout } from "../../../actions/auth";
 import { loadLists } from "../../../actions/list";
@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
 
 import {
   Box,
-  Button,
   Collapsible,
   Sidebar as GrommetSidebar,
   Avatar,
@@ -17,8 +16,6 @@ import {
 } from "grommet";
 import Calendar from "./Calendar";
 import TaskLists from "./TaskLists";
-import DisplayButtonGroup from "./DisplayButtonGroup";
-import { Menu as MenuIcon } from "grommet-icons";
 
 export const Sidebar = (
   { logout, isAuthenticated, view, userName, sidebarOpen },
@@ -56,7 +53,6 @@ export const Sidebar = (
       {...rest}
     >
       <Box fill='horizontal' align='center'>
-        {isAuthenticated && <DisplayButtonGroup />}
         {isAuthenticated && view === "calendar" && <Calendar />}
         {isAuthenticated && <TaskLists />}
       </Box>
