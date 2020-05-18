@@ -10,7 +10,6 @@ import {
   Box,
   Collapsible,
   Sidebar as GrommetSidebar,
-  Avatar,
   Menu,
   Text,
 } from "grommet";
@@ -18,7 +17,7 @@ import Calendar from "./Calendar";
 import TaskLists from "./TaskLists";
 
 export const Sidebar = (
-  { logout, isAuthenticated, view, userName, sidebarOpen },
+  { logout, isAuthenticated, userName, sidebarOpen },
   ...rest
 ) => {
   const history = useHistory();
@@ -38,7 +37,6 @@ export const Sidebar = (
             label={
               isAuthenticated ? (
                 <Box direction='row' gap='small' align='center'>
-                  <Avatar src='//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80' />
                   <Text>{userName}</Text>
                 </Box>
               ) : (
@@ -51,9 +49,10 @@ export const Sidebar = (
         </Box>
       }
       {...rest}
+      pad='medium'
     >
       <Box fill='horizontal' align='center'>
-        {isAuthenticated && view === "calendar" && <Calendar />}
+        {isAuthenticated && <Calendar />}
         {isAuthenticated && <TaskLists />}
       </Box>
     </GrommetSidebar>
@@ -70,14 +69,12 @@ export const Sidebar = (
 
 Sidebar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  view: PropTypes.string.isRequired,
   sidebarOpen: PropTypes.bool.isRequired,
   userName: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  view: state.dashboard.view,
   sidebarOpen: state.dashboard.sidebarOpen,
   userName: state.auth.user.name,
 });
