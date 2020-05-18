@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Box, RadioButtonGroup } from "grommet";
+import { Box, RadioButtonGroup, Button, Nav, ResponsiveContext } from "grommet";
 import { Task, Schedule } from "grommet-icons";
 import { changeView } from "../../../actions/dashboard";
 
 const DisplayButtonGroup = ({ view, changeView }) => {
-  return (
+  const radioButtons = () => (
     <Box align='center'>
       <RadioButtonGroup
         name='radio'
@@ -29,6 +29,28 @@ const DisplayButtonGroup = ({ view, changeView }) => {
         }}
       </RadioButtonGroup>
     </Box>
+  );
+
+  const navButtons = () => (
+    <Nav direction='row'>
+      <Button
+        label='List'
+        active={view === "task"}
+        onClick={() => changeView("task")}
+        hoverIndicator
+      />
+      <Button
+        label='Calendar'
+        active={view !== "task"}
+        onClick={() => changeView("calendar")}
+        hoverIndicator
+      />
+    </Nav>
+  );
+  return (
+    <ResponsiveContext.Consumer>
+      {(responsive) => (responsive === "small" ? radioButtons() : navButtons())}
+    </ResponsiveContext.Consumer>
   );
 };
 
