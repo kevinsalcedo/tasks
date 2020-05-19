@@ -1,19 +1,13 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { toggleCreateListForm } from "../../actions/dashboard";
-import {
-  Box,
-  Button,
-  Layer,
-  Heading,
-  Form,
-  FormField,
-  TextInput,
-  TextArea,
-} from "grommet";
-import { CirclePicker } from "react-color";
+import { Box, Button, Layer, Heading, Form } from "grommet";
+import FormTextInput from "./fields/FormTextInput";
+import FormTextArea from "./fields/FormTextArea";
 import { Close } from "grommet-icons";
 import { createList } from "../../actions/list";
+import FormColorPicker from "./fields/FormColorPicker";
+import FormControlButtons from "./fields/FormControlButtons";
 
 const CreateListForm = ({ taskList, toggleCreateListForm, createList }) => {
   const [name, setName] = useState(taskList ? taskList.name : "");
@@ -42,7 +36,6 @@ const CreateListForm = ({ taskList, toggleCreateListForm, createList }) => {
           <Heading level={3} margin='none'>
             {taskList ? "Update List" : "New List"}
           </Heading>
-
           <Button icon={<Close />} onClick={closeForm} />
         </Box>
         <Form
@@ -53,43 +46,23 @@ const CreateListForm = ({ taskList, toggleCreateListForm, createList }) => {
             setColor("");
           }}
         >
-          <FormField label='Name' name='name'>
-            <TextInput
-              placeholder='Name'
-              name='name'
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-          </FormField>
-          <FormField label='Description' name='description'>
-            <TextArea
-              placeholder="What's this list about?"
-              name='description'
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </FormField>
-          <FormField label='Color' name='color'>
-            <Box align='center' justify='center' pad='small'>
-              <CirclePicker
-                name='color'
-                color={color}
-                onChangeComplete={(color) => setColor(color.hex)}
-              />
-            </Box>
-          </FormField>
-          <Box direction='row' justify='around' margin={{ top: "medium" }}>
-            {taskList ? (
-              <Button label='Cancel' onClick={closeForm} />
-            ) : (
-              <Button type='reset' label='Reset' />
-            )}
-            <Button
-              type='submit'
-              label={taskList ? "Update" : "Create"}
-              primary
-            />
-          </Box>
+          <FormTextInput
+            label='Name'
+            name='name'
+            placeholder='Name'
+            value={name}
+            onChange={setName}
+            required
+          />
+          <FormTextArea
+            label='Description'
+            name='description'
+            placeholder='Description'
+            value={description}
+            onChange={setDescription}
+          />
+          <FormColorPicker name='color' color={color} onChange={setColor} />
+          <FormControlButtons isUpdate={taskList} closeBehavior={closeForm} />
         </Form>
       </Box>
     </Layer>

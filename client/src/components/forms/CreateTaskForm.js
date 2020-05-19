@@ -1,21 +1,15 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import {
-  Box,
-  Button,
-  Heading,
-  Form,
-  FormField,
-  Layer,
-  Select,
-  TextInput,
-  TextArea,
-} from "grommet";
+import { Box, Button, Heading, Form, Layer } from "grommet";
+import FormTextInput from "./fields/FormTextInput";
+import FormTextArea from "./fields/FormTextArea";
+import FormSelect from "./fields/FormSelect";
+import FormDatePicker from "./fields/FormDatePicker";
 import moment from "moment";
-import DatePicker from "./DatePicker";
 import { createTask, updateTask, selectTask } from "../../actions/list";
 import { toggleCreateTaskForm } from "../../actions/dashboard";
 import { Close } from "grommet-icons";
+import FormControlButtons from "./fields/FormControlButtons";
 
 const CreateTaskForm = ({
   dueDate,
@@ -80,56 +74,46 @@ const CreateTaskForm = ({
           }}
           onSubmit={(e) => onSubmit(e)}
         >
-          <FormField label='Name' name='name'>
-            <TextInput
-              placeholder='Name'
-              name='name'
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-          </FormField>
-          <FormField label='Description' name='description'>
-            <TextArea
-              placeholder="What's this task about?"
-              name='description'
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </FormField>
-          <FormField label='List' name='list'>
-            <Select
-              name='list'
-              options={selectOptions}
-              labelKey='label'
-              valueKey={{ key: "value", reduce: true }}
-              value={list}
-              onChange={({ value: nextValue }) => setList(nextValue)}
-            />
-          </FormField>
+          <FormTextInput
+            label='Name'
+            name='name'
+            placeholder='Name'
+            value={name}
+            onChange={setName}
+            required
+          />
+          <FormTextArea
+            label='Description'
+            name='description'
+            placeholder="What's this task about?"
+            value={description}
+            onChange={setDescription}
+          />
+          <FormSelect
+            label='List'
+            name='list'
+            placeholder='Please select a list'
+            options={selectOptions}
+            value={list}
+            onChange={setList}
+            required
+          />
+
           <Box direction='row' align='center' justify='around'>
-            <FormField label='Start Date' name='startDate'>
-              <DatePicker
-                name='startDate'
-                value={startDate}
-                onChange={(event) => setStartDate(event)}
-              />
-            </FormField>
-            <FormField label='End Date' name='endDate'>
-              <DatePicker
-                name='endDate'
-                value={endDate}
-                onChange={(event) => setEndDate(event)}
-              />
-            </FormField>
+            <FormDatePicker
+              label='Start Date'
+              name='startDate'
+              value={startDate}
+              onChange={setStartDate}
+            />
+            <FormDatePicker
+              label='Due Date'
+              name='endDate'
+              value={endDate}
+              onChange={setEndDate}
+            />
           </Box>
-          <Box direction='row' justify='around' margin={{ top: "medium" }}>
-            {task ? (
-              <Button label='Cancel' onClick={closeForm} />
-            ) : (
-              <Button type='reset' label='Reset' />
-            )}
-            <Button type='submit' label={task ? "Update" : "Create"} primary />
-          </Box>
+          <FormControlButtons isUpdate={task} closeBehavior={closeForm} />
         </Form>
       </Box>
     </Layer>
