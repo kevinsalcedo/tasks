@@ -54,7 +54,7 @@ export const Sidebar = (
           {...rest}
           pad='medium'
         >
-          <Box width='medium' align='center'>
+          <Box width={responsive === "small" ? "medium" : null} align='center'>
             <Calendar />
             {isAuthenticated && <TaskLists />}
           </Box>
