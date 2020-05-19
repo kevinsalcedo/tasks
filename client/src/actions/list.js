@@ -115,7 +115,6 @@ export const createTask = (
     },
   };
   var backlog = endDate === null;
-  console.log(backlog);
   const body = JSON.stringify({
     name,
     description,
@@ -136,6 +135,7 @@ export const createTask = (
     dispatch({ type: CREATE_TASK, payload: res.data });
   } catch (err) {
     console.log(err);
+
     // const errors = err.response.data.errors;
 
     // if (errors) {

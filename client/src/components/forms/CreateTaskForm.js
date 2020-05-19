@@ -47,15 +47,7 @@ const CreateTaskForm = ({
   const onSubmit = async (e) => {
     e.preventDefault();
     // Client side validation here
-    const body = {};
-    if (name) body.name = name;
-    if (description) body.description = description;
-    if (list) body.list = list;
-    if (startDate) body.startDate = startDate;
-    if (endDate) body.endDate = endDate;
-
     if (task) {
-      // console.log(list);
       updateTask(task._id, name, description, list, startDate, endDate);
     } else {
       createTask(name, description, list, startDate, endDate);

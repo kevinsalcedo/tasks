@@ -25,45 +25,7 @@ router.get("/", auth, async (req, res) => {
     res.json(lists);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-});
-
-// @route GET api/tasklists/tasks
-// @desc Get all user's non-backlog tasks
-// @access Private
-router.get("/tasks", auth, async (req, res) => {
-  console.log("GET all tasks");
-  let start = null;
-  let end = null;
-  if (req.query.start) {
-    start = moment(req.query.start).utc();
-  }
-  if (req.query.end) {
-    end = moment(req.query.end).utc();
-  }
-
-  let filter = {
-    user: req.user.id,
-    backlog: false,
-  };
-
-  if (start && end) {
-    filter = {
-      ...filter,
-      endDate: { $gte: start, $lte: end },
-    };
-  }
-
-  try {
-    let allTasks = await Task.find(filter)
-      .sort({ endDate: "asc" })
-      .populate("taskList", ["name", "color"]);
-
-    res.send(allTasks);
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).send("Server Error.");
+    return res.status(500).json({ msg: "Uh-oh. Something went wrong." });
   }
 });
 
@@ -86,47 +48,7 @@ router.get("/:list_id", auth, async (req, res) => {
     res.json(list);
   } catch (err) {
     console.log(err.message);
-    res.status(500).send("Server Error");
-  }
-});
-
-//@route GET api/tasklists/:list_id/tasks
-//@desc Get all tasks for selected task list
-//@access Private
-router.get("/:list_id/tasks", auth, async (req, res) => {
-  console.log("GET tasks for list");
-  let start = null;
-  let end = null;
-  if (req.query.start) {
-    start = moment(req.query.start).utc();
-  }
-  if (req.query.end) {
-    end = moment(req.query.end).utc();
-  }
-
-  let filter = {
-    taskList: req.params.list_id,
-    backlog: false,
-  };
-
-  if (start && end) {
-    filter = { ...filter, endDate: { $gte: start, $lte: end } };
-  }
-
-  try {
-    let allTasks = await Task.find(filter).populate("taskList", [
-      "name",
-      "color",
-    ]);
-
-    res.send(allTasks);
-  } catch (err) {
-    console.log(err.message);
-    // Throw diifferent error if an invalid id is apsse
-    if (err.kind == "ObjectId") {
-      return res.status(400).json({ msg: "No tasks found." });
-    }
-    return res.status(500).send("Server Error.");
+    return res.status(500).json({ msg: "Uh-oh. Something went wrong." });
   }
 });
 
@@ -149,7 +71,7 @@ router.get("/:list_id/tasks/:task_id", auth, async (req, res) => {
     if (err.kind === "ObjectId") {
       return res.status(400).json({ msg: "That task doesn't exist!" });
     }
-    return res.status(500).send("Server Error.");
+    return res.status(500).json({ msg: "uh-oh. something went wrong." });
   }
 });
 
@@ -189,64 +111,7 @@ router.post(
       res.json(tasklist);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
-    }
-  }
-);
-
-//@route POST api/tasklist/:list_id/tasks/
-//@desc Create a task in a tasklist
-//@access Private
-router.post(
-  "/:list_id/tasks",
-  [auth, [check("name", "A task name is required.").not().isEmpty()]],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    console.log("POST task");
-
-    const { name, description, startDate, endDate, backlog } = req.body;
-    const taskFields = {};
-    taskFields.user = req.user.id;
-
-    // Proper way of referencing another document?
-    // TODO: validation for if the list exists? Should a new list be created?
-    // Currently this can throw an error if the list doesn't exist
-    // Probably best idea is to give the user the option to make a new list on frontend,
-    // then hit the create list endpoint first. Then pass in that id here
-    // let list = TaskList.findOne({user: req.user.id, taskList: taskList});
-    // taskFields.taskList = taskList;
-    taskFields.taskList = req.params.list_id;
-    if (name) {
-      taskFields.name = name;
-    }
-    if (description) {
-      taskFields.description = description;
-    }
-    if (startDate) {
-      taskFields.startDate = startDate;
-    }
-    if (endDate) {
-      taskFields.endDate = endDate;
-    }
-    if (backlog) {
-      taskFields.backlog = backlog;
-    }
-    try {
-      // Create
-      task = new Task(taskFields);
-      await task.save();
-
-      var populatedTask = await task
-        .populate("taskList", ["name", "color"])
-        .execPopulate();
-      res.json(populatedTask);
-    } catch (err) {
-      console.log(err);
-      // Handle if the tasklist is invalid
-      return res.status(500).send("Server Error");
+      return res.status(500).json({ msg: "uh-oh. something went wrong." });
     }
   }
 );
@@ -299,80 +164,7 @@ router.put(
       if (err.kind == "ObjectId") {
         return res.status(400).json({ msg: "Oops! That list doesn't exist." });
       }
-      res.status(500).send("Server Error");
-    }
-  }
-);
-
-//@route PUT api/tasklist/:list_id/tasks/:task_id
-//@desc Update a task in a tasklist
-//@access Private
-router.put(
-  "/:list_id/tasks/:task_id",
-  [auth, [check("name", "Name is required.").not().isEmpty()]],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    const {
-      taskList,
-      name,
-      description,
-      startDate,
-      endDate,
-      backlog,
-    } = req.body;
-    const taskFields = {};
-    taskFields.user = req.user.id;
-
-    // Proper way of referencing another document?
-    if (taskList) {
-      // TODO: validation for if the list exists? Should a new list be created?
-      // Currently this can throw an error if the list doesn't exist
-      // Probably best idea is to give the user the option to make a new list on frontend,
-      // then hit the create list endpoint first. Then pass in that id here
-      // let list = TaskList.findOne({user: req.user.id, taskList: taskList});
-      // taskFields.taskList = taskList;
-      taskFields.taskList = req.params.list_id;
-    }
-    if (name) {
-      taskFields.name = name;
-    }
-    if (description) {
-      taskFields.description = description;
-    }
-    if (startDate) {
-      taskFields.startDate = startDate;
-    }
-    if (endDate) {
-      taskFields.endDate = endDate;
-    }
-    if (backlog !== null) {
-      taskFields.backlog = backlog;
-    }
-
-    try {
-      let task = await Task.findOne({ _id: req.params.task_id });
-      if (!task) {
-        return res.status(400).json({ msg: "This task does not exist." });
-      }
-
-      task = await Task.findOneAndUpdate(
-        { user: req.user.id, _id: req.params.task_id },
-        { $set: taskFields },
-        { new: true }
-      );
-      var populatedTask = await task
-        .populate("taskList", ["name", "color"])
-        .execPopulate();
-      return res.json(populatedTask);
-    } catch (err) {
-      console.log(err.message);
-      if (err.kind == "ObjectId") {
-        return res.status(400).json({ msg: "This task does not exist." });
-      }
-      return res.status(500).send("Server Error.");
+      return res.status(500).json({ msg: "uh-oh. something went wrong." });
     }
   }
 );
@@ -391,26 +183,6 @@ router.delete("/:list_id", auth, async (req, res) => {
     console.log(err.message);
     if (err.kind === "ObjectId") {
       return res.status(400).json({ msg: "oops! That list doesn't exist" });
-    }
-    return res.status(500).send("Server Error");
-  }
-});
-
-//@route  DELETE api/tasks/:list_id/tasks/:task_id
-//@desc   Delete a task
-//@access Private
-router.delete("/:list_id/tasks/:task_id", auth, async (req, res) => {
-  try {
-    let result = await Task.findOneAndDelete({ _id: req.params.task_id });
-
-    res.json({
-      msg: ` ${result.name} was deleted. Bye-bye task!`,
-      task: result,
-    });
-  } catch (err) {
-    console.log(err.message);
-    if (err.kind === "ObjectId") {
-      return res.status(400).json({ msg: "oops! That task doesn't exist" });
     }
     return res.status(500).send("Server Error");
   }
