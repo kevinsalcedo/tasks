@@ -21,10 +21,20 @@ const CreateTaskForm = ({
   selectTask,
   selectedList,
 }) => {
+  const selectOptions = [];
+  lists.map((item) =>
+    selectOptions.push({ label: item.name, value: item._id })
+  );
   const [name, setName] = useState(task ? task.name : "");
   const [description, setDescription] = useState(task ? task.description : "");
   const [list, setList] = useState(
-    task ? task.taskList._id : selectedList ? selectedList : ""
+    task
+      ? task.taskList._id
+      : selectedList
+      ? selectedList
+      : lists.length > 0
+      ? selectOptions[0].value
+      : ""
   );
   const [startDate, setStartDate] = useState(
     task && task.startDate ? moment(task.startDate) : null
@@ -35,11 +45,6 @@ const CreateTaskForm = ({
         ? null
         : moment(task.endDate)
       : dueDate
-  );
-
-  const selectOptions = [];
-  lists.map((item) =>
-    selectOptions.push({ label: item.name, value: item._id })
   );
 
   const onSubmit = async (e) => {

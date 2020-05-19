@@ -14,7 +14,7 @@ const CreateListForm = ({ taskList, toggleCreateListForm, createList }) => {
   const [description, setDescription] = useState(
     taskList ? taskList.description : ""
   );
-  const [color, setColor] = useState(taskList ? taskList.color : "");
+  const [color, setColor] = useState(taskList ? taskList.color : "#f44336");
 
   const onSubmit = async (e) => {
     e.preventDefault();

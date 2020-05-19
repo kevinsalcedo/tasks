@@ -20,7 +20,7 @@ const TaskListSchema = new mongoose.Schema({
   // TODO: color scheme?
   color: {
     type: String,
-    default: "#71EEB8",
+    default: "#f44336",
   },
 });
 module.exports = TaskList = mongoose.model("tasklist", TaskListSchema);
