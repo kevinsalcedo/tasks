@@ -7,7 +7,7 @@ import moment from "moment";
 const Calendar = ({ calendarStart, setCalendarRange, view }) => {
   return (
     <Collapsible open={view === "calendar"}>
-      <Box align='center' pad='small'>
+      <Box align='center' margin='10px'>
         <GrommetCalendar
           size='small'
           date={calendarStart}

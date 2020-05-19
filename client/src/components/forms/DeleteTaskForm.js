@@ -22,7 +22,13 @@ const DeleteTaskForm = ({
   };
 
   return (
-    <Layer position='center' modal onClickOutside={closeForm} onEsc={closeForm}>
+    <Layer
+      position='center'
+      modal
+      onClickOutside={closeForm}
+      onEsc={closeForm}
+      responsive={false}
+    >
       <Box pad='medium' round='small' gap='small' align='center'>
         <Heading level={3}>Confirmation</Heading>
         <Text>Are you sure you want to delete this task?</Text>

@@ -37,11 +37,10 @@ const DashBoardDayView = ({
   return (
     <ResponsiveContext.Consumer>
       {(responsive) => (
-        <Box direction='row' fill='vertical' gap='small' width='80%'>
+        <Box direction='row' fill='vertical' gap='small' width='95%'>
           {sliceKeys(Object.keys(calendar), responsive).map((dateGroup) => (
             <Box
               key={dateGroup}
-              gap='small'
               align='center'
               fill
               overflow='auto'
@@ -52,20 +51,20 @@ const DashBoardDayView = ({
               <Heading level='4' pad={"bottom"}>
                 {moment(dateGroup).format("MMMM Do")}
               </Heading>
-              <Box gap='small' overflow='auto' width='85%' fill='vertical'>
+              <Box overflow='auto' fill pad='small'>
                 <Box
                   onClick={() => openTaskForm(moment(dateGroup))}
                   pad={{ horizontal: "medium", vertical: "xxsmall" }}
                   background='light-1'
                   elevation='small'
-                  gap='small'
                   justify='between'
                   align='center'
                   flex={false}
                   height='xxsmall'
                   hoverIndicator
+                  margin={{ bottom: "5px" }}
                 >
-                  <Button icon={<Add />} />
+                  <Button icon={<Add />} hoverIndicator={false} />
                 </Box>
                 {calendar[dateGroup].map((task) => (
                   <TaskCard key={task._id} task={task} />

@@ -59,33 +59,32 @@ const TaskCard = ({
     },
   ];
   return (
-    <Box>
-      <Box
-        direction='row'
-        pad={{ horizontal: "medium", vertical: "xxsmall" }}
-        background='light-1'
-        elevation='small'
-        gap='small'
-        justify='between'
-        align='center'
-        flex={false}
-        border={{
-          color: task.taskList.color,
-          side: "left",
-          size: "large",
-          style: "solid",
-        }}
-      >
-        <Box direction='row' gap='small' align='center'>
-          <CheckBox checked={task.completed} />
-          <Box>
-            <Text truncate>{task.name}</Text>
-          </Box>
+    <Box
+      direction='row'
+      pad={{ horizontal: "medium", vertical: "xxsmall" }}
+      background='light-1'
+      elevation='small'
+      gap='small'
+      justify='between'
+      align='center'
+      flex={false}
+      border={{
+        color: task.taskList.color,
+        side: "left",
+        size: "large",
+        style: "solid",
+      }}
+      margin={{ vertical: "5px" }}
+    >
+      <Box direction='row' gap='small' align='center'>
+        <CheckBox checked={task.completed} />
+        <Box>
+          <Text truncate>{task.name}</Text>
         </Box>
-        <Box direction='row' gap='small' align='center'>
-          {renderDueDate()}
-          <Menu icon={<MoreVertical />} items={menuItems} hoverIndicator />
-        </Box>
+      </Box>
+      <Box direction='row' gap='small' align='center'>
+        {renderDueDate()}
+        <Menu icon={<MoreVertical />} items={menuItems} hoverIndicator />
       </Box>
     </Box>
   );

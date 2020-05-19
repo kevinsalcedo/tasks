@@ -8,9 +8,10 @@ const Alert = ({ alerts }) =>
   alerts != null &&
   alerts.length > 0 && (
     <Layer
-      position='top'
+      position='bottom'
       modal={false}
       margin={{ vertical: "medium", horizontal: "small" }}
+      responsive={false}
       plain
       gap='small'
     >

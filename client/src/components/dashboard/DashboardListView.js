@@ -30,7 +30,7 @@ const DashboardListView = ({
           onClick={() => toggleCreateTaskForm(true)}
         />
       </Box>
-      <Box gap='small' fill overflow='auto'>
+      <Box overflow='auto'>
         {tasks.map((task) => (
           <TaskCard key={task._id} task={task} />
         ))}

@@ -52,11 +52,10 @@ export const Sidebar = (
             </Box>
           }
           {...rest}
-          width={responsive === "small" ? "large" : null}
-          pad='small'
+          pad='medium'
         >
-          <Box fill='horizontal' align='center'>
-            {isAuthenticated && <Calendar />}
+          <Box width='medium' align='center'>
+            <Calendar />
             {isAuthenticated && <TaskLists />}
           </Box>
         </GrommetSidebar>
