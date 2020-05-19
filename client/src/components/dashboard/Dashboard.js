@@ -67,7 +67,7 @@ class Dashboard extends React.Component {
           <DashboardListView />
         )}
         {createTaskOpen && <CreateTaskForm dueDate={dueDate} />}
-        {deleteTaskOpen && <DeleteTaskForm />}'
+        {deleteTaskOpen && <DeleteTaskForm />}
         {createListOpen && <CreateListForm />}
       </ContainerPane>
     );
