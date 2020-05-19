@@ -1,13 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Box, Heading } from "grommet";
 import PropTypes from "prop-types";
 import ContainerPane from "../layout/containers/ContainerPane";
-import TaskCard from "../layout/containers/TaskCard";
 import { loadTasksView, loadLists } from "../../actions/list";
 import moment from "moment";
-import { Add } from "grommet-icons";
-import Spinner from "../layout/Spinner";
 import CreateTaskForm from "../forms/CreateTaskForm";
 import DeleteTaskForm from "../forms/DeleteTaskForm";
 import { toggleCreateTaskForm } from "../../actions/dashboard";
