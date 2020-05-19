@@ -52,29 +52,6 @@ router.get("/:list_id", auth, async (req, res) => {
   }
 });
 
-//@route GET api/tasklist/:lid_id/tasks/:task_id
-//desc Get a specific task for a tasklist
-//@access Private
-router.get("/:list_id/tasks/:task_id", auth, async (req, res) => {
-  console.log("GET task");
-  try {
-    let task = await Task.findOne({
-      _id: req.params.task_id,
-    });
-    if (!task) {
-      return res.status(400).json({ msg: "That task doesn't exist!" });
-    }
-
-    res.send(task);
-  } catch (err) {
-    console.log(err.message);
-    if (err.kind === "ObjectId") {
-      return res.status(400).json({ msg: "That task doesn't exist!" });
-    }
-    return res.status(500).json({ msg: "uh-oh. something went wrong." });
-  }
-});
-
 //@route POST api/tasklist
 //@desc Create a tasklist for a user
 //@access Private
