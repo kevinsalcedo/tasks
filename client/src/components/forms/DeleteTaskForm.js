@@ -17,7 +17,7 @@ const DeleteTaskForm = ({
   };
 
   const onClick = () => {
-    deleteTask(task._id, task.taskList._id);
+    deleteTask(task._id);
     closeForm();
   };
 

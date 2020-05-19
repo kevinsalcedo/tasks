@@ -65,7 +65,7 @@ export const loadLists = () => async (dispatch) => {
 };
 
 // Load tasks for selected list, loading all if id is null and filtering by dates, if provided
-export const loadTasksView = (id, start) => async (dispatch) => {
+export const loadTasksView = (listID, start) => async (dispatch) => {
   dispatch(loadRequest());
   if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -77,9 +77,11 @@ export const loadTasksView = (id, start) => async (dispatch) => {
         .endOf("day")
         .format()}`
     : "";
-  const listFilter = !id ? `/tasks${dateFilter}` : `/${id}/tasks${dateFilter}`;
+  const listFilter = !listID
+    ? `${dateFilter}`
+    : `/lists/${listID}${dateFilter}`;
   try {
-    const res = await axios.get(`/api/tasklists${listFilter}`);
+    const res = await axios.get(`/api/tasks${listFilter}`);
     dispatch({
       type: GET_TASKS,
       payload: {
@@ -127,11 +129,7 @@ export const createTask = (
   });
 
   try {
-    const res = await axios.post(
-      `api/tasklists/${taskList}/tasks`,
-      body,
-      config
-    );
+    const res = await axios.post(`api/tasks`, body, config);
     dispatch({ type: CREATE_TASK, payload: res.data });
   } catch (err) {
     console.log(err);
@@ -150,14 +148,14 @@ export const createTask = (
 };
 
 // Delete a task
-export const deleteTask = (taskID, listID) => async (dispatch) => {
+export const deleteTask = (taskID) => async (dispatch) => {
   dispatch(loadRequest());
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
 
   try {
-    const res = await axios.delete(`api/tasklists/${listID}/tasks/${taskID}`);
+    const res = await axios.delete(`api/tasks/${taskID}`);
     dispatch({
       type: DELETE_TASK,
       payload: res.data.task,
@@ -205,11 +203,7 @@ export const updateTask = (
   });
 
   try {
-    const res = await axios.put(
-      `api/tasklists/${taskList}/tasks/${taskID}`,
-      body,
-      config
-    );
+    const res = await axios.put(`api/tasks/${taskID}`, body, config);
     dispatch({ type: UPDATE_TASK, payload: res.data });
   } catch (err) {
     console.log(err);
