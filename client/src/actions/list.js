@@ -145,13 +145,7 @@ export const loadBacklogTasks = () => async (dispatch) => {
 };
 
 // Create a task for a selected task list
-export const createTask = (
-  name,
-  description,
-  taskList,
-  startDate,
-  endDate
-) => async (dispatch) => {
+export const createTask = (formValues) => async (dispatch) => {
   dispatch(loadRequest());
   if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -161,21 +155,28 @@ export const createTask = (
       "Content-Type": "application/json",
     },
   };
-  var backlog = endDate === null;
-  const body = JSON.stringify({
-    name,
-    description,
-    taskList,
-    startDate: startDate ? startDate.utc().format() : null,
-    endDate: endDate
-      ? endDate.utc().format()
-      : moment().endOf("day").utc().format(),
-    backlog,
-  });
+
+  const { startDate, endDate } = formValues;
+
+  if (startDate) {
+    formValues.startDate = moment(startDate).utc().format();
+  }
+  if (endDate) {
+    formValues.endDate = moment(endDate).utc().format();
+  } else {
+    formValues.endDate = moment().endOf("day").utc().format();
+  }
+
+  const body = JSON.stringify(formValues);
 
   try {
     const res = await axios.post(`api/tasks`, body, config);
-    dispatch({ type: CREATE_TASK, payload: res.data });
+    batch(() => {
+      if (formValues.backlog) {
+        dispatch(setAlert("Task sent to backlog", "good"));
+      }
+      dispatch({ type: CREATE_TASK, payload: res.data });
+    });
   } catch (err) {
     console.log(err);
     const errors = err.response.data.errors;
@@ -224,14 +225,7 @@ export const deleteTask = (taskID) => async (dispatch) => {
 };
 
 // Mark a task as completed
-export const updateTask = (
-  taskID,
-  name,
-  description,
-  taskList,
-  startDate,
-  endDate
-) => async (dispatch) => {
+export const updateTask = (taskID, formValues) => async (dispatch) => {
   dispatch(loadRequest());
   if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -243,15 +237,15 @@ export const updateTask = (
     },
   };
 
-  var backlog = endDate === null;
-  const body = JSON.stringify({
-    name,
-    description,
-    taskList,
-    startDate: startDate ? startDate.utc().format() : null,
-    endDate: endDate ? endDate.utc().format() : null,
-    backlog,
-  });
+  const { startDate, endDate } = formValues;
+  if (startDate) {
+    formValues.startDate = moment(startDate).utc().format();
+  }
+  if (endDate) {
+    formValues.endDate = moment(endDate).utc().format();
+  }
+
+  const body = JSON.stringify(formValues);
 
   try {
     const res = await axios.put(`api/tasks/${taskID}`, body, config);

@@ -49,11 +49,59 @@ const CreateTaskForm = ({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // Client side validation here
+    let body = {};
+    // Check for field changes
+    // TODO - move all these comparisons into a separate utility file
     if (task) {
-      updateTask(task._id, name, description, list, startDate, endDate);
+      if (task.name !== name) {
+        body.name = name;
+      }
+      if (task.description !== description) {
+        body.description = description;
+      }
+      if (task.taskList._id !== list) {
+        body.list = list;
+      }
+      if (
+        (task.startDate &&
+          (startDate === null ||
+            !moment(task.startDate).isSame(startDate, "day"))) ||
+        (!task.startDate && startDate)
+      ) {
+        body.startDate = startDate;
+      }
+      if (task.backlog && endDate !== null) {
+        body.backlog = false;
+        body.endDate = endDate;
+      } else if (
+        !task.backlog &&
+        (!moment(task.endDate).isSame(endDate, "day") || endDate === null)
+      ) {
+        body.backlog = true;
+        body.endDate = endDate;
+      }
+
+      updateTask(task._id, body);
     } else {
-      createTask(name, description, list, startDate, endDate);
+      if (name) {
+        body.name = name;
+      }
+      if (description) {
+        body.description = description;
+      }
+      if (list) {
+        body.taskList = list;
+      }
+      if (startDate) {
+        body.startDate = startDate;
+      }
+      if (endDate) {
+        body.endDate = endDate;
+        body.backlog = false;
+      } else {
+        body.backlog = true;
+      }
+      createTask(body);
     }
     closeForm();
   };

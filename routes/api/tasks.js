@@ -175,7 +175,7 @@ router.post(
     if (endDate) {
       taskFields.endDate = endDate;
     }
-    if (backlog) {
+    if (backlog !== null) {
       taskFields.backlog = backlog;
     }
     try {
@@ -200,80 +200,69 @@ router.post(
 //@route PUT api/tasks/:task_id
 //@desc Update a task in a tasklist
 //@access Private
-router.put(
-  "/:task_id",
-  [auth, [check("name", "Name is required.").not().isEmpty()]],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    const {
-      taskList,
-      name,
-      description,
-      startDate,
-      endDate,
-      backlog,
-    } = req.body;
-    const taskFields = {};
-    taskFields.user = req.user.id;
-
-    // Proper way of referencing another document?
-    if (taskList) {
-      // TODO: validation for if the list exists? Should a new list be created?
-      // Currently this can throw an error if the list doesn't exist
-      // Probably best idea is to give the user the option to make a new list on frontend,
-      // then hit the create list endpoint first. Then pass in that id here
-      // let list = TaskList.findOne({user: req.user.id, taskList: taskList});
-      taskFields.taskList = taskList;
-      //   taskFields.taskList = req.params.list_id;
-    }
-    if (name) {
-      taskFields.name = name;
-    }
-    if (description) {
-      taskFields.description = description;
-    }
-    if (startDate) {
-      taskFields.startDate = startDate;
-    }
-    if (endDate) {
-      taskFields.endDate = endDate;
-    }
-    if (backlog !== null) {
-      taskFields.backlog = backlog;
-    }
-
-    try {
-      let task = await Task.findOne({ _id: req.params.task_id });
-      if (!task) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "This task does not exist." }] });
-      }
-
-      task = await Task.findOneAndUpdate(
-        { user: req.user.id, _id: req.params.task_id },
-        { $set: taskFields },
-        { new: true }
-      );
-      var populatedTask = await task
-        .populate("taskList", ["name", "color"])
-        .execPopulate();
-      return res.json(populatedTask);
-    } catch (err) {
-      if (err.kind == "ObjectId") {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "This task does not exist." }] });
-      }
-      return res
-        .status(500)
-        .json({ errors: [{ msg: "uh-oh. something went wrong." }] });
-    }
+router.put("/:task_id", [auth], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
-);
+  const { taskList, name, description, startDate, endDate, backlog } = req.body;
+  const taskFields = {};
+  taskFields.user = req.user.id;
+
+  // Proper way of referencing another document?
+  if (taskList) {
+    // TODO: validation for if the list exists? Should a new list be created?
+    // Currently this can throw an error if the list doesn't exist
+    // Probably best idea is to give the user the option to make a new list on frontend,
+    // then hit the create list endpoint first. Then pass in that id here
+    // let list = TaskList.findOne({user: req.user.id, taskList: taskList});
+    taskFields.taskList = taskList;
+    //   taskFields.taskList = req.params.list_id;
+  }
+  if (name) {
+    taskFields.name = name;
+  }
+  if (description) {
+    taskFields.description = description;
+  }
+  if (startDate) {
+    taskFields.startDate = startDate;
+  }
+  if (endDate) {
+    taskFields.endDate = endDate;
+  }
+  if (backlog !== null) {
+    taskFields.backlog = backlog;
+  }
+
+  try {
+    let task = await Task.findOne({ _id: req.params.task_id });
+    if (!task) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "This task does not exist." }] });
+    }
+
+    task = await Task.findOneAndUpdate(
+      { user: req.user.id, _id: req.params.task_id },
+      { $set: taskFields },
+      { new: true }
+    );
+    var populatedTask = await task
+      .populate("taskList", ["name", "color"])
+      .execPopulate();
+    return res.json(populatedTask);
+  } catch (err) {
+    if (err.kind == "ObjectId") {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "This task does not exist." }] });
+    }
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "uh-oh. something went wrong." }] });
+  }
+});
 
 //@route  DELETE api/tasks/:task_id
 //@desc   Delete a task
