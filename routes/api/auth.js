@@ -17,7 +17,9 @@ router.get("/", auth, async (req, res) => {
     res.json(user);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
   }
 });
 
@@ -45,7 +47,7 @@ router.post(
       if (!user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "Invalid credentials." }] });
+          .json({ errors: [{ msg: "Invalid email/password." }] });
       }
 
       // Match user email and password
@@ -54,7 +56,7 @@ router.post(
       if (!isMatch) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "Invalid credentials." }] });
+          .json({ errors: [{ msg: "Invalid email/password." }] });
       }
 
       // Saving a user returns the id within the database (user.id)
@@ -76,8 +78,9 @@ router.post(
         }
       );
     } catch (err) {
-      console.log(err);
-      res.status(500).send("Server error");
+      return res
+        .status(500)
+        .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
     }
   }
 );

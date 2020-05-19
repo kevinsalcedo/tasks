@@ -74,8 +74,9 @@ router.post(
         }
       );
     } catch (err) {
-      console.log(err);
-      res.status(500).send("Server Error");
+      return res
+        .status(500)
+        .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
     }
   }
 );
@@ -90,8 +91,9 @@ router.delete("/", auth, async (req, res) => {
     await User.findOneAndDelete({ _id: req.user.id });
     res.json({ msg: "All data deleted." });
   } catch (err) {
-    console.log(err);
-    return res.status(500).send("Server Error");
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
   }
 });
 

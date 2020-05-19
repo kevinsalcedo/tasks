@@ -102,13 +102,6 @@ export default function (state = initialState, action) {
       };
     case LIST_ERROR:
     case TASK_ERROR:
-      return {
-        ...state,
-        lists: [],
-        tasks: [],
-        selectedList: null,
-        selectedTask: null,
-      };
     case CREATE_TASK_ERROR:
     case UPDATE_TASK_ERROR:
     case DELETE_TASK_ERROR:

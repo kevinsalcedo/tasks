@@ -20,12 +20,16 @@ router.get("/", auth, async (req, res) => {
     }).populate("user", ["name"]);
 
     if (!lists) {
-      return res.status(400).json({ msg: "You don't have any task lists!" });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "You don't have any task lists!" }] });
     }
     res.json(lists);
   } catch (err) {
     console.error(err.message);
-    return res.status(500).json({ msg: "Uh-oh. Something went wrong." });
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
   }
 });
 
@@ -42,13 +46,15 @@ router.get("/:list_id", auth, async (req, res) => {
     if (!list) {
       return res
         .status(400)
-        .json({ msg: "Oops! You don't have such a list. " });
+        .json({ errors: [{ msg: "Oops! You don't have such a list. " }] });
     }
 
     res.json(list);
   } catch (err) {
     console.log(err.message);
-    return res.status(500).json({ msg: "Uh-oh. Something went wrong." });
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
   }
 });
 
@@ -88,7 +94,9 @@ router.post(
       res.json(tasklist);
     } catch (err) {
       console.error(err.message);
-      return res.status(500).json({ msg: "uh-oh. something went wrong." });
+      return res
+        .status(500)
+        .json({ errors: [{ msg: "Uh-oh. something went wrong." }] });
     }
   }
 );
@@ -134,14 +142,20 @@ router.put(
         );
         return res.json(list);
       } else {
-        return res.status(400).json({ msg: "Oops! That list doesn't exist." });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Oops! That list doesn't exist." }] });
       }
     } catch (err) {
       console.error(err.message);
       if (err.kind == "ObjectId") {
-        return res.status(400).json({ msg: "Oops! That list doesn't exist." });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Oops! That list doesn't exist." }] });
       }
-      return res.status(500).json({ msg: "uh-oh. something went wrong." });
+      return res
+        .status(500)
+        .json({ errors: [{ msg: "Uh-oh. something went wrong." }] });
     }
   }
 );
@@ -159,9 +173,13 @@ router.delete("/:list_id", auth, async (req, res) => {
   } catch (err) {
     console.log(err.message);
     if (err.kind === "ObjectId") {
-      return res.status(400).json({ msg: "oops! That list doesn't exist" });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "oops! That list doesn't exist" }] });
     }
-    return res.status(500).send("Server Error");
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
   }
 });
 

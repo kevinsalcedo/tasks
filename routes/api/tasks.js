@@ -43,7 +43,9 @@ router.get("/", auth, async (req, res) => {
     res.send(allTasks);
   } catch (err) {
     console.error(err.message);
-    return res.status(500).json({ msg: "Uh-oh. Something went wrong." });
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
   }
 });
 
@@ -57,16 +59,22 @@ router.get("/:task_id", auth, async (req, res) => {
       _id: req.params.task_id,
     }).populate("taskList", ["name", "color"]);
     if (!task) {
-      return res.status(400).json({ msg: "That task doesn't exist!" });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "That task doesn't exist!" }] });
     }
 
     res.send(task);
   } catch (err) {
     console.log(err.message);
     if (err.kind === "ObjectId") {
-      return res.status(400).json({ msg: "That task doesn't exist!" });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "That task doesn't exist!" }] });
     }
-    return res.status(500).json({ msg: "uh-oh. something went wrong." });
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. something went wrong." }] });
   }
 });
 
@@ -105,9 +113,11 @@ router.get("/lists/:list_id", auth, async (req, res) => {
     console.log(err.message);
     // Throw diifferent error if an invalid id is apsse
     if (err.kind == "ObjectId") {
-      return res.status(400).json({ msg: "No tasks found." });
+      return res.status(400).json({ errors: [{ msg: "No tasks found." }] });
     }
-    return res.status(500).json({ msg: "uh-oh. something went wrong." });
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. something went wrong." }] });
   }
 });
 
@@ -116,12 +126,14 @@ router.get("/lists/:list_id", auth, async (req, res) => {
 //@access Private
 router.post(
   "/",
-  [auth, [check("name", "A task name is required.").not().isEmpty()]],
+  [
+    auth,
+    [check("name", "A task name is required.").not().isEmpty()],
+    check("taskList", "Please select a list").not().isEmpty(),
+  ],
   async (req, res) => {
     const errors = validationResult(req);
-    console.log(errors);
     if (!errors.isEmpty()) {
-      console.log("here");
       return res.status(400).json({ errors: errors.array() });
     }
     console.log("POST task");
@@ -170,9 +182,12 @@ router.post(
         .execPopulate();
       res.json(populatedTask);
     } catch (err) {
-      console.log(err);
+      console.log(err.errors);
+
       // Handle if the tasklist is invalid
-      return res.status(500).json({ msg: "uh-oh. something went wrong." });
+      return res
+        .status(500)
+        .json({ errors: [{ msg: "Uh-oh. something went wrong." }] });
     }
   }
 );
@@ -228,7 +243,9 @@ router.put(
     try {
       let task = await Task.findOne({ _id: req.params.task_id });
       if (!task) {
-        return res.status(400).json({ msg: "This task does not exist." });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "This task does not exist." }] });
       }
 
       task = await Task.findOneAndUpdate(
@@ -243,9 +260,13 @@ router.put(
     } catch (err) {
       console.log(err.message);
       if (err.kind == "ObjectId") {
-        return res.status(400).json({ msg: "This task does not exist." });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "This task does not exist." }] });
       }
-      return res.status(500).json({ msg: "uh-oh. something went wrong." });
+      return res
+        .status(500)
+        .json({ errors: [{ msg: "uh-oh. something went wrong." }] });
     }
   }
 );
@@ -264,9 +285,13 @@ router.delete("/:task_id", auth, async (req, res) => {
   } catch (err) {
     console.log(err.message);
     if (err.kind === "ObjectId") {
-      return res.status(400).json({ msg: "oops! That task doesn't exist" });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "oops! That task doesn't exist" }] });
     }
-    return res.status(500).json({ msg: "uh-oh. something went wrong." });
+    return res
+      .status(500)
+      .json({ errors: [{ msg: "Uh-oh. something went wrong." }] });
   }
 });
 

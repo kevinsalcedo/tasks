@@ -16,7 +16,7 @@ const Alert = ({ alerts }) =>
     >
       {alerts.map((alert) => (
         <Box
-          key={alert}
+          key={alert.id}
           align='center'
           direction='row'
           gap='small'

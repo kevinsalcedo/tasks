@@ -1,4 +1,5 @@
 import axios from "axios";
+import { batch } from "react-redux";
 import {
   GET_LISTS,
   LIST_ERROR,
@@ -13,6 +14,7 @@ import {
   UPDATE_TASK,
   UPDATE_TASK_ERROR,
   CREATE_LIST,
+  CREATE_LIST_ERROR,
 } from "./types";
 import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
@@ -56,8 +58,15 @@ export const loadLists = () => async (dispatch) => {
       payload: { lists: res.data },
     });
   } catch (err) {
-    dispatch({
-      type: LIST_ERROR,
+    const errors = err.response.data.errors;
+
+    batch(() => {
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      }
+      dispatch({
+        type: LIST_ERROR,
+      });
     });
   } finally {
     dispatch(loadResponse());
@@ -90,9 +99,15 @@ export const loadTasksView = (listID, start) => async (dispatch) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    dispatch({
-      type: TASK_ERROR,
+    const errors = err.response.data.errors;
+
+    batch(() => {
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      }
+      dispatch({
+        type: TASK_ERROR,
+      });
     });
   } finally {
     dispatch(loadResponse());
@@ -132,15 +147,15 @@ export const createTask = (
     const res = await axios.post(`api/tasks`, body, config);
     dispatch({ type: CREATE_TASK, payload: res.data });
   } catch (err) {
-    console.log(err);
+    const errors = err.response.data.errors;
 
-    // const errors = err.response.data.errors;
-
-    // if (errors) {
-    //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    // }
-    dispatch({
-      type: CREATE_TASK_ERROR,
+    batch(() => {
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      }
+      dispatch({
+        type: CREATE_TASK_ERROR,
+      });
     });
   } finally {
     dispatch(loadResponse());
@@ -162,10 +177,15 @@ export const deleteTask = (taskID) => async (dispatch) => {
     });
     dispatch(setAlert(res.data.msg, "good"));
   } catch (err) {
-    // TODO: send error alerts
-    console.log(err);
-    dispatch({
-      type: DELETE_TASK_ERROR,
+    const errors = err.response.data.errors;
+
+    batch(() => {
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      }
+      dispatch({
+        type: DELETE_TASK_ERROR,
+      });
     });
   } finally {
     dispatch(loadResponse());
@@ -206,8 +226,14 @@ export const updateTask = (
     const res = await axios.put(`api/tasks/${taskID}`, body, config);
     dispatch({ type: UPDATE_TASK, payload: res.data });
   } catch (err) {
-    console.log(err);
-    dispatch({ type: UPDATE_TASK_ERROR });
+    const errors = err.response.data.errors;
+
+    batch(() => {
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      }
+      dispatch({ type: UPDATE_TASK_ERROR });
+    });
   } finally {
     dispatch(loadResponse());
   }
@@ -227,7 +253,14 @@ export const createList = (formValues) => async (dispatch) => {
     const res = await axios.post("api/tasklists", body, config);
     dispatch({ type: CREATE_LIST, payload: res.data });
   } catch (err) {
-    console.log(err);
+    const errors = err.response.data.errors;
+
+    batch(() => {
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      }
+      dispatch({ type: CREATE_LIST_ERROR });
+    });
   } finally {
     dispatch(loadResponse());
   }
