@@ -28,7 +28,7 @@ const initialState = {
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
-  let calendar;
+  let newCalendar = { ...state.calendar };
   switch (type) {
     case GET_LISTS:
       return {
@@ -57,42 +57,39 @@ export default function (state = initialState, action) {
         calendar: payload,
       };
     case CREATE_TASK:
-      calendar = state.calendar;
-      if (Object.keys(calendar).length > 0) {
-        addToCalendar(calendar, payload);
+      if (Object.keys(newCalendar).length > 0) {
+        addToCalendar(newCalendar, payload);
       }
       return {
         ...state,
         tasks: [...state.tasks, payload].sort((a, b) =>
           moment(a.endDate).diff(b.endDate)
         ),
-        calendar,
+        calendar: newCalendar,
       };
     case UPDATE_TASK:
-      let tasks = state.tasks.filter((task) => task._id !== payload._id);
+      let newTasks = state.tasks.filter((task) => task._id !== payload._id);
 
       if (!payload.backlog) {
-        tasks = [...tasks, payload];
+        newTasks = [...newTasks, payload];
       }
-      calendar = state.calendar;
-      if (Object.keys(calendar).length > 0) {
-        removeFromCalendar(calendar, payload, true);
+      if (Object.keys(newCalendar).length > 0) {
+        removeFromCalendar(newCalendar, payload, true);
       }
       return {
         ...state,
-        tasks: tasks.sort((a, b) => moment(a.endDate).diff(b.endDate)),
-        calendar,
+        tasks: newTasks.sort((a, b) => moment(a.endDate).diff(b.endDate)),
+        calendar: newCalendar,
         selectedTask: null,
       };
     case DELETE_TASK:
-      calendar = state.calendar;
-      if (Object.keys(calendar).length > 0) {
-        removeFromCalendar(calendar, payload, false);
+      if (Object.keys(newCalendar).length > 0) {
+        removeFromCalendar(newCalendar, payload, false);
       }
       return {
         ...state,
-        tasks: [...state.tasks.filter((task) => task._id !== payload._id)],
-        calendar,
+        tasks: state.tasks.filter((task) => task._id !== payload._id),
+        calendar: newCalendar,
         selectedTask: null,
       };
     case CREATE_LIST:

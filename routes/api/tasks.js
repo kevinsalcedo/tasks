@@ -66,7 +66,6 @@ router.get("/:task_id", auth, async (req, res) => {
 
     res.send(task);
   } catch (err) {
-    console.log(err.message);
     if (err.kind === "ObjectId") {
       return res
         .status(400)
@@ -110,7 +109,6 @@ router.get("/lists/:list_id", auth, async (req, res) => {
 
     res.send(allTasks);
   } catch (err) {
-    console.log(err.message);
     // Throw diifferent error if an invalid id is apsse
     if (err.kind == "ObjectId") {
       return res.status(400).json({ errors: [{ msg: "No tasks found." }] });
@@ -182,8 +180,6 @@ router.post(
         .execPopulate();
       res.json(populatedTask);
     } catch (err) {
-      console.log(err.errors);
-
       // Handle if the tasklist is invalid
       return res
         .status(500)
@@ -258,7 +254,6 @@ router.put(
         .execPopulate();
       return res.json(populatedTask);
     } catch (err) {
-      console.log(err.message);
       if (err.kind == "ObjectId") {
         return res
           .status(400)
@@ -283,7 +278,6 @@ router.delete("/:task_id", auth, async (req, res) => {
       task: result,
     });
   } catch (err) {
-    console.log(err.message);
     if (err.kind === "ObjectId") {
       return res
         .status(400)

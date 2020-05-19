@@ -51,7 +51,6 @@ router.get("/:list_id", auth, async (req, res) => {
 
     res.json(list);
   } catch (err) {
-    console.log(err.message);
     return res
       .status(500)
       .json({ errors: [{ msg: "Uh-oh. Something went wrong." }] });
@@ -171,7 +170,6 @@ router.delete("/:list_id", auth, async (req, res) => {
 
     res.json({ msg: ` ${result.name} was deleted. Bye-bye list!` });
   } catch (err) {
-    console.log(err.message);
     if (err.kind === "ObjectId") {
       return res
         .status(400)

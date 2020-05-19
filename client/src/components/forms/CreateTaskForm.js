@@ -12,7 +12,7 @@ import { Close } from "grommet-icons";
 import FormControlButtons from "./fields/FormControlButtons";
 
 const CreateTaskForm = ({
-  dueDate,
+  dueDate = moment(),
   lists,
   task,
   createTask,

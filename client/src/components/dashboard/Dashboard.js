@@ -12,6 +12,8 @@ import CreateTaskForm from "../forms/CreateTaskForm";
 import DeleteTaskForm from "../forms/DeleteTaskForm";
 import { toggleCreateTaskForm } from "../../actions/dashboard";
 import CreateListForm from "../forms/CreateListForm";
+import DashboardDayView from "./DashBoardDayView";
+import DashboardListView from "./DashboardListView";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -43,9 +45,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  // Update the view
-  // When in list view, load all tasks
-  // When in calendar, filter on the selected start date
   updateTasksView = () => {
     const { calendarStart, selectedList, view, loadTasksView } = this.props;
     if (view === "task") {
@@ -56,90 +55,8 @@ class Dashboard extends React.Component {
     this.setState({ dueDate: moment() });
   };
 
-  // Render all tasks in a list view
-  renderListView = () => {
-    const { lists, selectedList, tasks, loading } = this.props;
-    const list = selectedList
-      ? lists.find((list) => list._id === selectedList).name
-      : "All Lists";
-
-    if (loading) {
-      return <Spinner />;
-    }
-
-    return (
-      <Box fill='vertical' width='80%'>
-        <Box align='center' direction='row'>
-          <Heading level='3'>{list}</Heading>
-          <Button
-            icon={<Add />}
-            hoverIndicator
-            onClick={() => this.openTaskForm(moment())}
-          />
-        </Box>
-        <Box gap='small' fill overflow='auto'>
-          {tasks.map((task) => (
-            <TaskCard key={task._id} task={task} />
-          ))}
-        </Box>
-      </Box>
-    );
-  };
-
-  // Render tasks in a day by day calendar view
-  renderDayView = () => {
-    const { calendar, loading } = this.props;
-    if (loading) {
-      return <Spinner />;
-    }
-
-    return (
-      <Box direction='row' fill='vertical' gap='small' width='80%'>
-        {Object.keys(calendar).map((dateGroup) => (
-          <Box
-            key={dateGroup}
-            gap='small'
-            align='center'
-            fill='vertical'
-            width='medium'
-            overflow='auto'
-            background='light-5'
-            elevation='small'
-            round='xsmall'
-          >
-            <Heading level='4' pad={"bottom"}>
-              {moment(dateGroup).format("MMMM Do")}
-            </Heading>
-            <Box gap='small' overflow='auto' width='85%' fill='vertical'>
-              <Box
-                onClick={() => this.openTaskForm(moment(dateGroup))}
-                pad={{ horizontal: "medium", vertical: "xxsmall" }}
-                background='light-1'
-                elevation='small'
-                gap='small'
-                justify='between'
-                align='center'
-                flex={false}
-                height='xxsmall'
-                hoverIndicator
-              >
-                <Button icon={<Add />} />
-              </Box>
-              {calendar[dateGroup].map((task) => (
-                <TaskCard key={task._id} task={task} />
-              ))}
-            </Box>
-          </Box>
-        ))}
-      </Box>
-    );
-  };
-
-  openTaskForm = (date) => {
-    const { toggleCreateTaskForm } = this.props;
-    if (date) {
-      this.setState({ dueDate: date }, () => toggleCreateTaskForm(true));
-    }
+  updateDueDate = (date, callback) => {
+    this.setState({ dueDate: date }, () => callback());
   };
 
   render() {
@@ -148,7 +65,11 @@ class Dashboard extends React.Component {
 
     return (
       <ContainerPane justify='start' pad='medium'>
-        {view === "calendar" ? this.renderDayView() : this.renderListView()}
+        {view === "calendar" ? (
+          <DashboardDayView onChangeDate={this.updateDueDate} />
+        ) : (
+          <DashboardListView />
+        )}
         {createTaskOpen && <CreateTaskForm dueDate={dueDate} />}
         {deleteTaskOpen && <DeleteTaskForm />}'
         {createListOpen && <CreateListForm />}
