@@ -32,6 +32,8 @@ export const DELETE_TASK = "DELETE_TASK";
 export const DELETE_TASK_ERROR = "DELETE_TASK_ERROR";
 export const UPDATE_TASK = "UPDATE_TASK";
 export const UPDATE_TASK_ERROR = "UPDATE_TASK_ERROR";
+export const GET_BACKLOG = "GET_BACKLOG";
+export const BACKLOG_ERROR = "BACKLOG_ERROR";
 
 // Dashboard settings
 export const CHANGE_VIEW = "CHANGE_VIEW";
@@ -41,6 +43,7 @@ export const SIDEBAR_OPEN = "SIDEBAR_OPEN";
 export const TOGGLE_CREATE_TASK_FORM = "TOGGLE_CREATE_TASK_FORM";
 export const TOGGLE_DELETE_TASK_FORM = "TOGGLE_DELETE_TASK_FORM";
 export const TOGGLE_CREATE_LIST_FORM = "TOGGLE_CREATE_LIST_FORM";
+export const BACKLOG_OPEN = "BACKLOG_OPEN";
 
 // UI Reloads
 export const LOADING_START = "LOADING_START";

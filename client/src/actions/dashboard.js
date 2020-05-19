@@ -3,6 +3,7 @@ import {
   SET_CALENDAR_RANGE,
   SET_DEFAULT_DUE_DATE,
   SIDEBAR_OPEN,
+  BACKLOG_OPEN,
   TOGGLE_CREATE_TASK_FORM,
   TOGGLE_DELETE_TASK_FORM,
   TOGGLE_CREATE_LIST_FORM,
@@ -36,6 +37,14 @@ export const setDefaultDueDate = (day) => async (dispatch) => {
 export const openSidebar = (isTrue) => async (dispatch) => {
   dispatch({
     type: SIDEBAR_OPEN,
+    payload: isTrue,
+  });
+};
+
+// Toggle the backlog to be open or not
+export const openBacklog = (isTrue) => async (dispatch) => {
+  dispatch({
+    type: BACKLOG_OPEN,
     payload: isTrue,
   });
 };

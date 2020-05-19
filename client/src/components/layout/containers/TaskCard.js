@@ -17,6 +17,7 @@ const TaskCard = ({
 }) => {
   const renderDueDate = () => {
     let innerText = "No due date";
+    let pastDue = false;
     if (task.endDate) {
       const now = moment().startOf("day");
       const dueDate = moment(task.endDate).startOf("day");
@@ -26,6 +27,7 @@ const TaskCard = ({
       if (!task.backlog) {
         const diff = dueDate.diff(now, "days");
         if (diff < 0) {
+          pastDue = true;
           innerText = "Past due";
         } else if (diff === 0) {
           innerText =
@@ -40,7 +42,11 @@ const TaskCard = ({
         }
       }
     }
-    return <Text size='xsmall'>{innerText}</Text>;
+    return (
+      <Text size='xsmall' color={pastDue ? "status-critical" : null}>
+        {innerText}
+      </Text>
+    );
   };
   const menuItems = [
     {

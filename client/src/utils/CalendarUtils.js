@@ -3,7 +3,7 @@ import moment from "moment";
 export const generateCalendar = (tasks, calendarStart) => {
   const calendar = {};
   const start = moment(calendarStart);
-  const end = moment(calendarStart).add(2, "days").endOf("day");
+  const end = moment(calendarStart).add(3, "days").endOf("day");
   let curr = start;
   while (!curr.isAfter(end, "day")) {
     calendar[curr.startOf("day").format()] = [];

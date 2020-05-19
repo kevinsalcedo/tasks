@@ -14,6 +14,8 @@ import {
   UPDATE_TASK_ERROR,
   CREATE_LIST,
   CREATE_LIST_ERROR,
+  BACKLOG_ERROR,
+  GET_BACKLOG,
 } from "../actions/types";
 import { addToCalendar, removeFromCalendar } from "../utils/CalendarUtils";
 import moment from "moment";
@@ -22,6 +24,7 @@ const initialState = {
   lists: [],
   tasks: [],
   calendar: {},
+  backlog: [],
   selectedList: null,
   selectedTask: null,
 };
@@ -29,6 +32,8 @@ const initialState = {
 export default function (state = initialState, action) {
   const { type, payload } = action;
   let newCalendar = { ...state.calendar };
+  let newTasks = [...state.tasks];
+  let newBacklog = [...state.backlog];
   switch (type) {
     case GET_LISTS:
       return {
@@ -57,30 +62,47 @@ export default function (state = initialState, action) {
         calendar: payload,
       };
     case CREATE_TASK:
+      // Update the calendar if on calendar view
       if (Object.keys(newCalendar).length > 0) {
         addToCalendar(newCalendar, payload);
       }
+      // Add task to proper list
+      if (payload.backlog) {
+        newBacklog.push(payload);
+      } else {
+        newTasks = [...newTasks, payload].sort((a, b) =>
+          moment(a.endDate).diff(b.endDate)
+        );
+      }
       return {
         ...state,
-        tasks: [...state.tasks, payload].sort((a, b) =>
-          moment(a.endDate).diff(b.endDate)
-        ),
+        tasks: newTasks,
         calendar: newCalendar,
+        backlog: newBacklog,
       };
     case UPDATE_TASK:
-      let newTasks = state.tasks.filter((task) => task._id !== payload._id);
+      // Remove task from whatever list it's on
+      newTasks = state.tasks.filter((task) => task._id !== payload._id);
+      newBacklog = state.backlog.filter((task) => task._id !== payload._id);
 
-      if (!payload.backlog) {
-        newTasks = [...newTasks, payload];
-      }
+      // Update the calendar if on calendar view
       if (Object.keys(newCalendar).length > 0) {
         removeFromCalendar(newCalendar, payload, true);
       }
+      // Add task to proper list
+      if (payload.backlog) {
+        newBacklog = [...newBacklog, payload];
+      } else {
+        newTasks = [...newTasks, payload].sort((a, b) =>
+          moment(a.endDate).diff(b.endDate)
+        );
+      }
       return {
         ...state,
-        tasks: newTasks.sort((a, b) => moment(a.endDate).diff(b.endDate)),
+        tasks: newTasks,
         calendar: newCalendar,
         selectedTask: null,
+        backlog: newBacklog,
       };
     case DELETE_TASK:
       if (Object.keys(newCalendar).length > 0) {
@@ -97,12 +119,18 @@ export default function (state = initialState, action) {
         ...state,
         lists: [...state.lists, payload],
       };
+    case GET_BACKLOG:
+      return {
+        ...state,
+        backlog: payload,
+      };
     case LIST_ERROR:
     case TASK_ERROR:
     case CREATE_TASK_ERROR:
     case UPDATE_TASK_ERROR:
     case DELETE_TASK_ERROR:
     case CREATE_LIST_ERROR:
+    case BACKLOG_ERROR:
     default:
       return state;
   }

@@ -30,7 +30,11 @@ const CreateTaskForm = ({
     task && task.startDate ? moment(task.startDate) : null
   );
   const [endDate, setEndDate] = useState(
-    task && task.endDate && !task.backlog ? moment(task.endDate) : dueDate
+    task && task.endDate
+      ? task.backlog
+        ? null
+        : moment(task.endDate)
+      : dueDate
   );
 
   const selectOptions = [];

@@ -16,16 +16,20 @@ router.get("/", auth, async (req, res) => {
   console.log("GET all tasks");
   let start = null;
   let end = null;
+  let backlog = false;
   if (req.query.start) {
     start = moment(req.query.start).utc();
   }
   if (req.query.end) {
     end = moment(req.query.end).utc();
   }
+  if (req.query.backlog) {
+    backlog = true;
+  }
 
   let filter = {
     user: req.user.id,
-    backlog: false,
+    backlog: backlog,
   };
 
   if (start && end) {
@@ -50,7 +54,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 //@route GET api/tasks/:task_id
-//desc Get a specific task for a tasklist
+//desc Get a specific task
 //@access Private
 router.get("/:task_id", auth, async (req, res) => {
   console.log("GET task");
@@ -84,17 +88,21 @@ router.get("/lists/:list_id", auth, async (req, res) => {
   console.log("GET tasks for list");
   let start = null;
   let end = null;
+  let backlog = false;
   if (req.query.start) {
     start = moment(req.query.start).utc();
   }
   if (req.query.end) {
     end = moment(req.query.end).utc();
   }
+  if (req.query.backlog) {
+    backlog.true;
+  }
 
   let filter = {
     user: req.user.id,
     taskList: req.params.list_id,
-    backlog: false,
+    backlog: backlog,
   };
 
   if (start && end) {
@@ -180,6 +188,7 @@ router.post(
         .execPopulate();
       res.json(populatedTask);
     } catch (err) {
+      console.log(err);
       // Handle if the tasklist is invalid
       return res
         .status(500)

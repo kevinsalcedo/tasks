@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ContainerPane from "../layout/containers/ContainerPane";
-import { loadTasksView, loadLists } from "../../actions/list";
+import { loadTasksView, loadLists, loadBacklogTasks } from "../../actions/list";
 import moment from "moment";
 import CreateTaskForm from "../forms/CreateTaskForm";
 import DeleteTaskForm from "../forms/DeleteTaskForm";
@@ -21,12 +21,15 @@ class Dashboard extends React.Component {
 
   // // On loading the dashboard, default load tasks for the year
   componentDidMount() {
-    const { loadLists } = this.props;
+    const { loadLists, loadBacklogTasks } = this.props;
     // Load lists for the sidebar
     loadLists();
 
-    // Load all tasks by default
+    // Load all non-backlog tasks by default
     this.updateTasksView();
+
+    // Load backlog
+    loadBacklogTasks();
   }
 
   // When selection options are updated, make the new api call
@@ -101,4 +104,5 @@ export default connect(mapStateToProps, {
   loadTasksView,
   loadLists,
   toggleCreateTaskForm,
+  loadBacklogTasks,
 })(Dashboard);

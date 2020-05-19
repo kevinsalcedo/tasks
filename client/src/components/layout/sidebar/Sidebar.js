@@ -35,7 +35,7 @@ export const Sidebar = (
       {(responsive) => (
         <GrommetSidebar
           header={
-            <Box direction='row'>
+            <Box direction='row' align='center'>
               <Menu
                 label={
                   isAuthenticated ? (

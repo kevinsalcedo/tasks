@@ -2,6 +2,7 @@ import {
   CHANGE_VIEW,
   SET_CALENDAR_RANGE,
   SIDEBAR_OPEN,
+  BACKLOG_OPEN,
   TOGGLE_CREATE_TASK_FORM,
   TOGGLE_DELETE_TASK_FORM,
   TOGGLE_CREATE_LIST_FORM,
@@ -12,6 +13,7 @@ const initialState = {
   view: "task",
   calendarStart: moment().startOf("day").format(),
   sidebarOpen: true,
+  backlogOpen: false,
   createTaskOpen: false,
   deleteTaskOpen: false,
   createListOpen: false,
@@ -29,6 +31,8 @@ export default function (state = initialState, action) {
       return { ...state, calendarStart: payload };
     case SIDEBAR_OPEN:
       return { ...state, sidebarOpen: payload };
+    case BACKLOG_OPEN:
+      return { ...state, backlogOpen: payload };
     case TOGGLE_CREATE_TASK_FORM:
       return { ...state, createTaskOpen: payload };
     case TOGGLE_DELETE_TASK_FORM:

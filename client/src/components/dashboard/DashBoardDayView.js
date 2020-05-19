@@ -26,7 +26,7 @@ const DashBoardDayView = ({
     if (keyArray.length > 1) {
       if (size === "small") {
         return [keyArray[0]];
-      } else if (size == "medium") {
+      } else if (size === "medium") {
         return [keyArray[0], keyArray[1]];
       }
     }

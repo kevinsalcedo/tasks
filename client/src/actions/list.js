@@ -15,6 +15,8 @@ import {
   UPDATE_TASK_ERROR,
   CREATE_LIST,
   CREATE_LIST_ERROR,
+  GET_BACKLOG,
+  BACKLOG_ERROR,
 } from "./types";
 import { loadRequest, loadResponse } from "./loading";
 import moment from "moment";
@@ -82,7 +84,7 @@ export const loadTasksView = (listID, start) => async (dispatch) => {
 
   const dateFilter = start
     ? `?start=${start}&end=${moment(start)
-        .add(2, "days")
+        .add(3, "days")
         .endOf("day")
         .format()}`
     : "";
@@ -111,6 +113,34 @@ export const loadTasksView = (listID, start) => async (dispatch) => {
     });
   } finally {
     dispatch(loadResponse());
+  }
+};
+
+// Load all backlog tasks
+export const loadBacklogTasks = () => async (dispatch) => {
+  dispatch(loadRequest());
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
+  const filter = "?backlog=true";
+  try {
+    const res = await axios.get(`/api/tasks${filter}`);
+    dispatch({
+      type: GET_BACKLOG,
+      payload: res.data,
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    batch(() => {
+      if (errors) {
+        errors.forEach((error) => dispatch(error.msg, "danger"));
+      }
+      dispatch({
+        type: BACKLOG_ERROR,
+      });
+    });
   }
 };
 
@@ -147,6 +177,7 @@ export const createTask = (
     const res = await axios.post(`api/tasks`, body, config);
     dispatch({ type: CREATE_TASK, payload: res.data });
   } catch (err) {
+    console.log(err);
     const errors = err.response.data.errors;
 
     batch(() => {

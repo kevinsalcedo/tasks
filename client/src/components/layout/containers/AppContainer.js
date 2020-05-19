@@ -19,6 +19,7 @@ import "../../../App.css";
 // UI
 import { Box, Grommet, Main, Grid } from "grommet";
 import { grommet } from "grommet/themes";
+import Backlog from "../Backlog";
 
 const AppContainer = ({ isAuthenticated }) => {
   return (
@@ -26,6 +27,7 @@ const AppContainer = ({ isAuthenticated }) => {
       <Router>
         <Box direction='row' fill>
           {isAuthenticated && <Sidebar />}
+          {isAuthenticated && <Backlog />}
           <Grid
             fill
             rows={["auto", "flex"]}
