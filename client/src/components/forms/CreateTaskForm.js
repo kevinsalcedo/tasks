@@ -27,7 +27,7 @@ const CreateTaskForm = ({
   );
   const [name, setName] = useState(task ? task.name : "");
   const [description, setDescription] = useState(task ? task.description : "");
-  const [list, setList] = useState(
+  const [taskList, setTaskList] = useState(
     task
       ? task.taskList._id
       : selectedList
@@ -59,8 +59,8 @@ const CreateTaskForm = ({
       if (task.description !== description) {
         body.description = description;
       }
-      if (task.taskList._id !== list) {
-        body.list = list;
+      if (task.taskList._id !== taskList) {
+        body.taskList = taskList;
       }
       if (
         (task.startDate &&
@@ -73,12 +73,13 @@ const CreateTaskForm = ({
       if (task.backlog && endDate !== null) {
         body.backlog = false;
         body.endDate = endDate;
-      } else if (
-        !task.backlog &&
-        (!moment(task.endDate).isSame(endDate, "day") || endDate === null)
-      ) {
-        body.backlog = true;
-        body.endDate = endDate;
+      } else if (!task.backlog) {
+        if (endDate === null) {
+          body.backlog = true;
+          body.endDate = endDate;
+        } else if (!moment(task.endDate).isSame(endDate, "day")) {
+          body.endDate = endDate;
+        }
       }
 
       updateTask(task._id, body);
@@ -89,8 +90,8 @@ const CreateTaskForm = ({
       if (description) {
         body.description = description;
       }
-      if (list) {
-        body.taskList = list;
+      if (taskList) {
+        body.taskList = taskList;
       }
       if (startDate) {
         body.startDate = startDate;
@@ -125,7 +126,7 @@ const CreateTaskForm = ({
           onReset={() => {
             setName("");
             setDescription("");
-            setList("");
+            setTaskList("");
             setStartDate(null);
             setEndDate(dueDate);
           }}
@@ -151,8 +152,8 @@ const CreateTaskForm = ({
             name='list'
             placeholder='Please select a list'
             options={selectOptions}
-            value={list}
-            onChange={setList}
+            value={taskList}
+            onChange={setTaskList}
             required
           />
 

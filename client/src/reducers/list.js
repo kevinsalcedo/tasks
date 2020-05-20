@@ -27,6 +27,7 @@ const initialState = {
   backlog: [],
   selectedList: null,
   selectedTask: null,
+  updatedFields: null,
 };
 
 export default function (state = initialState, action) {
@@ -81,21 +82,42 @@ export default function (state = initialState, action) {
         backlog: newBacklog,
       };
     case UPDATE_TASK:
-      // Remove task from whatever list it's on
-      newTasks = state.tasks.filter((task) => task._id !== payload._id);
-      newBacklog = state.backlog.filter((task) => task._id !== payload._id);
+      const updatedFields = payload.updatedFields;
+      let taskPlaced = false;
+      // Changing the end date requires list shuffling
+      if (updatedFields.backlogChanged) {
+        if (payload.task.backlog) {
+          newTasks = newTasks.filter((task) => task._id !== payload.task._id);
+          newBacklog = [...newBacklog, payload.task];
+        } else {
+          newBacklog = newBacklog.filter(
+            (task) => task._id !== payload.task._id
+          );
+          newTasks = [...newTasks, payload.task].sort((a, b) =>
+            moment(a.endDate).diff(b.endDate)
+          );
+        }
+        taskPlaced = true;
+      } else {
+        if (!payload.task.backlog && updatedFields.endDateChanged) {
+          newTasks = [
+            ...newTasks.filter((task) => task._id !== payload.task._id),
+            payload.task,
+          ].sort((a, b) => moment(a.endDate).diff(b.endDate));
+          taskPlaced = true;
+        }
+      }
+
+      if (!taskPlaced) {
+        const index = newTasks.findIndex(
+          (task) => task._id === payload.task._id
+        );
+        newTasks[index] = payload.task;
+      }
 
       // Update the calendar if on calendar view
       if (Object.keys(newCalendar).length > 0) {
-        removeFromCalendar(newCalendar, payload, true);
-      }
-      // Add task to proper list
-      if (payload.backlog) {
-        newBacklog = [...newBacklog, payload];
-      } else {
-        newTasks = [...newTasks, payload].sort((a, b) =>
-          moment(a.endDate).diff(b.endDate)
-        );
+        removeFromCalendar(newCalendar, payload.task, true);
       }
       return {
         ...state,
@@ -103,6 +125,7 @@ export default function (state = initialState, action) {
         calendar: newCalendar,
         selectedTask: null,
         backlog: newBacklog,
+        updatedFields: payload.updatedFields,
       };
     case DELETE_TASK:
       if (Object.keys(newCalendar).length > 0) {

@@ -205,8 +205,17 @@ router.put("/:task_id", [auth], async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { taskList, name, description, startDate, endDate, backlog } = req.body;
+  const {
+    taskList,
+    name,
+    description,
+    startDate,
+    endDate,
+    backlog,
+    completed,
+  } = req.body;
   const taskFields = {};
+  const updatedFields = {};
   taskFields.user = req.user.id;
 
   // Proper way of referencing another document?
@@ -218,21 +227,32 @@ router.put("/:task_id", [auth], async (req, res) => {
     // let list = TaskList.findOne({user: req.user.id, taskList: taskList});
     taskFields.taskList = taskList;
     //   taskFields.taskList = req.params.list_id;
+    updatedFields.listChanged = true;
   }
   if (name) {
     taskFields.name = name;
+    updatedFields.nameChanged = true;
   }
   if (description) {
     taskFields.description = description;
+    updatedFields.descriptionChanged = true;
   }
   if (startDate) {
     taskFields.startDate = startDate;
+    updatedFields.startDateChanged = true;
   }
   if (endDate) {
     taskFields.endDate = endDate;
+    updatedFields.endDateChanged = true;
   }
-  if (backlog !== null) {
+  if (backlog !== undefined) {
     taskFields.backlog = backlog;
+    updatedFields.backlogChanged = true;
+  }
+
+  if (completed !== undefined) {
+    taskFields.completed = completed;
+    updatedFields.completedChanged = true;
   }
 
   try {
@@ -251,7 +271,10 @@ router.put("/:task_id", [auth], async (req, res) => {
     var populatedTask = await task
       .populate("taskList", ["name", "color"])
       .execPopulate();
-    return res.json(populatedTask);
+    return res.json({
+      task: populatedTask,
+      updatedFields,
+    });
   } catch (err) {
     if (err.kind == "ObjectId") {
       return res

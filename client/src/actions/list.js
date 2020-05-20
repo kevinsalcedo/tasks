@@ -247,8 +247,10 @@ export const updateTask = (taskID, formValues) => async (dispatch) => {
 
   const body = JSON.stringify(formValues);
 
+  console.log(formValues);
   try {
     const res = await axios.put(`api/tasks/${taskID}`, body, config);
+    console.log(res);
     dispatch({ type: UPDATE_TASK, payload: res.data });
   } catch (err) {
     const errors = err.response.data.errors;
