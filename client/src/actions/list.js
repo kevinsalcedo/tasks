@@ -226,7 +226,7 @@ export const deleteTask = (taskID) => async (dispatch) => {
   }
 };
 
-// Mark a task as completed
+// Update a task
 export const updateTask = (taskID, formValues) => async (dispatch) => {
   dispatch(loadRequest());
   if (localStorage.token) {
@@ -251,9 +251,23 @@ export const updateTask = (taskID, formValues) => async (dispatch) => {
 
   try {
     const res = await axios.put(`api/tasks/${taskID}`, body, config);
+    let msg = "";
+    if (res.data.updatedFields.completedChanged) {
+    } else if (res.data.updatedFields.backlogChanged) {
+      if (res.data.task.backlog) {
+        msg = `${res.data.task.name} was moved to the backlog.`;
+      } else {
+        msg = `${res.data.task.name} was moved to the active.`;
+      }
+    } else {
+      msg = `${res.data.task.name} was updated.`;
+    }
+
     batch(() => {
       dispatch({ type: UPDATE_TASK, payload: res.data });
-      dispatch(setAlert(`${res.data.task.name} was updated.`, "status-good"));
+      if (msg !== "") {
+        dispatch(setAlert(msg, "status-good"));
+      }
     });
   } catch (err) {
     const errors = err.response.data.errors;

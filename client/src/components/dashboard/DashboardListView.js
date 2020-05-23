@@ -17,20 +17,17 @@ const DashboardListView = ({
     ? lists.find((list) => list._id === selectedList).name
     : "All Lists";
 
-  if (loading) {
-    return <Spinner />;
-  }
   return (
-    <Box fill='vertical' width='80%'>
-      <Box align='center' direction='row'>
-        <Heading level='3'>{list}</Heading>
+    <Box fill="vertical" width="80%">
+      <Box align="center" direction="row">
+        <Heading level="3">{list}</Heading>
         <Button
           icon={<Add />}
           hoverIndicator
           onClick={() => toggleCreateTaskForm(true)}
         />
       </Box>
-      <Box overflow='auto'>
+      <Box overflow="auto">
         {tasks.map((task) => (
           <TaskCard key={task._id} task={task} />
         ))}

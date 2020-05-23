@@ -17,7 +17,11 @@ import {
   BACKLOG_ERROR,
   GET_BACKLOG,
 } from "../actions/types";
-import { addToCalendar, removeFromCalendar } from "../utils/CalendarUtils";
+import {
+  addToCalendar,
+  removeFromCalendar,
+  updateCalendar,
+} from "../utils/CalendarUtils";
 import moment from "moment";
 
 const initialState = {

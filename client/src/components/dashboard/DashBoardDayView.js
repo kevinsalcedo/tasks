@@ -13,9 +13,6 @@ const DashBoardDayView = ({
   onChangeDate,
   toggleCreateTaskForm,
 }) => {
-  if (loading) {
-    return <Spinner />;
-  }
   const openTaskForm = (date) => {
     if (date) {
       onChangeDate(date, () => toggleCreateTaskForm(true));
@@ -37,30 +34,31 @@ const DashBoardDayView = ({
   return (
     <ResponsiveContext.Consumer>
       {(responsive) => (
-        <Box direction='row' fill='vertical' gap='small' width='95%'>
+        <Box direction="row" fill="vertical" gap="small" width="95%">
           {sliceKeys(Object.keys(calendar), responsive).map((dateGroup) => (
             <Box
               key={dateGroup}
-              align='center'
+              align="center"
               fill
-              overflow='auto'
-              background='light-5'
-              elevation='small'
-              round='xsmall'
+              overflow="auto"
+              background="light-5"
+              elevation="small"
+              round="xsmall"
             >
-              <Heading level='4' pad={"bottom"}>
+              <Heading level="4" pad={"bottom"}>
                 {moment(dateGroup).format("MMMM Do")}
               </Heading>
-              <Box overflow='auto' fill pad='small'>
+
+              <Box overflow="auto" fill pad="small">
                 <Box
                   onClick={() => openTaskForm(moment(dateGroup))}
                   pad={{ horizontal: "medium", vertical: "xxsmall" }}
-                  background='light-1'
-                  elevation='small'
-                  justify='between'
-                  align='center'
+                  background="light-1"
+                  elevation="small"
+                  justify="between"
+                  align="center"
                   flex={false}
-                  height='xxsmall'
+                  height="xxsmall"
                   hoverIndicator
                   margin={{ bottom: "5px" }}
                 >

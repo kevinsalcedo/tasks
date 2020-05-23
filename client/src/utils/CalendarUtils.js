@@ -34,7 +34,17 @@ export const removeFromCalendar = (calendar, targetTask, isUpdate) => {
       ))
   );
 
-  if (isUpdate) {
+  if (isUpdate && !targetTask.backlog) {
     addToCalendar(calendar, targetTask);
+  }
+};
+
+export const updateCalendar = (calendar, targetTask) => {
+  const taskDateGroup = moment(targetTask.endDate).startOf("day").format();
+
+  if (calendar.hasOwnProperty(taskDateGroup)) {
+    calendar[taskDateGroup].find(
+      (task) => task._id === targetTask._id
+    ).completed = targetTask.completed;
   }
 };
