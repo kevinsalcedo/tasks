@@ -121,7 +121,12 @@ export default function (state = initialState, action) {
 
       // Update the calendar if on calendar view
       if (Object.keys(newCalendar).length > 0) {
-        removeFromCalendar(newCalendar, payload.task, true);
+        if (updatedFields.completedChanged) {
+          updateCalendar(newCalendar, payload.task);
+          console.log(newCalendar);
+        } else {
+          removeFromCalendar(newCalendar, payload.task, true);
+        }
       }
       return {
         ...state,

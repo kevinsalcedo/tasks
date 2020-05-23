@@ -43,8 +43,8 @@ export const updateCalendar = (calendar, targetTask) => {
   const taskDateGroup = moment(targetTask.endDate).startOf("day").format();
 
   if (calendar.hasOwnProperty(taskDateGroup)) {
-    calendar[taskDateGroup].find(
-      (task) => task._id === targetTask._id
-    ).completed = targetTask.completed;
+    const dateGroup = calendar[taskDateGroup];
+    const index = dateGroup.findIndex((task) => task._id === targetTask._id);
+    dateGroup[index] = targetTask;
   }
 };
