@@ -30,10 +30,10 @@ const CreateListForm = ({ taskList, toggleCreateListForm, createList }) => {
   };
 
   return (
-    <Layer position='center' modal onClickOutside={closeForm} onEsc={closeForm}>
-      <Box pad='medium' gap='small' width='medium' fill='horizontal'>
-        <Box direction='row' justify='between' align='center'>
-          <Heading level={3} margin='none'>
+    <Layer position="center" modal onClickOutside={closeForm} onEsc={closeForm}>
+      <Box pad="medium" gap="small" width="medium" fill="horizontal">
+        <Box direction="row" justify="between" align="center">
+          <Heading level={3} margin="none">
             {taskList ? "Update List" : "New List"}
           </Heading>
           <Button icon={<Close />} onClick={closeForm} />
@@ -47,21 +47,22 @@ const CreateListForm = ({ taskList, toggleCreateListForm, createList }) => {
           }}
         >
           <FormTextInput
-            label='Name'
-            name='name'
-            placeholder='Name'
+            label="Name"
+            name="name"
+            placeholder="Name"
             value={name}
             onChange={setName}
             required
+            showRequired
           />
           <FormTextArea
-            label='Description'
-            name='description'
-            placeholder='Description'
+            label="Description"
+            name="description"
+            placeholder="Description"
             value={description}
             onChange={setDescription}
           />
-          <FormColorPicker name='color' color={color} onChange={setColor} />
+          <FormColorPicker name="color" color={color} onChange={setColor} />
           <FormControlButtons isUpdate={taskList} closeBehavior={closeForm} />
         </Form>
       </Box>

@@ -8,13 +8,14 @@ const FormTextInput = ({
   placeholder,
   value,
   onChange,
+  showRequired,
 }) => {
   const renderLabel = () => {
-    if (required) {
+    if (required && showRequired) {
       return (
-        <Box direction='row'>
+        <Box direction="row">
           <Text>{label}</Text>
-          <Text color='status-critical'>*</Text>
+          <Text color="status-critical">*</Text>
         </Box>
       );
     } else {

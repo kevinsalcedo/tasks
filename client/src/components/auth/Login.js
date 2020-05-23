@@ -5,29 +5,18 @@ import PropTypes from "prop-types";
 import { login } from "../../actions/auth";
 import AUTH_CONSTANTS from "../../strings/auth";
 import PAGES from "../../strings/pages";
-import {
-  Box,
-  Button,
-  Heading,
-  Form,
-  FormField,
-  TextInput,
-  MaskedInput,
-  Paragraph,
-} from "grommet";
-import { Hide, View } from "grommet-icons";
+import { Box, Heading, Form, Paragraph } from "grommet";
 import LinkAnchor from "../routing/LinkAnchor";
 import ContainerPane from "../layout/containers/ContainerPane";
+import FormControlButtons from "../forms/fields/FormControlButtons";
+import FormPasswordInput from "../forms/fields/FormPasswordInput";
+import FormEmailInput from "../forms/fields/FormEmailInput";
 
 const Login = ({ login, isAuthenticated }) => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [reveal, setReveal] = React.useState(false);
-
-  const { email, password } = formData;
+  // const { email, password } = formData;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -48,45 +37,27 @@ const Login = ({ login, isAuthenticated }) => {
         </Heading>
 
         <Form
-          value={formData}
-          onChange={(nextValue) => setFormData(nextValue)}
-          onReset={() => setFormData({})}
+          onReset={() => {
+            setEmail("");
+            setPassword("");
+          }}
           onSubmit={(e) => onSubmit(e)}
         >
-          <FormField
+          <FormEmailInput
+            label="Email Address"
             name="email"
-            label={AUTH_CONSTANTS.FORM_FIELDS.EMAIL_PLACEHOLDER}
-          >
-            <MaskedInput
-              name="email"
-              mask={[
-                { regexp: /^[\w\-_.]+$/, placeholder: "example" },
-                { fixed: "@" },
-                { regexpt: /^[\w]+$/, placehodler: "my" },
-                { fixed: "." },
-                { regexp: /^[\w]+$/, placeholder: "com" },
-              ]}
-            />
-          </FormField>
-          <FormField
+            value={email}
+            onChange={setEmail}
+            required
+          />
+          <FormPasswordInput
+            label="Password"
             name="password"
-            label={AUTH_CONSTANTS.FORM_FIELDS.PASSWORD_PLACEHOLDER}
-          >
-            <Box direction="row" align="center">
-              <TextInput
-                name="password"
-                plain
-                type={reveal ? "text" : "password"}
-              />
-              <Button
-                icon={reveal ? <View size="medium" /> : <Hide size="medium" />}
-                onClick={() => setReveal(!reveal)}
-              />
-            </Box>
-          </FormField>
-          <Box direction="row" justify="around" margin={{ top: "medium" }}>
-            <Button type="submit" label="Submit" primary />
-          </Box>
+            value={password}
+            onChange={setPassword}
+            required
+          />
+          <FormControlButtons submitOnly />
         </Form>
 
         <Paragraph>

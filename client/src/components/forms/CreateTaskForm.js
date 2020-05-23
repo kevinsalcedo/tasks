@@ -113,10 +113,10 @@ const CreateTaskForm = ({
   };
 
   return (
-    <Layer position='center' modal onClickOutside={closeForm} onEsc={closeForm}>
-      <Box pad='medium' gap='small' width='medium' fill='horizontal'>
-        <Box direction='row' justify='between' align='center'>
-          <Heading level={3} margin='none'>
+    <Layer position="center" modal onClickOutside={closeForm} onEsc={closeForm}>
+      <Box pad="medium" gap="small" width="medium" fill="horizontal">
+        <Box direction="row" justify="between" align="center">
+          <Heading level={3} margin="none">
             {task ? "Update Task" : "New Task"}
           </Heading>
 
@@ -133,40 +133,41 @@ const CreateTaskForm = ({
           onSubmit={(e) => onSubmit(e)}
         >
           <FormTextInput
-            label='Name'
-            name='name'
-            placeholder='Name'
+            label="Name"
+            name="name"
+            placeholder="Name"
             value={name}
             onChange={setName}
             required
+            showRequired
           />
           <FormTextArea
-            label='Description'
-            name='description'
+            label="Description"
+            name="description"
             placeholder="What's this task about?"
             value={description}
             onChange={setDescription}
           />
           <FormSelect
-            label='List'
-            name='list'
-            placeholder='Please select a list'
+            label="List"
+            name="list"
+            placeholder="Please select a list"
             options={selectOptions}
             value={taskList}
             onChange={setTaskList}
             required
           />
 
-          <Box direction='row' align='center' justify='around'>
+          <Box direction="row" align="center" justify="around">
             <FormDatePicker
-              label='Start Date'
-              name='startDate'
+              label="Start Date"
+              name="startDate"
               value={startDate}
               onChange={setStartDate}
             />
             <FormDatePicker
-              label='Due Date'
-              name='endDate'
+              label="Due Date"
+              name="endDate"
               value={endDate}
               onChange={setEndDate}
             />
