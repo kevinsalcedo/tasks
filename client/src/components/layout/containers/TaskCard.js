@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Box, CheckBox, Text, Menu } from "grommet";
 import { MoreVertical } from "grommet-icons";
 import moment from "moment";
-import { selectTask } from "../../../actions/list";
+import { selectTask, updateTask } from "../../../actions/list";
 import {
   toggleCreateTaskForm,
   toggleDeleteTaskForm,
@@ -12,6 +12,7 @@ import {
 const TaskCard = ({
   task,
   selectTask,
+  updateTask,
   toggleCreateTaskForm,
   toggleDeleteTaskForm,
 }) => {
@@ -43,10 +44,25 @@ const TaskCard = ({
       }
     }
     return (
-      <Text size='xsmall' color={pastDue ? "status-critical" : null}>
+      <Text size="xsmall" color={pastDue ? "status-critical" : null}>
         {innerText}
       </Text>
     );
+  };
+  // Toggles a task between the backlog and active lists
+  // Toggling to active list sets the end date to today
+  const toggleTaskBacklog = (task) => {
+    const isBacklog = task.backlog;
+
+    let formValues = {
+      backlog: !isBacklog,
+    };
+
+    if (isBacklog) {
+      formValues.endDate = moment().utc().format();
+    }
+
+    updateTask(task._id, formValues);
   };
   const menuItems = [
     {
@@ -57,6 +73,12 @@ const TaskCard = ({
       },
     },
     {
+      label: `Move to ${task.backlog ? "Active" : "Backlog"}`,
+      onClick: () => {
+        toggleTaskBacklog(task);
+      },
+    },
+    {
       label: "Delete Task",
       onClick: () => {
         selectTask(task);
@@ -64,15 +86,16 @@ const TaskCard = ({
       },
     },
   ];
+
   return (
     <Box
-      direction='row'
+      direction="row"
       pad={{ horizontal: "medium", vertical: "xxsmall" }}
-      background='light-1'
-      elevation='small'
-      gap='small'
-      justify='between'
-      align='center'
+      background="light-1"
+      elevation="small"
+      gap="small"
+      justify="between"
+      align="center"
       flex={false}
       border={{
         color: task.taskList.color,
@@ -82,13 +105,13 @@ const TaskCard = ({
       }}
       margin={{ vertical: "5px" }}
     >
-      <Box direction='row' gap='small' align='center'>
+      <Box direction="row" gap="small" align="center">
         <CheckBox checked={task.completed} />
         <Box>
           <Text truncate>{task.name}</Text>
         </Box>
       </Box>
-      <Box direction='row' gap='small' align='center'>
+      <Box direction="row" gap="small" align="center">
         {renderDueDate()}
         <Menu icon={<MoreVertical />} items={menuItems} hoverIndicator />
       </Box>
@@ -98,6 +121,7 @@ const TaskCard = ({
 
 export default connect(null, {
   selectTask,
+  updateTask,
   toggleCreateTaskForm,
   toggleDeleteTaskForm,
 })(TaskCard);

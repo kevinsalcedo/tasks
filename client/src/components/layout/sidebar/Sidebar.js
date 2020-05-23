@@ -35,11 +35,11 @@ export const Sidebar = (
       {(responsive) => (
         <GrommetSidebar
           header={
-            <Box direction='row' align='center'>
+            <Box direction="row" align="center">
               <Menu
                 label={
                   isAuthenticated ? (
-                    <Box direction='row' gap='small' align='center'>
+                    <Box direction="row" gap="small" align="center">
                       <Text>{isAuthenticated && user ? user.name : ""}</Text>
                     </Box>
                   ) : (
@@ -47,16 +47,16 @@ export const Sidebar = (
                   )
                 }
                 items={isAuthenticated ? authMenuItems : guestMenuItems}
-                gap='small'
+                gap="small"
               />
             </Box>
           }
           {...rest}
-          pad='medium'
+          pad="medium"
         >
-          <Box width={responsive === "small" ? "medium" : null} align='center'>
+          <Box width={responsive === "small" ? "medium" : null} align="center">
             <Calendar />
-            {isAuthenticated && <TaskLists />}
+            <TaskLists />
           </Box>
         </GrommetSidebar>
       )}
@@ -65,7 +65,7 @@ export const Sidebar = (
 
   return (
     <Box>
-      <Collapsible direction='horizontal' open={sidebarOpen}>
+      <Collapsible direction="horizontal" open={sidebarOpen}>
         {sideBarContent()}
       </Collapsible>
     </Box>

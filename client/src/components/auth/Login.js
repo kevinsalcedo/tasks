@@ -36,15 +36,15 @@ const Login = ({ login, isAuthenticated }) => {
 
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (
     <ContainerPane>
-      <Box width='large' gap='medium'>
-        <Heading color='brand'>{AUTH_CONSTANTS.SIGN_IN}</Heading>
-        <Heading level='3'>
-          <i className='fas fa-user'></i> {AUTH_CONSTANTS.SIGN_IN_PAGE.HEADER}
+      <Box gap="medium" width="medium" pad="small">
+        <Heading color="brand">{AUTH_CONSTANTS.SIGN_IN}</Heading>
+        <Heading level="3">
+          <i className="fas fa-user"></i> {AUTH_CONSTANTS.SIGN_IN_PAGE.HEADER}
         </Heading>
 
         <Form
@@ -54,11 +54,11 @@ const Login = ({ login, isAuthenticated }) => {
           onSubmit={(e) => onSubmit(e)}
         >
           <FormField
-            name='email'
+            name="email"
             label={AUTH_CONSTANTS.FORM_FIELDS.EMAIL_PLACEHOLDER}
           >
             <MaskedInput
-              name='email'
+              name="email"
               mask={[
                 { regexp: /^[\w\-_.]+$/, placeholder: "example" },
                 { fixed: "@" },
@@ -69,23 +69,23 @@ const Login = ({ login, isAuthenticated }) => {
             />
           </FormField>
           <FormField
-            name='password'
+            name="password"
             label={AUTH_CONSTANTS.FORM_FIELDS.PASSWORD_PLACEHOLDER}
           >
-            <Box direction='row' align='center'>
+            <Box direction="row" align="center">
               <TextInput
-                name='password'
+                name="password"
                 plain
                 type={reveal ? "text" : "password"}
               />
               <Button
-                icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
+                icon={reveal ? <View size="medium" /> : <Hide size="medium" />}
                 onClick={() => setReveal(!reveal)}
               />
             </Box>
           </FormField>
-          <Box direction='row' justify='around' margin={{ top: "medium" }}>
-            <Button type='submit' label='Submit' primary />
+          <Box direction="row" justify="around" margin={{ top: "medium" }}>
+            <Button type="submit" label="Submit" primary />
           </Box>
         </Form>
 

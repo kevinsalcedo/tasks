@@ -131,9 +131,15 @@ export default function (state = initialState, action) {
       if (Object.keys(newCalendar).length > 0) {
         removeFromCalendar(newCalendar, payload, false);
       }
+      if (payload.backlog) {
+        newBacklog = newBacklog.filter((task) => task._id !== payload._id);
+      } else {
+        newTasks = newTasks.filter((task) => task._id !== payload._id);
+      }
       return {
         ...state,
-        tasks: state.tasks.filter((task) => task._id !== payload._id),
+        tasks: newTasks,
+        backlog: newBacklog,
         calendar: newCalendar,
         selectedTask: null,
       };

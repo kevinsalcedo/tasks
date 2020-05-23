@@ -20,25 +20,25 @@ const Navbar = ({
   openBacklog,
 }) => {
   return (
-    <Header pad='small' elevation='small' justify='between' direction='row'>
-      <Box direction='row' align='center' gap='small'>
+    <Header pad="small" elevation="small" justify="between" direction="row">
+      <Box direction="row" align="center" gap="small">
         <Button
-          icon={<MenuIcon size='medium' />}
+          icon={<MenuIcon size="medium" />}
           onClick={() => openSidebar(!sidebarOpen)}
         />
 
         {isAuthenticated && <DisplayButtonGroup />}
       </Box>
-      <Box direction='row' align='center' gap='small'>
+      <Box direction="row" align="center" gap="small">
         <Menu
-          label='Add New'
+          label="Add New"
           items={[
             { label: "Task", onClick: () => toggleCreateTaskForm(true) },
             { label: "List", onClick: () => toggleCreateListForm(true) },
           ]}
         />
         <Button
-          icon={<MenuIcon size='medium' />}
+          icon={<MenuIcon size="medium" />}
           onClick={() => openBacklog(!backlogOpen)}
         />
       </Box>

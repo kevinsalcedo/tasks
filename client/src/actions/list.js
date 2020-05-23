@@ -203,11 +203,13 @@ export const deleteTask = (taskID) => async (dispatch) => {
 
   try {
     const res = await axios.delete(`api/tasks/${taskID}`);
-    dispatch({
-      type: DELETE_TASK,
-      payload: res.data.task,
+    batch(() => {
+      dispatch({
+        type: DELETE_TASK,
+        payload: res.data.task,
+      });
+      dispatch(setAlert(res.data.msg, "good"));
     });
-    dispatch(setAlert(res.data.msg, "good"));
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -247,11 +249,12 @@ export const updateTask = (taskID, formValues) => async (dispatch) => {
 
   const body = JSON.stringify(formValues);
 
-  console.log(formValues);
   try {
     const res = await axios.put(`api/tasks/${taskID}`, body, config);
-    console.log(res);
-    dispatch({ type: UPDATE_TASK, payload: res.data });
+    batch(() => {
+      dispatch({ type: UPDATE_TASK, payload: res.data });
+      dispatch(setAlert(`${res.data.task.name} was updated.`, "status-good"));
+    });
   } catch (err) {
     const errors = err.response.data.errors;
 

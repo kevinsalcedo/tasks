@@ -45,15 +45,15 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
     return <ContainerPane>Loading...</ContainerPane>;
   }
   if (!loading && isAuthenticated) {
-    return <Redirect to='/dashboard' />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (
     <ContainerPane>
-      <Box width='large' gap='medium'>
-        <Heading color='brand'>{AUTH_CONSTANTS.SIGN_UP}</Heading>
-        <Heading level='3'>
-          <i className='fas fa-user'></i> {AUTH_CONSTANTS.REGISTER_PAGE.HEADER}
+      <Box width="medium" pad="small" gap="small">
+        <Heading color="brand">{AUTH_CONSTANTS.SIGN_UP}</Heading>
+        <Heading level="3">
+          <i className="fas fa-user"></i> {AUTH_CONSTANTS.REGISTER_PAGE.HEADER}
         </Heading>
 
         <Form
@@ -63,17 +63,17 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
           onSubmit={(e) => onSubmit(e)}
         >
           <FormField
-            name='name'
+            name="name"
             label={AUTH_CONSTANTS.FORM_FIELDS.NAME_PLACEHOLDER}
           >
-            <TextInput name='name' />
+            <TextInput name="name" />
           </FormField>
           <FormField
-            name='email'
+            name="email"
             label={AUTH_CONSTANTS.FORM_FIELDS.EMAIL_PLACEHOLDER}
           >
             <MaskedInput
-              name='email'
+              name="email"
               mask={[
                 { regexp: /^[\w\-_.]+$/, placeholder: "example" },
                 { fixed: "@" },
@@ -84,50 +84,49 @@ const Register = ({ setAlert, register, isAuthenticated, loading }) => {
             />
           </FormField>
           <FormField
-            name='password'
+            name="password"
             label={AUTH_CONSTANTS.FORM_FIELDS.PASSWORD_PLACEHOLDER}
           >
-            <Box direction='row' align='center'>
+            <Box direction="row" align="center">
               <TextInput
-                name='password'
+                name="password"
                 plain
                 type={reveal ? "text" : "password"}
               />
               <Button
-                icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
+                icon={reveal ? <View size="medium" /> : <Hide size="medium" />}
                 onClick={() => setReveal(!reveal)}
               />
             </Box>
           </FormField>
           <FormField
-            name='password2'
+            name="password2"
             label={AUTH_CONSTANTS.FORM_FIELDS.VERIFY_PASSWORD_PLACEHOLDER}
           >
-            <Box direction='row' align='center'>
+            <Box direction="row" align="center">
               <TextInput
-                name='password2'
+                name="password2"
                 plain
                 type={reveal ? "text" : "password"}
               />
               <Button
-                icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
+                icon={reveal ? <View size="medium" /> : <Hide size="medium" />}
                 onClick={() => setReveal(!reveal)}
               />
             </Box>
           </FormField>
-          <Box direction='row' justify='around' margin={{ top: "medium" }}>
-            <Button type='reset' label='Reset' />
-            <Button type='submit' label='Submit' primary />
+          <Box direction="row" justify="around" margin={{ top: "medium" }}>
+            <Button type="reset" label="Reset" />
+            <Button type="submit" label="Submit" primary />
           </Box>
         </Form>
-
-        <Paragraph>
-          {AUTH_CONSTANTS.REGISTER_PAGE.SWITCH}{" "}
-          <LinkAnchor to={PAGES.LOGIN}>
-            {AUTH_CONSTANTS.REGISTER_PAGE.SWITCH_LINK}
-          </LinkAnchor>
-        </Paragraph>
       </Box>
+      <Paragraph>
+        {AUTH_CONSTANTS.REGISTER_PAGE.SWITCH}{" "}
+        <LinkAnchor to={PAGES.LOGIN}>
+          {AUTH_CONSTANTS.REGISTER_PAGE.SWITCH_LINK}
+        </LinkAnchor>
+      </Paragraph>
     </ContainerPane>
   );
 };
