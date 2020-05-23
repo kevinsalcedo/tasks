@@ -49,6 +49,15 @@ const TaskCard = ({
       </Text>
     );
   };
+
+  // Mark a task as completed
+  // This will also allow users to mark them as incomplete before refreshing the page
+  const toggleCompleteTask = (task) => {
+    let formValues = {
+      completed: !task.completed,
+    };
+    updateTask(task._id, formValues);
+  };
   // Toggles a task between the backlog and active lists
   // Toggling to active list sets the end date to today
   const toggleTaskBacklog = (task) => {
@@ -106,7 +115,10 @@ const TaskCard = ({
       margin={{ vertical: "5px" }}
     >
       <Box direction="row" gap="small" align="center">
-        <CheckBox checked={task.completed} />
+        <CheckBox
+          checked={task.completed}
+          onClick={() => toggleCompleteTask(task)}
+        />
         <Box>
           <Text truncate>{task.name}</Text>
         </Box>
