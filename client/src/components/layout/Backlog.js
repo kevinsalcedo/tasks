@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { Button, Layer, Box, Heading, Tabs, Tab } from "grommet";
+import { Button, Layer, Box, Heading } from "grommet";
 import { openBacklog } from "../../actions/dashboard";
 import TaskCard from "./containers/TaskCard";
 import { Close } from "grommet-icons";
 
 const Backlog = ({ backlog, backlogOpen, openBacklog }) => {
-  const [index, setIndex] = useState(0);
-
-  const onActive = (nextIndex) => setIndex(nextIndex);
   return (
     backlogOpen && (
       <Layer

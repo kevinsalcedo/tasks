@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, FormField, Text, TextInput } from "grommet";
+import { Box, Button, FormField, TextInput } from "grommet";
 import { View, Hide } from "grommet-icons";
 
 const FormPasswordInput = ({
@@ -13,7 +13,7 @@ const FormPasswordInput = ({
   const [reveal, setReveal] = useState(false);
   return (
     <FormField label={label} name={name} required={required}>
-      <Box direction="row" align="center">
+      <Box direction='row' align='center'>
         <TextInput
           name={name}
           value={value}
@@ -23,7 +23,7 @@ const FormPasswordInput = ({
           type={reveal ? "text" : "password"}
         />
         <Button
-          icon={reveal ? <View size="medium" /> : <Hide size="medium" />}
+          icon={reveal ? <View size='medium' /> : <Hide size='medium' />}
           onClick={() => setReveal(!reveal)}
         />
       </Box>

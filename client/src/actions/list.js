@@ -97,7 +97,7 @@ export const loadTasksView = (listID, start) => async (dispatch) => {
       type: GET_TASKS,
       payload: {
         tasks: res.data,
-        calendar: start ? generateCalendar(res.data, start) : {},
+        calendar: start ? generateCalendar(res.data, start) : null,
       },
     });
   } catch (err) {

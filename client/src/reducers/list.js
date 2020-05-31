@@ -27,7 +27,7 @@ import moment from "moment";
 const initialState = {
   lists: [],
   tasks: [],
-  calendar: {},
+  calendar: null,
   backlog: [],
   selectedList: null,
   selectedTask: null,

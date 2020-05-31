@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Box, RadioButtonGroup, Button, Nav, ResponsiveContext } from "grommet";
+import { Box, RadioButtonGroup, Nav, ResponsiveContext, Anchor } from "grommet";
 import { Task, Schedule } from "grommet-icons";
 import { changeView } from "../../../actions/dashboard";
 
@@ -33,18 +33,8 @@ const DisplayButtonGroup = ({ view, changeView }) => {
 
   const navButtons = () => (
     <Nav direction='row'>
-      <Button
-        label='List'
-        active={view === "task"}
-        onClick={() => changeView("task")}
-        hoverIndicator
-      />
-      <Button
-        label='Calendar'
-        active={view !== "task"}
-        onClick={() => changeView("calendar")}
-        hoverIndicator
-      />
+      <Anchor label='List' onClick={() => changeView("task")} />
+      <Anchor label='Calendar' onClick={() => changeView("calendar")} />
     </Nav>
   );
   return (

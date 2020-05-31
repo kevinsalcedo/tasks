@@ -38,10 +38,12 @@ const TaskSchema = new mongoose.Schema({
   completed: {
     type: Boolean,
     default: false,
+    required: true,
   },
   backlog: {
     type: Boolean,
     default: false,
+    required: true,
   },
   // TODO: subtasks?
 });

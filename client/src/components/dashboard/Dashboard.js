@@ -25,37 +25,12 @@ class Dashboard extends React.Component {
     // Load lists for the sidebar
     loadLists();
 
-    // Load all non-backlog tasks by default
-    this.updateTasksView();
-
     // Load backlog
     loadBacklogTasks();
   }
 
-  // When selection options are updated, make the new api call
-  componentDidUpdate(prevProps) {
-    const { view, calendarStart, selectedList } = this.props;
-    if (
-      prevProps.view !== view ||
-      prevProps.calendarStart !== calendarStart ||
-      prevProps.selectedList !== selectedList
-    ) {
-      this.updateTasksView();
-    }
-  }
-
-  updateTasksView = () => {
-    const { calendarStart, selectedList, view, loadTasksView } = this.props;
-    if (view === "task") {
-      loadTasksView(selectedList);
-    } else {
-      loadTasksView(selectedList, calendarStart);
-    }
-    this.setState({ dueDate: moment() });
-  };
-
   updateDueDate = (date, callback) => {
-    this.setState({ dueDate: date }, () => callback());
+    this.setState({ dueDate: date }, callback ? () => callback() : null);
   };
 
   render() {
